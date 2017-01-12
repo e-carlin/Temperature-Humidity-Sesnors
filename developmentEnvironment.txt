@@ -1,0 +1,4 @@
+To set up your development environment follow the guide on the Moteino site:
+https://lowpowerlab.com/guide/moteino-programming/arduinoide/
+
+I think we should all use the latest Arduino IDE.
