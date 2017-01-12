@@ -1,0 +1,13 @@
+Here are some links that will be useful in developing our sensors.
+
+RFM69 library:
+https://github.com/LowPowerLab/RFM69
+
+Moteino example sketches:
+https://github.com/LowPowerLab/Moteino
+
+AWS IoT with MQTT:
+http://docs.aws.amazon.com/iot/latest/developerguide/protocols.html#mqtt-ws
+
+DHT22 sensor info:
+https://learn.adafruit.com/dht/overview
