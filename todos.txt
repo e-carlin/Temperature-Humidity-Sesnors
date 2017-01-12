@@ -1,0 +1,7 @@
+- Write sensor node and gateway node code (we can just pretty much copy and paste from an RFM69 example)
+- Write the code for getting a reading from a sensor (again copy and paste from an adafruit example)
+- Write the code for powering down the sensors and radios
+- Start learning about how to monitor battery life left (there is a good adafruit wrtie up I will dig up)
+- Starting learning about MQTT and AWS IoT (to transfer data from gateway raspberry pi to AWS)
+- Decide on a web framework (Rails is nice but becoming more outdated, my vote would be to use something more modern but we should definitely discuss)
+- Decide on what type of database we want to use (Again, depends somewhat on what web framework we use. My vote would be for MySQL)
