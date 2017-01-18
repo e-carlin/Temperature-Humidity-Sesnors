@@ -1,37 +1,51 @@
 Setting up Mosquito MQTT broker:
 
-1) Update and install dependecies
+Debian:
+	1) Update and install dependecies
 
-$apt-get update
-$apt-get install build-essential libwrap0-dev libssl-dev libc-ares-dev uuid-dev xsltproc
+	$ apt-get update
+	$ apt-get install build-essential libwrap0-dev libssl-dev libc-ares-dev uuid-dev xsltproc
 
-2) Add the mosquitto repo
+	2) Add the mosquitto repo
 
-$sudo apt-add-repository ppa:mosquitto-dev/mosquitto-ppa
-$sudo apt-get update
+	$ sudo apt-add-repository ppa:mosquitto-dev/mosquitto-ppa
+	$ sudo apt-get update
 
-3) Install mosquitto broker
+	3) Install mosquitto broker
 
-$sudo apt-get install mosquitto
+	$ sudo apt-get install mosquitto
 
-4) Install developer libs
+	4) Install developer libs
 
-$sudo apt-get install libmosquitto-dev
+	$ sudo apt-get install libmosquitto-dev
 
-5) Install client packages
+	5) Install client packages
 
-$sudo apt-get install mosquitto-clients
+	$ sudo apt-get install mosquitto-clients
 
-6) Ensure broker is running
+	6) Ensure broker is running
 
-$sudo service mosquitto status
+	$ sudo service mosquitto status
+
+
+OS X:
+	1) Install via homebrew
+
+	$ brew install mosquitto
+
+	2) To start the service 
+
+	$ /usr/local/sbin/mosquitto -c /usr/local/etc/mosquitto/mosquitto.conf
+
+
 
 Testing:
 
 1) Subscribe to to "mqtt" topic
 
-$mosquitto_sub -h localhost -t "mqtt" -v
+$ mosquitto_sub -h localhost -t "mqtt" -v
 
 2) In a new terminal window publish to that topic
 
-$mosquitto_pub -h localhost -t "mqtt" -m "Hello MQTT"
+$ mosquitto_pub -h localhost -t "mqtt" -m "Hello MQTT"
+
