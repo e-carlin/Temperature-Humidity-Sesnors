@@ -33,19 +33,21 @@ OS X:
 
 	$ brew install mosquitto
 
-	2) To start the service 
-
-	$ /usr/local/sbin/mosquitto -c /usr/local/etc/mosquitto/mosquitto.conf
 
 
 
 Testing:
 
-1) Subscribe to to "mqtt" topic
+1) Start the service
+
+$ /usr/local/sbin/mosquitto -c /usr/local/etc/mosquitto/mosquitto.conf
+
+2) Subscribe to to "mqtt" topic
 
 $ mosquitto_sub -h localhost -t "mqtt" -v
 
-2) In a new terminal window publish to that topic
+3) In a new terminal window publish to that topic
 
 $ mosquitto_pub -h localhost -t "mqtt" -m "Hello MQTT"
 
+4) Another option is to run the python "mqttSubscriber.py" and "mqttPublisher.py" scripts
