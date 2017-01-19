@@ -1,4 +1,25 @@
-To set up your development environment follow the guide on the Moteino site:
-https://lowpowerlab.com/guide/moteino-programming/arduinoide/
+1) Get the latest Arduino IDE from 
 
-I think we should all use the latest Arduino IDE.
+https://www.arduino.cc/en/Main/Software
+
+2) Download the zip of the RFM69 library
+
+https://github.com/LowPowerLab/RFM69
+
+3) Rename the downloaded zip to just RFM69 (remove -master)
+
+4) Download the zip of the SPIFlash library
+
+https://github.com/LowPowerLab/SPIFlash
+
+5) Rename the downloaded zip to just SPIFlash (remove -master)
+
+6) Open up the Arduino IDE
+
+7) Navigate to Sketch -> Include library -> Add .zip and add the RFM69 library
+
+8) Do the same for the SPIFlash library
+
+9) Restart the IDE
+
+10) You're ready to go!
