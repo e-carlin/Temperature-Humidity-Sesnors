@@ -1,0 +1,14 @@
+1) Download latest version of Raspbian 
+
+https://www.raspberrypi.org/downloads/raspbian/
+
+2) Follow instructions for you machine
+
+https://www.raspberrypi.org/documentation/installation/installing-images/README.md
+
+3) Add wifi provision service (this service allows us to provision the Pi on a new
+network without needing to connect a display,mouse,or keyboard to it)
+
+https://github.com/sabhiram/raspberry-wifi-conf#why
+
+4) Follow the setup instructs on the README
