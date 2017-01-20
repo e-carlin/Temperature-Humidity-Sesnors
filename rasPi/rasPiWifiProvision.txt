@@ -1,10 +1,13 @@
-1) Plug in the Pi
+1) Plug in the Pi to your laptop using an ethernet cable
 
 2) Connect it to the router through a hardwired ethernet cable
 
 3) Find you Pi's IP address
 
 $ sudo nmap -sP <your IP>/24
+	
+		Note to find you IP you can do:
+			$ ifconfig en0
 
 4) SSH into the PI and provide password when prompted
 
