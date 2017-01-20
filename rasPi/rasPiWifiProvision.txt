@@ -1,0 +1,34 @@
+1) Plug in the Pi
+
+2) Connect it to the router through a hardwired ethernet cable
+
+3) Find you Pi's IP address
+
+$ sudo nmap -sP <your IP>/24
+
+4) SSH into the PI and provide password when prompted
+
+$ ssh pi@<pi's ip address>
+
+5) Navigate to wpa-supplicant config info
+
+$ sudo nano /etc/wpa_supplicant/wpa_supplicant.conf
+
+6) Add this to the bottom of the file (filling in necessary data)
+
+network={
+    ssid="network-name"
+    psk="network-password"
+}
+
+7) Disconnect from ethernet and reboot
+
+8) Sometimes when you SSH into the Pi now there are RSA key problems if so
+	1) Delete old key
+		$ ssh-keygen -R <Old Pi IP address>
+
+	2) Look up new IP 
+		See step 3
+
+	3) SSH into Pi using new IP
+		$ ssh pi@<new UP from step 8.2>
