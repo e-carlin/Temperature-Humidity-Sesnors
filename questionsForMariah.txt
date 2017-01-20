@@ -1,0 +1,3 @@
+- Will we have access to one outlet?
+
+- Can we have access to an ethernet port on the router to initially connect to the internet? We will only need access to it for 5 minutes to add the WiFi credentials.
