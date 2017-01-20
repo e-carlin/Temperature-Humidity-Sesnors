@@ -1,0 +1,11 @@
+==Selecting the Database==
+We were considering between MySQL and SQLite. MySQL is oftentimes quoted in the industry, so it seemed like a good idea. However, on further investigation we realized that MySQL would be far too complex for such a small database that we would need. 
+
+==Making the Schema==
+Super simple, given that the only data needed was user info, sensor layout, and data transmission. 
+
+==Connecting with the web framework==
+We had to determine how to the SQLite DB via Javascript. We found an npm module that works just fine.
+
+==Working in Parallel==
+With the schema done, and things more or less determined for integrating it with our other stuff, that's one less thing to worry about. 
