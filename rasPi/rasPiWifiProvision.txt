@@ -1,6 +1,6 @@
 1) Plug in the Pi to your laptop using an ethernet cable
 
-2) Connect it to the router through a hardwired ethernet cable
+2) Or connect it to the router through a hardwired ethernet cable
 
 3) Find you Pi's IP address
 
