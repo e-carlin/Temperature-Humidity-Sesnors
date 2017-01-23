@@ -1,0 +1,32 @@
+The Express app uses an MVC (Model-View-Controller) model for its code layout. As of now the two files that are important to look at are the index.js file in the routes folder and the index.ejs in the view folder. The code provided by the Express documentation (https://expressjs.com/en/guide/database-integration.html#sqlite) details the code for how to run a sqlite query. Here is the code:
+
+var sqlite3 = require('sqlite3').verbose();
+var db = new sqlite3.Database(':memory:');
+
+db.serialize(function() {
+  db.run("CREATE TABLE lorem (info TEXT)");
+
+  var stmt = db.prepare("INSERT INTO lorem VALUES (?)");
+  for (var i = 0; i < 10; i++) {
+      stmt.run("Ipsum " + i);
+  }
+  stmt.finalize();
+
+  db.each("SELECT rowid AS id, info FROM lorem", function(err, row) {
+      //document.write(row.id + ": " + row.info);
+      console.log(row.id + ": " + row.info);
+  });
+});
+
+db.close();
+This code just creates a new table, inserts the numbers 0-10 and then prints it out to the console. I am still trying to figure out how to get this to print to a web page but there is not a lot of documentation on that aspect. This also does not save the database or use a pre existing one so we will have to figure out that aspect.
+
+As for the installation and set up of this framework: 
+The setup was not very difficult except since there is not a lot of up to date documentation for this type of thing most of it is a shot in the dark. All you have to do is:
+1. Create a new directory
+2. Install NPM and then express, sqlite with that
+3. For the express installation I chose the Express generator which helps speed up that process but also provides a lot of bloatware that is not exactly clear on what it does.
+4. Then inside the index.js goes the sql query and the index.ejs displays the html for the web page
+
+
+
