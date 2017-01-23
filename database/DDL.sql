@@ -4,7 +4,7 @@
 PRAGMA foreign_keys = ON;
 
 create table User(
-	userName text unique primary key,
+	username text unique primary key,
 	password text
 );
 
