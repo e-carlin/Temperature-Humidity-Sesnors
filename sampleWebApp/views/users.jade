@@ -1,0 +1,6 @@
+extends layout
+
+block content
+	h1= 'A list of all users'
+		each user in User
+			H3= user.userName
