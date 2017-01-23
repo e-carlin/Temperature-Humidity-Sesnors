@@ -11,7 +11,7 @@ Virtual Box and Ubuntu for my environment.
 
  https://www.phusionpassenger.com/library/walkthroughs/deploy/ruby/ownserver/apache/oss/install_language_runtime.html <br />
 
-2) Install gem dependecies
+2) Install gem dependecies <br />
 	$ cd museumWebAppRails <br />
 	$ bundle install <br />
 
