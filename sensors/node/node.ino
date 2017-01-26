@@ -26,8 +26,6 @@
 // **********************************************************************************
 #include <RFM69.h>         //get it here: https://www.github.com/lowpowerlab/rfm69
 #include <RFM69_ATC.h>     //get it here: https://www.github.com/lowpowerlab/rfm69
-#include <SPIFlash.h>      //get it here: https://www.github.com/lowpowerlab/spiflash
-#include <SPI.h>           //included with Arduino IDE install (www.arduino.cc) //-ecarlin: allows us to talk over the serial prot
 
 //*********************************************************************************************
 //************ IMPORTANT SETTINGS - YOU MUST CHANGE/CONFIGURE TO FIT YOUR HARDWARE ************
@@ -36,11 +34,8 @@
 #define NETWORKID     100  //the same on all nodes that talk to each other (range up to 255)
 #define GATEWAYID     1
 //Match frequency to the hardware version of the radio on your Moteino (uncomment one):
-//#define FREQUENCY   RF69_433MHZ
-//#define FREQUENCY   RF69_868MHZ
 #define FREQUENCY     RF69_915MHZ
 #define ENCRYPTKEY    "sampleEncryptKey" //exactly the same 16 characters/bytes on all nodes!
-//#define IS_RFM69HW    //uncomment only for RFM69HW! Leave out if you have RFM69W!
 //*********************************************************************************************
 //Auto Transmission Control - dials down transmit power to save battery
 //Usually you do not need to always transmit at max output power
@@ -51,73 +46,35 @@
 #define ATC_RSSI      -80
 //*********************************************************************************************
 
-//******** e-carlin commented this out ********
-// #ifdef __AVR_ATmega1284P__
-//   #define LED           15 // Moteino MEGAs have LEDs on D15
-//   #define FLASH_SS      23 // and FLASH SS on D23
-// #else
-//   #define LED           9 // Moteinos have LEDs on D9
-//   #define FLASH_SS      8 // and FLASH SS on D8
-// #endif
-//*********************************************
+//e-carlin: I think this should be 9600 (atleast for macs)
+//#define SERIAL_BAUD   115200
+#define SERIAL_BAUD 9600
+#define LED           9 // Moteinos have LEDs on D9
 
-#define SERIAL_BAUD   115200
-
-int TRANSMITPERIOD = 200; //transmit a packet to gateway so often (in ms)
+int TRANSMITPERIOD = 2000; //transmit a packet to gateway so often (in ms)
 char payload[] = "123 ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 char buff[20];
 byte sendSize=0;
-//***** maybe we want an ACK ******//
+//***** maybe we want an ACK but I don't think so******//
 boolean requestACK = false;
 
-//******** e-carlin commented this out we have no flash chip so do we need it? ********
-SPIFlash flash(FLASH_SS, 0xEF30); //EF30 for 4mbit  Windbond chip (W25X40CL)
-//*****************************************
-#ifdef ENABLE_ATC
-  RFM69_ATC radio;
-#else
-  RFM69 radio;
-#endif
+RFM69_ATC radio;
 
 void setup() {
   Serial.begin(SERIAL_BAUD);
   radio.initialize(FREQUENCY,NODEID,NETWORKID);
-//******** e-carlin we don't have the HW version ********
-// #ifdef IS_RFM69HW
-//   radio.setHighPower(); //uncomment only for RFM69HW!
-// #endif
-// **********************************************
   radio.encrypt(ENCRYPTKEY);
-  //radio.setFrequency(919000000); //set frequency to some custom frequency
 
 //Auto Transmission Control - dials down transmit power to save battery (-100 is the noise floor, -90 is still pretty good)
 //For indoor nodes that are pretty static and at pretty stable temperatures (like a MotionMote) -90dBm is quite safe
 //For more variable nodes that can expect to move or experience larger temp drifts a lower margin like -70 to -80 would probably be better
 //Always test your ATC mote in the edge cases in your own environment to ensure ATC will perform as you expect
-#ifdef ENABLE_ATC
-  radio.enableAutoPower(ATC_RSSI);
-#endif
+radio.enableAutoPower(ATC_RSSI);
 
   char buff[50];
-  sprintf(buff, "\nTransmitting at %d Mhz...", FREQUENCY==RF69_433MHZ ? 433 : FREQUENCY==RF69_868MHZ ? 868 : 915);
+  sprintf(buff, "\nTransmitting at %d Mhz...", FREQUENCY);
   Serial.println(buff);
 
-// ********* e-carlin we don't have a flash chip so we shouldn't need this **********
-  // if (flash.initialize())
-  // {
-  //   Serial.print("SPI Flash Init OK ... UniqueID (MAC): ");
-  //   flash.readUniqueId();
-  //   for (byte i=0;i<8;i++)
-  //   {
-  //     Serial.print(flash.UNIQUEID[i], HEX);
-  //     Serial.print(' ');
-  //   }
-  //   Serial.println();
-  // }
-  // else
-//*******************************************************
-
-    Serial.println("SPI Flash MEM not found (is chip soldered?)...");
 
 #ifdef ENABLE_ATC
   Serial.println("RFM69_ATC Enabled (Auto Transmission Control)\n");
@@ -134,58 +91,9 @@ void Blink(byte PIN, int DELAY_MS)
 
 long lastPeriod = 0;
 void loop() {
-  //********** e-carlin in our node we won't have any input from a serial port so this is uneccesary **********
-  //process any serial input
-  // if (Serial.available() > 0)
-  // {
-  //   char input = Serial.read();
-  //   if (input >= 48 && input <= 57) //[0,9]
-  //   {
-  //     TRANSMITPERIOD = 100 * (input-48);
-  //     if (TRANSMITPERIOD == 0) TRANSMITPERIOD = 1000;
-  //     Serial.print("\nChanging delay to ");
-  //     Serial.print(TRANSMITPERIOD);
-  //     Serial.println("ms\n");
-  //   }
-
-  //   if (input == 'r') //d=dump register values
-  //     radio.readAllRegs();
-  //   //if (input == 'E') //E=enable encryption
-  //   //  radio.encrypt(KEY);
-  //   //if (input == 'e') //e=disable encryption
-  //   //  radio.encrypt(null);
-
-  //   if (input == 'd') //d=dump flash area
-  //   {
-  //     Serial.println("Flash content:");
-  //     uint16_t counter = 0;
-
-  //     Serial.print("0-256: ");
-  //     while(counter<=256){
-  //       Serial.print(flash.readByte(counter++), HEX);
-  //       Serial.print('.');
-  //     }
-  //     while(flash.busy());
-  //     Serial.println();
-  //   }
-  //   if (input == 'e')
-  //   {
-  //     Serial.print("Erasing Flash chip ... ");
-  //     flash.chipErase();
-  //     while(flash.busy());
-  //     Serial.println("DONE");
-  //   }
-  //   if (input == 'i')
-  //   {
-  //     Serial.print("DeviceID: ");
-  //     word jedecid = flash.readDeviceId();
-  //     Serial.println(jedecid, HEX);
-  //   }
-  // }
-  //********************************************************************
-
+ 
 //********* e-carlin our node won't be recieving any packets so no need for this either ***********
-  //check for any received packets
+  // check for any received packets
   // if (radio.receiveDone())
   // {
   //   Serial.print('[');Serial.print(radio.SENDERID, DEC);Serial.print("] ");
@@ -212,7 +120,7 @@ void loop() {
     //send FLASH id
     if(sendSize==0)
     {
-      sprintf(buff, "FLASH_MEM_ID:0x%X", flash.readDeviceId());
+      Serial.print("Sending first packet...");
       byte buffLen=strlen(buff);
       if (radio.sendWithRetry(GATEWAYID, buff, buffLen)) //e-carlin maybe ? keep the meat of this if because that is where we are actually sending 
         Serial.print(" ok!"); //e-carlin can remove this because our node won't be printing anything
@@ -224,8 +132,9 @@ void loop() {
       Serial.print("Sending[");
       Serial.print(sendSize);
       Serial.print("]: ");
-      for(byte i = 0; i < sendSize; i++)
+      for(byte i = 0; i < sendSize; i++){
         Serial.print((char)payload[i]);
+      }
 
       if (radio.sendWithRetry(GATEWAYID, payload, sendSize))
        Serial.print(" ok!");
