@@ -26,6 +26,7 @@
 // **********************************************************************************
 #include <RFM69.h>         //get it here: https://www.github.com/lowpowerlab/rfm69
 #include <RFM69_ATC.h>     //get it here: https://www.github.com/lowpowerlab/rfm69
+#include "DHT.h"
 
 //*********************************************************************************************
 //************ IMPORTANT SETTINGS - YOU MUST CHANGE/CONFIGURE TO FIT YOUR HARDWARE ************
@@ -36,6 +37,15 @@
 //Match frequency to the hardware version of the radio on your Moteino (uncomment one):
 #define FREQUENCY     RF69_915MHZ
 #define ENCRYPTKEY    "sampleEncryptKey" //exactly the same 16 characters/bytes on all nodes!
+ //********** DHT Sensor stuff 
+#define DHTPIN   4    // what digital pin we're connected to
+#define DHTTYPE DHT22   // DHT 22
+// Initialize DHT sensor.
+// Note that older versions of this library took an optional third parameter to
+// tweak the timings for faster processors.  This parameter is no longer needed
+// as the current DHT reading algorithm adjusts itself to work on faster procs.
+DHT dht(DHTPIN, DHTTYPE);
+//**********************
 //*********************************************************************************************
 //Auto Transmission Control - dials down transmit power to save battery
 //Usually you do not need to always transmit at max output power
@@ -51,10 +61,7 @@
 #define SERIAL_BAUD 9600
 #define LED           9 // Moteinos have LEDs on D9
 
-int TRANSMITPERIOD = 2000; //transmit a packet to gateway so often (in ms)
-char payload[] = "123 ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-char buff[20];
-byte sendSize=0;
+char buff[20]; //Do we need this?
 //***** maybe we want an ACK but I don't think so******//
 boolean requestACK = false;
 
@@ -62,6 +69,7 @@ RFM69_ATC radio;
 
 void setup() {
   Serial.begin(SERIAL_BAUD);
+  dht.begin();
   radio.initialize(FREQUENCY,NODEID,NETWORKID);
   radio.encrypt(ENCRYPTKEY);
 
@@ -89,8 +97,9 @@ void Blink(byte PIN, int DELAY_MS)
   digitalWrite(PIN,LOW);
 }
 
-long lastPeriod = 0;
+long counter = 0;
 void loop() {
+  delay(2000);
  
 //********* e-carlin our node won't be recieving any packets so no need for this either ***********
   // check for any received packets
@@ -111,37 +120,78 @@ void loop() {
   // }
   //******************************************************************
 
-  int currPeriod = millis()/TRANSMITPERIOD;
-  if (currPeriod != lastPeriod)
-  {
-    lastPeriod=currPeriod;
+      Serial.print("Sending packet num ");
+      Serial.println(counter);
 
-    //e-carlin I think this if is just for the first send we can probably eliminate it and just use what is in the else, not positive though....
-    //send FLASH id
-    if(sendSize==0)
-    {
-      Serial.print("Sending first packet...");
-      byte buffLen=strlen(buff);
-      if (radio.sendWithRetry(GATEWAYID, buff, buffLen)) //e-carlin maybe ? keep the meat of this if because that is where we are actually sending 
-        Serial.print(" ok!"); //e-carlin can remove this because our node won't be printing anything
-      else Serial.print(" nothing..."); //e-carlin same here
-      //sendSize = (sendSize + 1) % 31;
-    }
-    else
-    {
-      Serial.print("Sending[");
-      Serial.print(sendSize);
-      Serial.print("]: ");
-      for(byte i = 0; i < sendSize; i++){
-        Serial.print((char)payload[i]);
-      }
+      // Wait a few seconds between measurements.
+  delay(2000);
 
-      if (radio.sendWithRetry(GATEWAYID, payload, sendSize))
-       Serial.print(" ok!");
-      else Serial.print(" nothing...");
-    }
-    sendSize = (sendSize + 1) % 31;
-    Serial.println();
-    Blink(LED,3);
+  // Reading temperature or humidity takes about 250 milliseconds!
+  // Sensor readings may also be up to 2 seconds 'old' (its a very slow sensor)
+  float h = dht.readHumidity();
+  // Read temperature as Celsius (the default)
+  float t = dht.readTemperature();
+  // Read temperature as Fahrenheit (isFahrenheit = true)
+  float f = dht.readTemperature(true);
+
+  // Check if any reads failed and exit early (to try again).
+  if (isnan(h) || isnan(t) || isnan(f)) {
+    Serial.println("Failed to read from DHT sensor!");
+    return;
+  }
+
+  // Compute heat index in Fahrenheit (the default)
+  float hif = dht.computeHeatIndex(f, h);
+  // Compute heat index in Celsius (isFahreheit = false)
+  float hic = dht.computeHeatIndex(t, h, false);
+
+//  Serial.print("Humidity: ");
+//  Serial.print(h);
+//  Serial.print(" %\t");
+//  Serial.print("Temperature: ");
+//  Serial.print(t);
+//  Serial.print(" *C ");
+//  Serial.print(f);
+//  Serial.print(" *F\t");
+//  Serial.print("Heat index: ");
+//  Serial.print(hic);
+//  Serial.print(" *C ");
+//  Serial.print(hif);
+//  Serial.println(" *F");
+/*
+{
+  "pi": 3.141,
+  "happy": true,
+  "name": "Niels",
+  "nothing": null,
+  "answer": {
+    "everything": 42
+  },
+  "list": [1, 0, 2],
+  "object": {
+    "currency": "USD",
+    "value": 42.99
   }
 }
+*/
+
+char payload[100];
+char tempFaren[6];
+char humidity[6];
+/* 4 is mininum width, 2 is precision; float value is copied onto str_temp*/
+dtostrf(f, 4, 2, tempFaren);
+dtostrf(h, 4, 2, humidity);
+sprintf(payload,"{ \"farenheit\" : %s, \"humidity\" : %s }", tempFaren,humidity);
+Serial.print("Sending ");
+Serial.println(payload);
+
+
+     if (radio.sendWithRetry(GATEWAYID, payload, strlen(payload)))
+       Serial.print(" ok!");
+      else Serial.print(" nothing...");
+    Serial.println();
+    Blink(LED,3);
+
+    counter++;
+  }
+

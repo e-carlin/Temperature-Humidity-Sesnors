@@ -46,9 +46,9 @@ if ser.isOpen():
     	while True:
     		response = ser.readline()
     		if response == "":
-    			print("Read in: nothing")
+    			print("Nothing...")
     		else:
-    			print("Read in: " + response)
+    			print(response)
 
 
     		
