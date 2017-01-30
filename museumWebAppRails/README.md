@@ -25,6 +25,7 @@ Virtual Box and Ubuntu for my environment.
 5) Navigate to the homepage
  
 	localhost:3000
+	
 
 
 
