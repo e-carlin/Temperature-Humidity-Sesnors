@@ -17,9 +17,6 @@ class ReadingsController < ApplicationController
     @reading = Reading.new
   end
 
-  # GET /readings/1/edit
-  def edit
-  end
 
   # POST /readings
   # POST /readings.json
@@ -37,19 +34,6 @@ class ReadingsController < ApplicationController
     end
   end
 
-  # PATCH/PUT /readings/1
-  # PATCH/PUT /readings/1.json
-  def update
-    respond_to do |format|
-      if @reading.update(reading_params)
-        format.html { redirect_to @reading, notice: 'Reading was successfully updated.' }
-        format.json { render :show, status: :ok, location: @reading }
-      else
-        format.html { render :edit }
-        format.json { render json: @reading.errors, status: :unprocessable_entity }
-      end
-    end
-  end
 
   # DELETE /readings/1
   # DELETE /readings/1.json

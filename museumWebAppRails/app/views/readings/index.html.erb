@@ -13,7 +13,6 @@
     <% @readings.each do |reading| %>
       <tr>
         <td><%= link_to 'Show', reading %></td>
-        <td><%= link_to 'Edit', edit_reading_path(reading) %></td>
         <td><%= link_to 'Destroy', reading, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>
@@ -21,5 +20,3 @@
 </table>
 
 <br>
-
-<%= link_to 'New Reading', new_reading_path %>
