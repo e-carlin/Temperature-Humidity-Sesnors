@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :readings
   root 'index#index'
 
   resources :passwords, controller: "clearance/passwords", only: [:create, :new]
