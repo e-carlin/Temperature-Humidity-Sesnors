@@ -26,6 +26,8 @@
 // **********************************************************************************
 #include <RFM69.h>         //get it here: https://www.github.com/lowpowerlab/rfm69
 #include <RFM69_ATC.h>     //get it here: https://www.github.com/lowpowerlab/rfm69
+#include <LowPower.h> //get library from: https://github.com/lowpowerlab/lowpower
+                      //writeup here: http://www.rocketscream.com/blog/2011/07/04/lightweight-low-power-arduino-library/
 #include "DHT.h"
 
 //*********************************************************************************************
@@ -192,6 +194,10 @@ Serial.println(payload);
     Serial.println();
     Blink(LED,3);
 
+//Power down the radio
+  radio.sleep();
+  //Sleep the device for 8s
+  LowPower.powerDown(SLEEP_8S, ADC_OFF, BOD_OFF);
     counter++;
   }
 
