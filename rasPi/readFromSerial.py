@@ -3,7 +3,7 @@
 # A simple script to read incoming data from a usb port
 # and print it to the console
 
-import serial, time
+import serial, time, datetime
 #initialization and open the port
 
 #possible timeout values:
@@ -41,6 +41,8 @@ if ser.isOpen():
     	ser.flushOutput()#flush output buffer, aborting current output and discard all that is in buffer
     	time.sleep(0.5)  #give the serial port sometime to receive the data
 
+        
+
     	numOfLines = 0
 
     	while True:
@@ -49,6 +51,11 @@ if ser.isOpen():
     			print("Nothing...")
     		else:
     			print(response)
+                #Add timestamp, as the Moteino's can't reliably provide an accurate timestamp
+                dateString = '%Y/%m/%d %H:%M:%S'
+                dateString = datetime.now();
+                response += "\"timeStamp\" : " + dateString + " }"
+                print(response)
 
 
     		

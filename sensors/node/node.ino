@@ -197,7 +197,7 @@ void loop() {
     Serial.print("Voltage: ");
     Serial.println(voltage);
 
-    sprintf(payload, "{ \"farenheit\" : %s, \"humidity\" : %s, \"node ID\" : %s, \"sensor ID\" : %s, \"voltage\" : %s }", tempFaren, humidity, nodeID, sensorID, voltage);
+    sprintf(payload, "{ \"farenheit\" : %s, \"humidity\" : %s, \"node ID\" : %s, \"sensor ID\" : %s, \"voltage\" : %s ", tempFaren, humidity, nodeID, sensorID, voltage);
     Serial.print("Sending ");
     Serial.println(payload);
 
