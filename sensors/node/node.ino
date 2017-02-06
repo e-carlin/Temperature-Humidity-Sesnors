@@ -40,10 +40,11 @@
 #define FREQUENCY     RF69_915MHZ
 #define ENCRYPTKEY    "sampleEncryptKey" //exactly the same 16 characters/bytes on all nodes!
 //********** DHT Sensor stuff
-#define DHTPIN   4    // what digital pin we're connected to (SINGLE SENSOR) <== Probably will be replaced
 #define DHTTYPE DHT22   // DHT 22
 //#define SENSOR_PINS {4} // All of the digital pins we're connected to (MULTIPLE SENSORS)
 int SENSOR_PINS[] = {4};
+#define DHTPIN   4    // what digital pin we're connected to (SINGLE SENSOR) <== Probably will be replaced
+
 
 // Initialize DHT sensor.
 // Note that older versions of this library took an optional third parameter to
@@ -155,7 +156,6 @@ void loop() {
   Serial.println(counter);
 
   for (i = 0; i < ARR_LEN; i++) {
-    delay(2000);
     Serial.print("Reading sensor from pin ");
     Serial.println(SENSOR_PINS[i]);
 
@@ -169,9 +169,9 @@ void loop() {
     if (isnan(h) || isnan(t) || isnan(f) || isnan(v)) {
       Serial.println("Failed to read from DHT sensor!");
       return;
-    }
 
-    char payload[100];
+      /* Send the reading */
+         char payload[100];
     char tempFaren[6];
     char humidity[6];
     char nodeID[6];
@@ -207,6 +207,8 @@ void loop() {
     else Serial.print(" nothing...");
     Serial.println();
     Blink(LED, 3);
+    }
+
 
     //Power down the radio
     radio.sleep();
