@@ -41,9 +41,9 @@
 #define ENCRYPTKEY    "sampleEncryptKey" //exactly the same 16 characters/bytes on all nodes!
 //********** DHT Sensor stuff
 #define DHTTYPE DHT22   // DHT 22
-//#define SENSOR_PINS {4} // All of the digital pins we're connected to (MULTIPLE SENSORS)
-int SENSOR_PINS[] = {4};
-#define DHTPIN   4    // what digital pin we're connected to (SINGLE SENSOR) <== Probably will be replaced
+//#define SENSOR_PINS {16} // All of the digital pins we're connected to (MULTIPLE SENSORS)
+int SENSOR_PINS[] = {16};
+//#define DHTPIN   16    // what digital pin we're connected to (SINGLE SENSOR) <== Probably will be replaced
 
 
 // Initialize DHT sensor.
@@ -70,7 +70,6 @@ DHT DHT_LIST[] = {dht};
 #define ENABLE_ATC    //comment out this line to disable AUTO TRANSMISSION CONTROL
 #define ATC_RSSI      -80
 //*********************************************************************************************
-
 //e-carlin: I think this should be 9600 (atleast for macs)
 //#define SERIAL_BAUD   115200
 #define SERIAL_BAUD 9600
@@ -102,14 +101,14 @@ void setup() {
   //Always test your ATC mote in the edge cases in your own environment to ensure ATC will perform as you expect
   radio.enableAutoPower(ATC_RSSI);
 
-  char buff[50];
-  sprintf(buff, "\nTransmitting at %d Mhz...", FREQUENCY);
-  Serial.println(buff);
+//  char buff[50];
+//  sprintf(buff, "\nTransmitting at %d Mhz...", FREQUENCY);
+//  Serial.println(buff);
 
 
-#ifdef ENABLE_ATC
-  Serial.println("RFM69_ATC Enabled (Auto Transmission Control)\n");
-#endif
+//#ifdef ENABLE_ATC
+//  Serial.println("RFM69_ATC Enabled (Auto Transmission Control)\n");
+//#endif
 }
 
 void Blink(byte PIN, int DELAY_MS)
@@ -150,14 +149,12 @@ long readVcc() {
 long counter = 0;
 int i;
 void loop() {
-  delay(2000);
-
-  Serial.print("Sending packet num ");
-  Serial.println(counter);
+//  Serial.print("Sending packet num ");
+//  Serial.println(counter);
 
   for (i = 0; i < ARR_LEN; i++) {
-    Serial.print("Reading sensor from pin ");
-    Serial.println(SENSOR_PINS[i]);
+//    Serial.print("Reading sensor from pin ");
+//    Serial.println(SENSOR_PINS[i]);
 
     float h = DHT_LIST[i].readHumidity();
     float t = DHT_LIST[i].readTemperature();
@@ -167,38 +164,34 @@ void loop() {
 
     //Check readings
     if (isnan(h) || isnan(t) || isnan(f) || isnan(v)) {
-      Serial.println("Failed to read from DHT sensor!");
-      return;
+//      Serial.println("Failed to read from DHT sensor!");
+      continue;
+    }
 
       /* Send the reading */
          char payload[100];
     char tempFaren[6];
     char humidity[6];
-    char nodeID[6];
-    char sensorID[6];
-    char voltage[6];
 
     /* 4 is mininum width, 2 is precision; float value is copied onto str_temp*/
     dtostrf(f, 4, 2, tempFaren);
     dtostrf(h, 4, 2, humidity);
-    dtostrf(NODEID, 4, 0, nodeID);
-    dtostrf(DHTPIN, 4, 0, sensorID);
-    dtostrf(v, 4, 0, voltage);
 
-    Serial.println("Print testing");
-    Serial.print("Temp: " );
-    Serial.println(tempFaren);
-    Serial.print("Hum: ");
-    Serial.println(humidity);
-    Serial.print("NodeID: ");
-    Serial.println(nodeID);
-    Serial.print("SensorID: ");
-    Serial.println(sensorID);
-    Serial.print("Voltage: ");
-    Serial.println(voltage);
+//    Serial.println("Print testing");
+//    Serial.print("Temp: " );
+//    Serial.println(tempFaren);
+//    Serial.print("Hum: ");
+//    Serial.println(humidity);
+//    Serial.println(XSTR(NODEID));
+//    Serial.print("SensorID: ");
+//    Serial.println(SENSOR_PINS[i]);
+//    Serial.print("Voltage: ");
+//    Serial.println(voltage);
 
-    sprintf(payload, "{ \"farenheit\" : %s, \"humidity\" : %s, \"node ID\" : %s, \"sensor ID\" : %s, \"voltage\" : %s ", tempFaren, humidity, nodeID, sensorID, voltage);
-    Serial.print("Sending ");
+////    sprintf(payload, "{ \"farenheit\" : %s, \"humidity\" : %s, \"node ID\" : %s, \"sensor ID\" : %s, \"voltage\" : %s }", tempFaren, humidity, NODEID, DHTPIN, voltage);
+    sprintf(payload, "{ \"farenheit\" : %s, \"humidity\" : %s, \"sensor ID\" : %d, \"voltage\" : %ld }", tempFaren, humidity,  SENSOR_PINS[i], v);
+
+    Serial.print("Sending: ");
     Serial.println(payload);
 
 
@@ -207,14 +200,15 @@ void loop() {
     else Serial.print(" nothing...");
     Serial.println();
     Blink(LED, 3);
-    }
+    
+  }
 
-
+    delay(1000);
     //Power down the radio
-    radio.sleep();
-    //Sleep the device for 8s
-    LowPower.powerDown(SLEEP_8S, ADC_OFF, BOD_OFF);
+//    radio.sleep();
+    //Sleep the device for xS
+//    LowPower.powerDown(SLEEP_8S, ADC_OFF, BOD_OFF);
+
 
     counter++;
-  }
 }
