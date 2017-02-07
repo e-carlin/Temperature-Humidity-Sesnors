@@ -3,7 +3,8 @@
 # A simple script to read incoming data from a usb port
 # and print it to the console
 
-import serial, time, datetime
+import serial, time
+from datetime import datetime
 #initialization and open the port
 
 #possible timeout values:
@@ -14,8 +15,8 @@ import serial, time, datetime
 ser = serial.Serial()
 # This port will be different of different machines check correct port with
 # $ python -m serial.tools.list_ports
-ser.port = "/dev/cu.usbserial-DN01Q8E0" #For mini-USB cable
-# ser.port = "/dev/cu.usbserial-A5058SOW" #For FTDI cable
+# ser.port = "/dev/cu.usbserial-DN01Q8E0" #For mini-USB cable
+ser.port = "/dev/cu.usbserial-A5058SOW" #For FTDI cable
 ser.baudrate = 9600
 ser.bytesize = serial.EIGHTBITS #number of bits per bytes
 ser.parity = serial.PARITY_NONE #set parity check: no parity
@@ -53,7 +54,7 @@ if ser.isOpen():
     			print(response)
                 #Add timestamp, as the Moteino's can't reliably provide an accurate timestamp
                 dateString = '%Y/%m/%d %H:%M:%S'
-                dateString = datetime.now();
+                dateString = str(datetime.now());
                 response += "\"timeStamp\" : " + dateString + " }"
                 print(response)
 

@@ -131,7 +131,7 @@ void loop() {
     dtostrf(t, 4, 2, tempFaren);
     dtostrf(h, 4, 2, humidity);
 
-    sprintf(payload, "{ \"farenheit\" : %s, \"humidity\" : %s, \"sensor ID\" : %d, \"voltage\" : %ld }", tempFaren, humidity,  SENSOR_PINS[i], v);
+    sprintf(payload, "{ \"temperature\" : %s, \"humidity\" : %s, \"sensor ID\" : %d, \"voltage\" : %ld, ", tempFaren, humidity,  SENSOR_PINS[i], v);
 
     Serial.println(payload);
 
