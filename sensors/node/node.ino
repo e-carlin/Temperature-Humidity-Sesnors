@@ -56,11 +56,7 @@ RFM69_ATC radio;
 #define DHTTYPE DHT22   // DHT 22
 #define NUM_CONNECTED_PINS 1
 int SENSOR_PINS[] = {16}; //The digital pins sensors are connected to
-// Initialize DHT sensor.
-//DHT dht(SENSOR_PINS[0], DHTTYPE);
-//DHT DHT_LIST[] = {dht};
-//DHT DHT_LIST[] = {dht};
-DHT* DHT_LIST[NUM_CONNECTED_PINS];
+DHT* DHT_LIST[NUM_CONNECTED_PINS]; //Array of DHT objects
 
 void setup() {
   //Start serial port
@@ -68,10 +64,8 @@ void setup() {
 
   //Start DHT22's
   for (int i = 0; i < NUM_CONNECTED_PINS; i++) {
-
-//    DHT_LIST[i] = DHT(SENSOR_PINS[i], DHTTYPE);
-//    DHT_LIST[i].begin();
-
+      DHT_LIST[i] = new DHT(SENSOR_PINS[i], DHTTYPE);
+      DHT_LIST[i]->begin();
   }
   
   radio.initialize(FREQUENCY, NODEID, NETWORKID);
@@ -118,13 +112,12 @@ void loop() {
   //Read each sensor and send data
   for (i = 0; i < NUM_CONNECTED_PINS; i++) {
 
-    float h = DHT_LIST[i].readHumidity();
-    float t = DHT_LIST[i].readTemperature();
-    float f = DHT_LIST[i].readTemperature(true);
+    float h = DHT_LIST[i]->readHumidity();
+    float t = DHT_LIST[i]->readTemperature(true);
     long v = readVcc();
 
     //If failed to read then just skip this pin
-    if (isnan(h) || isnan(t) || isnan(f) || isnan(v)) {
+    if (isnan(h) || isnan(t) || isnan(v)) {
       continue;
     }
 
@@ -135,7 +128,7 @@ void loop() {
 
     /* This is necessary for sending float in char[] packet */
     //4 is mininum width, 2 is precision
-    dtostrf(f, 4, 2, tempFaren);
+    dtostrf(t, 4, 2, tempFaren);
     dtostrf(h, 4, 2, humidity);
 
     sprintf(payload, "{ \"farenheit\" : %s, \"humidity\" : %s, \"sensor ID\" : %d, \"voltage\" : %ld }", tempFaren, humidity,  SENSOR_PINS[i], v);
