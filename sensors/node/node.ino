@@ -53,7 +53,7 @@ boolean requestACK = false;
 RFM69_ATC radio;
 
 //********** DHT22 definitions ************************
-#define DHTTYPE DHT22   // DHT 22
+#define DHTTYPE DHT22
 #define NUM_CONNECTED_PINS 1
 int SENSOR_PINS[] = {16}; //The digital pins sensors are connected to
 DHT* DHT_LIST[NUM_CONNECTED_PINS]; //Array of DHT objects
