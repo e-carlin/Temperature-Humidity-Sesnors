@@ -67,9 +67,6 @@ void setup() {
   radio.encrypt(ENCRYPTKEY);
   radio.promiscuous(promiscuousMode);
   //radio.setFrequency(919000000); //set frequency to some custom frequency
-  char buff[50];
-  sprintf(buff, "\nListening at %d Mhz...", FREQUENCY==RF69_433MHZ ? 433 : FREQUENCY==RF69_868MHZ ? 868 : 915);
-  Serial.println(buff);
   
 #ifdef ENABLE_ATC
   Serial.println("RFM69_ATC Enabled (Auto Transmission Control)\n");
@@ -89,29 +86,15 @@ void loop() {
     {
       Serial.print("to [");Serial.print(radio.TARGETID, DEC);Serial.print("] ");
     }
-    for (byte i = 0; i < radio.DATALEN; i++)
+    for (byte i = 0; i < radio.DATALEN; i++){
       Serial.print((char)radio.DATA[i]);
+    }
     // Serial.print("   [RX_RSSI:");Serial.print(radio.RSSI);Serial.print("]");
     
     if (radio.ACKRequested())
     {
       byte theNodeID = radio.SENDERID;
       radio.sendACK();
-      // Serial.print(" - ACK sent.");
-
-      // When a node requests an ACK, respond to the ACK
-      // and also send a packet requesting an ACK (every 3rd one only)
-      // This way both TX/RX NODE functions are tested on 1 end at the GATEWAY
-      // if (ackCount++%3==0)
-      // {
-      //   Serial.print(" Pinging node ");
-      //   Serial.print(theNodeID);
-      //   Serial.print(" - ACK...");
-      //   delay(3); //need this when sending right after reception .. ?
-      //   if (radio.sendWithRetry(theNodeID, "ACK TEST", 8, 0))  // 0 = only 1 attempt, no retries
-      //     Serial.print("ok!");
-      //   else Serial.print("nothing");
-      // }
     }
     Serial.println();
     Blink(LED,3);

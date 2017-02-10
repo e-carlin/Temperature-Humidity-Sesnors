@@ -41,6 +41,7 @@
 #define GATEWAYID     1
 #define FREQUENCY     RF69_915MHZ
 #define ENCRYPTKEY    "sampleEncryptKey" //exactly the same 16 characters/bytes on all nodes!
+#define MAX_PACKET_SIZE 61 //The maximum number of bytes in a packet
 //Auto Transmission Control - dials down transmit power to save battery
 //Usually you do not need to always transmit at max output power
 //By reducing TX power even a little you save a significanadt amount of battery power
@@ -126,7 +127,7 @@ void loop() {
     }
 
       /* Send the reading */
-    char payload[100];
+    char payload[MAX_PACKET_SIZE];
     char tempFaren[6];
     char humidity[6];
 
@@ -135,11 +136,11 @@ void loop() {
     dtostrf(t, 4, 2, tempFaren);
     dtostrf(h, 4, 2, humidity);
 
-    sprintf(payload, "{ \"temperature\" : %s, \"humidity\" : %s, \"sensor ID\" : %d, \"voltage\" : %ld, ", tempFaren, humidity,  SENSOR_PINS[i], v);
+    sprintf(payload, "{ \"temp\" : %s, \"hum\" : %s, \"sID\" : %d, \"volt\" : %ld, ", tempFaren, humidity,  SENSOR_PINS[i], v);
 
     Serial.println(payload);
 
-
+    Serial.println(strlen(payload));
     if (radio.sendWithRetry(GATEWAYID, payload, strlen(payload)))
       Serial.print(" ok!");
     else Serial.print(" nothing...");
@@ -148,16 +149,17 @@ void loop() {
     
   }
 
-  /* Sleep radio and chip */
-    // delay(1000);
-  // Power down the radio
+  
+//  /* Sleep radio and chip */
+//     delay(1000);
+//  // Power down the radio
   radio.sleep();
-  // Sleep the chip
-  //Needs to be in a loop because max time allowed by powerDown() is 8s
-  for(i=0; i<SLEEP_TIME; i++){
-    //Power down for 8s (max allowed time) just leaving watchdog timer running
+//  // Sleep the chip
+//  //Needs to be in a loop because max time allowed by powerDown() is 8s
+//  for(i=0; i<SLEEP_TIME; i++){
+//    //Power down for 8s (max allowed time) just leaving watchdog timer running
     LowPower.powerDown(SLEEP_8S, ADC_OFF, BOD_OFF);
-  }
+//  }
 }
 
 
