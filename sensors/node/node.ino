@@ -58,6 +58,10 @@ RFM69_ATC radio;
 int SENSOR_PINS[] = {16}; //The digital pins sensors are connected to
 DHT* DHT_LIST[NUM_CONNECTED_PINS]; //Array of DHT objects
 
+//******** LowPower definitions ***********
+#define SLEEP_TIME 35 //SLEEP_TIME * 8 = num seconds device will sleep for in between transmissions
+
+
 void setup() {
   //Start serial port
   Serial.begin(SERIAL_BAUD);
@@ -144,9 +148,17 @@ void loop() {
     
   }
 
-    delay(1000);
-    //Power down the radio
-//    radio.sleep();
-    //Sleep the device for xS
-//    LowPower.powerDown(SLEEP_8S, ADC_OFF, BOD_OFF);
+  /* Sleep radio and chip */
+    // delay(1000);
+  // Power down the radio
+  radio.sleep();
+  // Sleep the chip
+  //Needs to be in a loop because max time allowed by powerDown() is 8s
+  for(i=0; i<SLEEP_TIME; i++){
+    //Power down for 8s (max allowed time) just leaving watchdog timer running
+    LowPower.powerDown(SLEEP_8S, ADC_OFF, BOD_OFF);
+  }
 }
+
+
+
