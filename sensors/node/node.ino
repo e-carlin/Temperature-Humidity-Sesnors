@@ -6,19 +6,19 @@
 // **********************************************************************************
 // License
 // **********************************************************************************
-// This program is free software; you can redistribute it 
-// and/or modify it under the terms of the GNU General    
-// Public License as published by the Free Software       
-// Foundation; either version 3 of the License, or        
-// (at your option) any later version.                    
-//                                                        
-// This program is distributed in the hope that it will   
-// be useful, but WITHOUT ANY WARRANTY; without even the  
-// implied warranty of MERCHANTABILITY or FITNESS FOR A   
-// PARTICULAR PURPOSE. See the GNU General Public        
-// License for more details.                              
-//                                                        
-// Licence can be viewed at                               
+// This program is free software; you can redistribute it
+// and/or modify it under the terms of the GNU General
+// Public License as published by the Free Software
+// Foundation; either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will
+// be useful, but WITHOUT ANY WARRANTY; without even the
+// implied warranty of MERCHANTABILITY or FITNESS FOR A
+// PARTICULAR PURPOSE. See the GNU General Public
+// License for more details.
+//
+// Licence can be viewed at
 // http://www.gnu.org/licenses/gpl-3.0.txt
 //
 // Please maintain this license information along with authorship
@@ -26,172 +26,141 @@
 // **********************************************************************************
 #include <RFM69.h>         //get it here: https://www.github.com/lowpowerlab/rfm69
 #include <RFM69_ATC.h>     //get it here: https://www.github.com/lowpowerlab/rfm69
-#include "DHT.h"
+#include <DHT.h>
+#include <LowPower.h> //get library from: https://github.com/lowpowerlab/lowpower
+                      //writeup here: http://www.rocketscream.com/blog/2011/07/04/lightweight-low-power-arduino-library/
+//***** USB port BAUD *****
+#define SERIAL_BAUD 9600 //9600 seems to work not really sure what it actually means
 
-//*********************************************************************************************
-//************ IMPORTANT SETTINGS - YOU MUST CHANGE/CONFIGURE TO FIT YOUR HARDWARE ************
-//*********************************************************************************************
+//******* LED **************
+#define LED 9 // Moteinos have LEDs on D9
+
+//***** RFM69 definitions ********************************
 #define NODEID        2    //must be unique for each node on same network (range up to 254, 255 is used for broadcast)
 #define NETWORKID     100  //the same on all nodes that talk to each other (range up to 255)
 #define GATEWAYID     1
-//Match frequency to the hardware version of the radio on your Moteino (uncomment one):
 #define FREQUENCY     RF69_915MHZ
 #define ENCRYPTKEY    "sampleEncryptKey" //exactly the same 16 characters/bytes on all nodes!
- //********** DHT Sensor stuff 
-#define DHTPIN   4    // what digital pin we're connected to
-#define DHTTYPE DHT22   // DHT 22
-// Initialize DHT sensor.
-// Note that older versions of this library took an optional third parameter to
-// tweak the timings for faster processors.  This parameter is no longer needed
-// as the current DHT reading algorithm adjusts itself to work on faster procs.
-DHT dht(DHTPIN, DHTTYPE);
-//**********************
-//*********************************************************************************************
+#define MAX_PACKET_SIZE 61 //The maximum number of bytes in a packet
 //Auto Transmission Control - dials down transmit power to save battery
 //Usually you do not need to always transmit at max output power
-//By reducing TX power even a little you save a significant amount of battery power
+//By reducing TX power even a little you save a significanadt amount of battery power
 //This setting enables this gateway to work with remote nodes that have ATC enabled to
 //dial their power down to only the required level (ATC_RSSI)
 #define ENABLE_ATC    //comment out this line to disable AUTO TRANSMISSION CONTROL
 #define ATC_RSSI      -80
-//*********************************************************************************************
-
-//e-carlin: I think this should be 9600 (atleast for macs)
-//#define SERIAL_BAUD   115200
-#define SERIAL_BAUD 9600
-#define LED           9 // Moteinos have LEDs on D9
-
-char buff[20]; //Do we need this?
 //***** maybe we want an ACK but I don't think so******//
 boolean requestACK = false;
-
 RFM69_ATC radio;
 
+//********** DHT22 definitions ************************
+#define DHTTYPE DHT22
+#define NUM_CONNECTED_PINS 1
+int SENSOR_PINS[] = {16}; //The digital pins sensors are connected to
+DHT* DHT_LIST[NUM_CONNECTED_PINS]; //Array of DHT objects
+
+//******** LowPower definitions ***********
+#define SLEEP_TIME 35 //SLEEP_TIME * 8 = num seconds device will sleep for in between transmissions
+
+
 void setup() {
+  //Start serial port
   Serial.begin(SERIAL_BAUD);
-  dht.begin();
-  radio.initialize(FREQUENCY,NODEID,NETWORKID);
+
+  //Start DHT22's
+  for (int i = 0; i < NUM_CONNECTED_PINS; i++) {
+      DHT_LIST[i] = new DHT(SENSOR_PINS[i], DHTTYPE);
+      DHT_LIST[i]->begin();
+  }
+  
+  radio.initialize(FREQUENCY, NODEID, NETWORKID);
   radio.encrypt(ENCRYPTKEY);
 
-//Auto Transmission Control - dials down transmit power to save battery (-100 is the noise floor, -90 is still pretty good)
-//For indoor nodes that are pretty static and at pretty stable temperatures (like a MotionMote) -90dBm is quite safe
-//For more variable nodes that can expect to move or experience larger temp drifts a lower margin like -70 to -80 would probably be better
-//Always test your ATC mote in the edge cases in your own environment to ensure ATC will perform as you expect
-radio.enableAutoPower(ATC_RSSI);
 
-  char buff[50];
-  sprintf(buff, "\nTransmitting at %d Mhz...", FREQUENCY);
-  Serial.println(buff);
-
-
-#ifdef ENABLE_ATC
-  Serial.println("RFM69_ATC Enabled (Auto Transmission Control)\n");
-#endif
+  //Auto Transmission Control - dials down transmit power to save battery (-100 is the noise floor, -90 is still pretty good)
+  //For indoor nodes that are pretty static and at pretty stable temperatures (like a MotionMote) -90dBm is quite safe
+  //For more variable nodes that can expect to move or experience larger temp drifts a lower margin like -70 to -80 would probably be better
+  //Always test your ATC mote in the edge cases in your own environment to ensure ATC will perform as you expect
+  radio.enableAutoPower(ATC_RSSI);
 }
 
 void Blink(byte PIN, int DELAY_MS)
 {
   pinMode(PIN, OUTPUT);
-  digitalWrite(PIN,HIGH);
+  digitalWrite(PIN, HIGH);
   delay(DELAY_MS);
-  digitalWrite(PIN,LOW);
+  digitalWrite(PIN, LOW);
 }
 
-long counter = 0;
+// Retrieves the voltage in miniVolts, doesn't require additional hardware
+long readVcc() {
+  // Read 1.1V reference against AVcc
+  // set the reference to Vcc and the measurement to the internal 1.1V reference
+  ADMUX = _BV(REFS0) | _BV(MUX3) | _BV(MUX2) | _BV(MUX1);
+
+  delay(2); // Wait for Vref to settle
+  ADCSRA |= _BV(ADSC); // Start conversion
+  while (bit_is_set(ADCSRA, ADSC)); // measuring
+
+  uint8_t low  = ADCL; // must read ADCL first - it then locks ADCH
+  uint8_t high = ADCH; // unlocks both
+
+  long result = (high << 8) | low;
+
+  result = 1125300L / result; // Calculate Vcc (in mV); 1125300 = 1.1*1023*1000
+  return result; // Vcc in millivolts
+}
+
+int i;
 void loop() {
-  delay(2000);
- 
-//********* e-carlin our node won't be recieving any packets so no need for this either ***********
-  // check for any received packets
-  // if (radio.receiveDone())
-  // {
-  //   Serial.print('[');Serial.print(radio.SENDERID, DEC);Serial.print("] ");
-  //   for (byte i = 0; i < radio.DATALEN; i++)
-  //     Serial.print((char)radio.DATA[i]);
-  //   Serial.print("   [RX_RSSI:");Serial.print(radio.RSSI);Serial.print("]");
 
-  //   if (radio.ACKRequested())
-  //   {
-  //     radio.sendACK();
-  //     Serial.print(" - ACK sent");
-  //   }
-  //   Blink(LED,3);
-  //   Serial.println();
-  // }
-  //******************************************************************
+  //Read each sensor and send data
+  for (i = 0; i < NUM_CONNECTED_PINS; i++) {
 
-      Serial.print("Sending packet num ");
-      Serial.println(counter);
+    float h = DHT_LIST[i]->readHumidity();
+    float t = DHT_LIST[i]->readTemperature(true);
+    long v = readVcc();
 
-      // Wait a few seconds between measurements.
-  delay(2000);
+    //If failed to read then just skip this pin
+    if (isnan(h) || isnan(t) || isnan(v)) {
+      continue;
+    }
 
-  // Reading temperature or humidity takes about 250 milliseconds!
-  // Sensor readings may also be up to 2 seconds 'old' (its a very slow sensor)
-  float h = dht.readHumidity();
-  // Read temperature as Celsius (the default)
-  float t = dht.readTemperature();
-  // Read temperature as Fahrenheit (isFahrenheit = true)
-  float f = dht.readTemperature(true);
+      /* Send the reading */
+    char payload[MAX_PACKET_SIZE];
+    char tempFaren[6];
+    char humidity[6];
 
-  // Check if any reads failed and exit early (to try again).
-  if (isnan(h) || isnan(t) || isnan(f)) {
-    Serial.println("Failed to read from DHT sensor!");
-    return;
+    /* This is necessary for sending float in char[] packet */
+    //4 is mininum width, 2 is precision
+    dtostrf(t, 4, 2, tempFaren);
+    dtostrf(h, 4, 2, humidity);
+
+    sprintf(payload, "{ \"temp\" : %s, \"hum\" : %s, \"sID\" : %d, \"volt\" : %ld, ", tempFaren, humidity,  SENSOR_PINS[i], v);
+
+    Serial.println(payload);
+
+    Serial.println(strlen(payload));
+    if (radio.sendWithRetry(GATEWAYID, payload, strlen(payload)))
+      Serial.print(" ok!");
+    else Serial.print(" nothing...");
+      Serial.println();
+    Blink(LED, 3);
+    
   }
 
-  // Compute heat index in Fahrenheit (the default)
-  float hif = dht.computeHeatIndex(f, h);
-  // Compute heat index in Celsius (isFahreheit = false)
-  float hic = dht.computeHeatIndex(t, h, false);
-
-//  Serial.print("Humidity: ");
-//  Serial.print(h);
-//  Serial.print(" %\t");
-//  Serial.print("Temperature: ");
-//  Serial.print(t);
-//  Serial.print(" *C ");
-//  Serial.print(f);
-//  Serial.print(" *F\t");
-//  Serial.print("Heat index: ");
-//  Serial.print(hic);
-//  Serial.print(" *C ");
-//  Serial.print(hif);
-//  Serial.println(" *F");
-/*
-{
-  "pi": 3.141,
-  "happy": true,
-  "name": "Niels",
-  "nothing": null,
-  "answer": {
-    "everything": 42
-  },
-  "list": [1, 0, 2],
-  "object": {
-    "currency": "USD",
-    "value": 42.99
-  }
+  
+//  /* Sleep radio and chip */
+//     delay(1000);
+//  // Power down the radio
+  radio.sleep();
+//  // Sleep the chip
+//  //Needs to be in a loop because max time allowed by powerDown() is 8s
+//  for(i=0; i<SLEEP_TIME; i++){
+//    //Power down for 8s (max allowed time) just leaving watchdog timer running
+    LowPower.powerDown(SLEEP_8S, ADC_OFF, BOD_OFF);
+//  }
 }
-*/
-
-char payload[100];
-char tempFaren[6];
-char humidity[6];
-/* 4 is mininum width, 2 is precision; float value is copied onto str_temp*/
-dtostrf(f, 4, 2, tempFaren);
-dtostrf(h, 4, 2, humidity);
-sprintf(payload,"{ \"farenheit\" : %s, \"humidity\" : %s }", tempFaren,humidity);
-Serial.print("Sending ");
-Serial.println(payload);
 
 
-     if (radio.sendWithRetry(GATEWAYID, payload, strlen(payload)))
-       Serial.print(" ok!");
-      else Serial.print(" nothing...");
-    Serial.println();
-    Blink(LED,3);
-
-    counter++;
-  }
 

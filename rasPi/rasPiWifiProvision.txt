@@ -6,7 +6,7 @@
 
 $ sudo nmap -sP <your IP>/24
 	
-		Note to find you IP you can do:
+		Note: to find you IP you can do:
 			$ ifconfig en0
 
 4) SSH into the PI and provide password when prompted
