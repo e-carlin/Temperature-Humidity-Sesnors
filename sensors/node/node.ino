@@ -62,9 +62,8 @@ DHT* DHT_LIST[NUM_CONNECTED_PINS]; //Array of DHT objects
 //******** LowPower definitions ***********
 #define SLEEP_TIME 35 //SLEEP_TIME * 8 = num seconds device will sleep for in between transmissions
 #include <avr/wdt.h>
-#define Reset_AVR() wdt_enable(WDTO_1S); while(1) {} //This resets the chip
+#define Reset_AVR() wdt_enable(WDTO_15MS); while(1) {} //This resets the chip
                                                      //Used in cases where a reading was NAN
-
 void setup() {
   //Start serial port
 //  Serial.begin(SERIAL_BAUD);
