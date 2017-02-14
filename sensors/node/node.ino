@@ -61,11 +61,13 @@ DHT* DHT_LIST[NUM_CONNECTED_PINS]; //Array of DHT objects
 
 //******** LowPower definitions ***********
 #define SLEEP_TIME 35 //SLEEP_TIME * 8 = num seconds device will sleep for in between transmissions
-
+#include <avr/wdt.h>
+#define Reset_AVR() wdt_enable(WDTO_1S); while(1) {} //This resets the chip
+                                                     //Used in cases where a reading was NAN
 
 void setup() {
   //Start serial port
-  Serial.begin(SERIAL_BAUD);
+//  Serial.begin(SERIAL_BAUD);
 
   //Start DHT22's
   for (int i = 0; i < NUM_CONNECTED_PINS; i++) {
@@ -82,6 +84,7 @@ void setup() {
   //For more variable nodes that can expect to move or experience larger temp drifts a lower margin like -70 to -80 would probably be better
   //Always test your ATC mote in the edge cases in your own environment to ensure ATC will perform as you expect
   radio.enableAutoPower(ATC_RSSI);
+//  Blink(LED, 3);
 }
 
 void Blink(byte PIN, int DELAY_MS)
@@ -111,8 +114,10 @@ long readVcc() {
   return result; // Vcc in millivolts
 }
 
-int i;
+  int i;
+  char payload[MAX_PACKET_SIZE];
 void loop() {
+  Blink(LED, 3);
 
   //Read each sensor and send data
   for (i = 0; i < NUM_CONNECTED_PINS; i++) {
@@ -121,13 +126,16 @@ void loop() {
     float t = DHT_LIST[i]->readTemperature(true);
     long v = readVcc();
 
-    //If failed to read then just skip this pin
-    if (isnan(h) || isnan(t) || isnan(v)) {
-      continue;
+    //If failed to read then we need to do a reset!
+    if (isnan(h)|| isnan(t) || isnan(v)) {
+      Blink(LED, 1000);
+      sprintf(payload, "{ \"error\" : A reading was NAN, \"sID\" : %d,", SENSOR_PINS[i]);
+      radio.send(GATEWAYID, payload, strlen(payload));
+      Reset_AVR();
+//      continue;
     }
 
       /* Send the reading */
-    char payload[MAX_PACKET_SIZE];
     char tempFaren[6];
     char humidity[6];
 
@@ -138,14 +146,14 @@ void loop() {
 
     sprintf(payload, "{ \"temp\" : %s, \"hum\" : %s, \"sID\" : %d, \"volt\" : %ld, ", tempFaren, humidity,  SENSOR_PINS[i], v);
 
-    Serial.println(payload);
+//    Serial.println(payload);
 
-    Serial.println(strlen(payload));
-    if (radio.sendWithRetry(GATEWAYID, payload, strlen(payload)))
-      Serial.print(" ok!");
-    else Serial.print(" nothing...");
-      Serial.println();
-    Blink(LED, 3);
+//    if (radio.sendWithRetry(GATEWAYID, payload, strlen(payload)))
+//      Serial.print(" ok!");
+//    else Serial.print(" nothing...");
+//      Serial.println();
+    radio.send(GATEWAYID, payload, strlen(payload));
+//    Blink(LED, 3);
     
   }
 
@@ -158,7 +166,7 @@ void loop() {
 //  //Needs to be in a loop because max time allowed by powerDown() is 8s
 //  for(i=0; i<SLEEP_TIME; i++){
 //    //Power down for 8s (max allowed time) just leaving watchdog timer running
-    LowPower.powerDown(SLEEP_8S, ADC_OFF, BOD_OFF);
+    LowPower.powerDown(SLEEP_2S, ADC_OFF, BOD_OFF);
 //  }
 }
 
