@@ -7,6 +7,7 @@
     <tr>
     <th>Temperature</th>
     <th>Humidity</th>
+    <th>Recorded at</th>
     </tr>
   </thead>
 
@@ -15,6 +16,7 @@
       <tr>
         <td><%= reading.temperature%></td>
         <td><%= reading.humidity%></td>
+        <td><%= reading.recorded_at%></td>
         <td><%= link_to 'Show', reading %></td>
         <td><%= link_to 'Destroy', reading, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
