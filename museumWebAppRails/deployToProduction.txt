@@ -1,0 +1,13 @@
+1) SSH into the machine
+2) cd /var/www/museum_monitoring_sensors
+3) sudo git checkout .
+4) sudo git pull
+5) sudo rm -rf ../museumWebAppRails/ && sudo mv museumWebAppRails/ ../ && cd ../
+6) sudo chown -R ubuntu: museumWebAppRails/ %% cd museumWebAppRails/
+7) bundle install --deployment --without development test 
+8) bundle exec rake secret
+9) copy result into  nano config/secrets.yml
+            production:
+  secret_key_base: the value that you copied from 'rake secret'
+10)  bundle exec rake assets:precompile db:migrate RAILS_ENV=production
+11) passenger-config restart-app $(pwd)
