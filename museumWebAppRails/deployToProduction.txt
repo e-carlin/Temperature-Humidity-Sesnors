@@ -3,6 +3,7 @@
 3) sudo git checkout .
 4) sudo git pull
 5) sudo rm -rf ../museumWebAppRails/ && sudo mv museumWebAppRails/ ../ && cd ../
+	***This DELETES *ALL* databases and their contents
 6) sudo chown -R ubuntu: museumWebAppRails/ %% cd museumWebAppRails/
 7) bundle install --deployment --without development test 
 8) bundle exec rake secret
@@ -11,3 +12,11 @@
   secret_key_base: the value that you copied from 'rake secret'
 10)  bundle exec rake assets:precompile db:migrate RAILS_ENV=production
 11) passenger-config restart-app $(pwd)
+
+
+Note:
+	To delete the prodcution db run
+	$ bundle exec rake db:drop RAILS_ENV=production DISABLE_DATABASE_ENVIRONMENT_CHECK=1
+	To recreate it (with all of the data gone from deleting it) run
+	$ bundle exec rake assets:precompile db:migrate RAILS_ENV=production
+	$ passenger-config restart-app $(pwd)
