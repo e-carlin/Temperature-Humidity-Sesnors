@@ -74,14 +74,11 @@ uint32_t packetCount = 0;
 void loop() {
   if (radio.receiveDone())
   {
-//    if (promiscuousMode)
-//    {
-//      Serial.print("to [");Serial.print(radio.TARGETID, DEC);Serial.print("] ");
-//    }
     for (byte i = 0; i < radio.DATALEN; i++){
       Serial.print((char)radio.DATA[i]);
     }
-    // Serial.print("   [RX_RSSI:");Serial.print(radio.RSSI);Serial.print("]");
+    //Attach the nodeID to the sender to the packet
+    //Serial.print("\"nodeID\" :"+ radio.SENDERID+","); //Something like this
     
     if (radio.ACKRequested())
     {
