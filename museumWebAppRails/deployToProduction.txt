@@ -4,7 +4,7 @@
 4) sudo git pull
 5) sudo rm -rf ../museumWebAppRails/ && sudo mv museumWebAppRails/ ../ && cd ../
 	***This DELETES *ALL* databases and their contents
-6) sudo chown -R ubuntu: museumWebAppRails/ %% cd museumWebAppRails/
+6) sudo chown -R ubuntu: museumWebAppRails/ && cd museumWebAppRails/
 7) bundle install --deployment --without development test 
 8) bundle exec rake secret
 9) copy result into  nano config/secrets.yml
