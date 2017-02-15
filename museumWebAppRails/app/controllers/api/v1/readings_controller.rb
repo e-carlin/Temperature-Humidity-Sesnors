@@ -2,7 +2,8 @@ class Api::V1::ReadingsController < Api::V1::BaseController
   def create
   	pp "***************************"
   	pp "In API create"
-  	pp reading_params
+  	# pp reading_params[:temp]
+  	pp params[0]
   	pp "****************************"
     @reading = Reading.new(:temperature => reading_params[:temp],
     	:humidity => reading_params[:hum],
