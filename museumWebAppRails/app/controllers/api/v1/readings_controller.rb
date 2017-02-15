@@ -2,8 +2,7 @@ class Api::V1::ReadingsController < Api::V1::BaseController
   def create
   	pp "***************************"
   	pp "In API create"
-  	# pp reading_params[:temp]
-  	pp params[0]
+  	pp reading_params[:temp]
   	pp "****************************"
     @reading = Reading.new(:temperature => reading_params[:temp],
     	:humidity => reading_params[:hum],
@@ -22,6 +21,6 @@ class Api::V1::ReadingsController < Api::V1::BaseController
   private
     # Never trust parameters from the scary internet, only allow the white list through.
     def reading_params
-      params.permit(:temp, :hum, :timeStamp)
+      params.permit(:temp, :hum, :timeStamp, :volt, :sID)
     end
 end
