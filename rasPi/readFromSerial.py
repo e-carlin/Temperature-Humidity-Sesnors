@@ -58,10 +58,15 @@ if ser.isOpen():
                 response += " \"timeStamp\"  : \"" + dateString + "\"}"
                 print(response)
                 j = json.loads(response)
+                # r = requests.post('http://ec2-54-202-217-172.us-west-2.compute.amazonaws.com/api/v1/readings',
+                #     headers = {'Content-type': 'application/json'}, 
+                #     data = json.dumps(j))
                 r = requests.post('http://localhost:3000/api/v1/readings',
                     headers = {'Content-type': 'application/json'}, 
                     data = json.dumps(j))
+
                 print r
+                print r.content
 
 
             
