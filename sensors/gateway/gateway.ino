@@ -67,10 +67,6 @@ void setup() {
   radio.encrypt(ENCRYPTKEY);
   radio.promiscuous(promiscuousMode);
   //radio.setFrequency(919000000); //set frequency to some custom frequency
-  
-#ifdef ENABLE_ATC
-  Serial.println("RFM69_ATC Enabled (Auto Transmission Control)\n");
-#endif
 }
 
 byte ackCount=0;
@@ -78,14 +74,10 @@ uint32_t packetCount = 0;
 void loop() {
   if (radio.receiveDone())
   {
-    Serial.print("#[");
-    Serial.print(++packetCount);
-    Serial.print(']');
-    Serial.print('[');Serial.print(radio.SENDERID, DEC);Serial.print("] ");
-    if (promiscuousMode)
-    {
-      Serial.print("to [");Serial.print(radio.TARGETID, DEC);Serial.print("] ");
-    }
+//    if (promiscuousMode)
+//    {
+//      Serial.print("to [");Serial.print(radio.TARGETID, DEC);Serial.print("] ");
+//    }
     for (byte i = 0; i < radio.DATALEN; i++){
       Serial.print((char)radio.DATA[i]);
     }
