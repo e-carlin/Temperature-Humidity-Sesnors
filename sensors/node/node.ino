@@ -126,7 +126,7 @@ void loop() {
     //If failed to read then we need to do a reset!
     if (isnan(h)|| isnan(t) || isnan(v)) {
       Blink(LED, 1000);
-      sprintf(payload, "{ \"error\" : A reading was NAN, \"sID\" : %d,", SENSOR_PINS[i]);
+      sprintf(payload, "{ \"error\" : \"A reading was NAN\", \"sID\" : %d,", SENSOR_PINS[i]);
       radio.send(GATEWAYID, payload, strlen(payload));
       Reset_AVR();
 //      continue;
