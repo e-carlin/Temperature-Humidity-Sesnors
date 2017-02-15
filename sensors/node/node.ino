@@ -116,8 +116,6 @@ long readVcc() {
   int i;
   char payload[MAX_PACKET_SIZE];
 void loop() {
-  Blink(LED, 3);
-
   //Read each sensor and send data
   for (i = 0; i < NUM_CONNECTED_PINS; i++) {
 
@@ -152,6 +150,7 @@ void loop() {
 //    else Serial.print(" nothing...");
 //      Serial.println();
     radio.send(GATEWAYID, payload, strlen(payload));
+    Blink(LED, 3);
 //    Blink(LED, 3);
     
   }
