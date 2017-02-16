@@ -58,14 +58,12 @@
   RFM69 radio;
 #endif
 
-bool promiscuousMode = false; //set to 'true' to sniff all packets on the same network
 
 void setup() {
   Serial.begin(SERIAL_BAUD);
   delay(10);
   radio.initialize(FREQUENCY,NODEID,NETWORKID);
   radio.encrypt(ENCRYPTKEY);
-  radio.promiscuous(promiscuousMode);
   //radio.setFrequency(919000000); //set frequency to some custom frequency
 }
 
@@ -78,7 +76,9 @@ void loop() {
       Serial.print((char)radio.DATA[i]);
     }
     //Attach the nodeID to the sender to the packet
-    //Serial.print("\"nodeID\" :"+ radio.SENDERID+","); //Something like this
+    Serial.print("\"nodeID\" : "); //Something like this
+    Serial.print(radio.SENDERID);
+    Serial.print(",");
     
     if (radio.ACKRequested())
     {

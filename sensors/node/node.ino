@@ -36,7 +36,7 @@
 #define LED 9 // Moteinos have LEDs on D9
 
 //***** RFM69 definitions ********************************
-#define NODEID        2    //must be unique for each node on same network (range up to 254, 255 is used for broadcast)
+#define NODEID        3    //must be unique for each node on same network (range up to 254, 255 is used for broadcast)
 #define NETWORKID     100  //the same on all nodes that talk to each other (range up to 255)
 #define GATEWAYID     1
 #define FREQUENCY     RF69_915MHZ
@@ -57,7 +57,6 @@ RFM69_ATC radio;
 #define DHTTYPE DHT22
 #define NUM_CONNECTED_PINS 1
 int SENSOR_PINS[] = {16}; //The digital pins sensors are connected to
-DHT* DHT_LIST[NUM_CONNECTED_PINS]; //Array of DHT objects
 
 //******** LowPower definitions ***********
 #define SLEEP_TIME 35 //SLEEP_TIME * 8 = num seconds device will sleep for in between transmissions
@@ -67,12 +66,6 @@ DHT* DHT_LIST[NUM_CONNECTED_PINS]; //Array of DHT objects
 void setup() {
   //Start serial port
 //  Serial.begin(SERIAL_BAUD);
-
-  //Start DHT22's
-  for (int i = 0; i < NUM_CONNECTED_PINS; i++) {
-      DHT_LIST[i] = new DHT(SENSOR_PINS[i], DHTTYPE);
-      DHT_LIST[i]->begin();
-  }
   
   radio.initialize(FREQUENCY, NODEID, NETWORKID);
   radio.encrypt(ENCRYPTKEY);
@@ -118,9 +111,11 @@ long readVcc() {
 void loop() {
   //Read each sensor and send data
   for (i = 0; i < NUM_CONNECTED_PINS; i++) {
-
-    float h = DHT_LIST[i]->readHumidity();
-    float t = DHT_LIST[i]->readTemperature(true);
+      DHT dht(SENSOR_PINS[i], DHTTYPE);
+      dht.begin();
+      
+    float h = dht.readHumidity();
+    float t = dht.readTemperature(true);
     long v = readVcc();
 
     //If failed to read then we need to do a reset!
