@@ -12,10 +12,7 @@ class Api::V1::ReadingsController < Api::V1::BaseController
         message: "Received error"
       }.to_json,
       :status => 200)
-      #Then handle the error
-      # This type of error means either the Pi or the moteino is 
-      # having a problem
-      # Return status 200 saying you received the error
+      #We should probably add this erorr to our logs
 
     else #This means it is a vaild reading
         #if(SELECT from Nodes where networkID = reading_params[:node_id] == NULL)
