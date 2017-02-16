@@ -36,7 +36,7 @@
 #define LED 9 // Moteinos have LEDs on D9
 
 //***** RFM69 definitions ********************************
-#define NODEID        3    //must be unique for each node on same network (range up to 254, 255 is used for broadcast)
+#define NODEID        4    //must be unique for each node on same network (range up to 254, 255 is used for broadcast)
 #define NETWORKID     100  //the same on all nodes that talk to each other (range up to 255)
 #define GATEWAYID     1
 #define FREQUENCY     RF69_915MHZ
