@@ -36,7 +36,7 @@
 #define LED 9 // Moteinos have LEDs on D9
 
 //***** RFM69 definitions ********************************
-#define NODEID        3    //must be unique for each node on same network (range up to 254, 255 is used for broadcast)
+#define NODEID        2    //must be unique for each node on same network (range up to 254, 255 is used for broadcast)
 #define NETWORKID     100  //the same on all nodes that talk to each other (range up to 255)
 #define GATEWAYID     1
 #define FREQUENCY     RF69_915MHZ
@@ -47,7 +47,7 @@
 //By reducing TX power even a little you save a significanadt amount of battery power
 //This setting enables this gateway to work with remote nodes that have ATC enabled to
 //dial their power down to only the required level (ATC_RSSI)
-#define ENABLE_ATC    //comment out this line to disable AUTO TRANSMISSION CONTROL
+#define ENABLE_ATC    //comment out this line to disable AUTO TRANSMISSION CONTROLz
 #define ATC_RSSI      -80
 //***** maybe we want an ACK but I don't think so******//
 boolean requestACK = false;
@@ -55,8 +55,8 @@ RFM69_ATC radio;
 
 //********** DHT22 definitions ************************
 #define DHTTYPE DHT22
-#define NUM_CONNECTED_PINS 1
-int SENSOR_PINS[] = {16}; //The digital pins sensors are connected to
+#define NUM_CONNECTED_PINS 3
+int SENSOR_PINS[] = {16, 17, 18}; //The digital pins sensors are connected to
 
 //******** LowPower definitions ***********
 #define SLEEP_TIME 35 //SLEEP_TIME * 8 = num seconds device will sleep for in between transmissions
@@ -106,6 +106,8 @@ long readVcc() {
   return result; // Vcc in millivolts
 }
 
+
+
   int i;
   char payload[MAX_PACKET_SIZE];
 void loop() {
@@ -115,14 +117,15 @@ void loop() {
       dht.begin();
       
     float h = dht.readHumidity();
-    float t = dht.readTemperature(true);
+    float t = dht.readTemperature(true);  //true => temp. in farenheit
     long v = readVcc();
 
     //If failed to read then we need to do a reset!
     if (isnan(h)|| isnan(t) || isnan(v)) {
       Blink(LED, 1000);
       sprintf(payload, "{ \"error\" : \"A reading was NAN\", \"sID\" : %d,", SENSOR_PINS[i]);
-      radio.send(GATEWAYID, payload, strlen(payload));
+      if(!radio.sendWithRetry(GATEWAYID, payload, strlen(payload)));
+        radio.send(GATEWAYID, payload, strlen(payload)); //If no ack was recieved then try once more
       Reset_AVR();
 //      continue;
     }
@@ -144,22 +147,21 @@ void loop() {
 //      Serial.print(" ok!");
 //    else Serial.print(" nothing...");
 //      Serial.println();
-    radio.send(GATEWAYID, payload, strlen(payload));
+      if(!radio.sendWithRetry(GATEWAYID, payload, strlen(payload))){
+        radio.send(GATEWAYID, payload, strlen(payload)); //If no ack was recieved then try once more
+      }
     Blink(LED, 3);
-//    Blink(LED, 3);
     
-  }
-
-  
+  }  
 //  /* Sleep radio and chip */
-//     delay(1000);
+//     delay(3000);
 //  // Power down the radio
   radio.sleep();
 //  // Sleep the chip
 //  //Needs to be in a loop because max time allowed by powerDown() is 8s
 //  for(i=0; i<SLEEP_TIME; i++){
 //    //Power down for 8s (max allowed time) just leaving watchdog timer running
-    LowPower.powerDown(SLEEP_2S, ADC_OFF, BOD_OFF);
+    LowPower.powerDown(SLEEP_8S, ADC_OFF, BOD_OFF);
 //  }
 }
 
