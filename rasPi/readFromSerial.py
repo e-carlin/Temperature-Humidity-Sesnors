@@ -58,7 +58,7 @@ if ser.isOpen():
                 response += " \"timeStamp\"  : \"" + dateString + "\"}"
                 print(response)
                 j = json.loads(response)
-                if(j["nodeID"] == 4):
+                if(j["sID"] == 18):
                     print("\n")
                 # r = requests.post('http://ec2-54-202-217-172.us-west-2.compute.amazonaws.com/api/v1/readings',
                 #     headers = {'Content-type': 'application/json'}, 
