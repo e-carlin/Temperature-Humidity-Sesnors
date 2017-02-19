@@ -4,4 +4,4 @@ The project is to create wireless temperature and humidity sensors for a
 local musuem. The sensor data will be available on the web for museum staff
 to monitor. 
 
-![Alt text](./images/fritzingDiagram.jpg?raw=true)
+![Alt text](./images/fritzingDiagram.png?raw=true)
