@@ -55,8 +55,8 @@ RFM69_ATC radio;
 
 //********** DHT22 definitions ************************
 #define DHTTYPE DHT22
-#define NUM_CONNECTED_PINS 1
-int SENSOR_PINS[] = {16}; //The digital pins sensors are connected to
+#define NUM_CONNECTED_PINS 3
+int SENSOR_PINS[] = {16, 17, 18}; //The digital pins sensors are connected to
 
 //******** LowPower definitions ***********
 #define SLEEP_TIME 35 //SLEEP_TIME * 8 = num seconds device will sleep for in between transmissions
