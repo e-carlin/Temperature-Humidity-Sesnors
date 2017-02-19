@@ -1,17 +1,9 @@
-// Sample RFM69 sender/node sketch, with ACK and optional encryption, and Automatic Transmission Control
-// Sends periodic messages of increasing length to gateway (id=1)
-// It also looks for an onboard FLASH chip, if present
 // **********************************************************************************
 // Copyright Felix Rusu 2016, http://www.LowPowerLab.com/contact
+// Modified by Evan Carlin
 // **********************************************************************************
 // License
 // **********************************************************************************
-// This program is free software; you can redistribute it
-// and/or modify it under the terms of the GNU General
-// Public License as published by the Free Software
-// Foundation; either version 3 of the License, or
-// (at your option) any later version.
-//
 // This program is distributed in the hope that it will
 // be useful, but WITHOUT ANY WARRANTY; without even the
 // implied warranty of MERCHANTABILITY or FITNESS FOR A
@@ -47,16 +39,15 @@
 //By reducing TX power even a little you save a significanadt amount of battery power
 //This setting enables this gateway to work with remote nodes that have ATC enabled to
 //dial their power down to only the required level (ATC_RSSI)
-#define ENABLE_ATC    //comment out this line to disable AUTO TRANSMISSION CONTROLz
+#define ENABLE_ATC    //comment out this line to disable AUTO TRANSMISSION CONTROL
 #define ATC_RSSI      -80
-//***** maybe we want an ACK but I don't think so******//
-boolean requestACK = false;
 RFM69_ATC radio;
 
 //********** DHT22 definitions ************************
 #define DHTTYPE DHT22
 #define NUM_CONNECTED_PINS 3
 int SENSOR_PINS[] = {16, 17, 18}; //The digital pins sensors are connected to
+boolean NANReading = false;
 
 //******** LowPower definitions ***********
 #define SLEEP_TIME 35 //SLEEP_TIME * 8 = num seconds device will sleep for in between transmissions
@@ -107,10 +98,10 @@ long readVcc() {
 }
 
 
-
+void loop() {
   int i;
   char payload[MAX_PACKET_SIZE];
-void loop() {
+  
   //Read each sensor and send data
   for (i = 0; i < NUM_CONNECTED_PINS; i++) {
       DHT dht(SENSOR_PINS[i], DHTTYPE);
@@ -120,14 +111,16 @@ void loop() {
     float t = dht.readTemperature(true);  //true => temp. in farenheit
     long v = readVcc();
 
-    //If failed to read then we need to do a reset!
+    //If failed to read then set flag to reset
     if (isnan(h)|| isnan(t) || isnan(v)) {
       Blink(LED, 1000);
       sprintf(payload, "{ \"error\" : \"A reading was NAN\", \"sID\" : %d,", SENSOR_PINS[i]);
-      if(!radio.sendWithRetry(GATEWAYID, payload, strlen(payload)));
+      if(!radio.sendWithRetry(GATEWAYID, payload, strlen(payload))){
         radio.send(GATEWAYID, payload, strlen(payload)); //If no ack was recieved then try once more
-      Reset_AVR();
-//      continue;
+      }
+        
+        NANReading = true; //Set flag
+        continue; //Skip to next sensor
     }
 
       /* Send the reading */
@@ -140,29 +133,21 @@ void loop() {
     dtostrf(h, 4, 2, humidity);
 
     sprintf(payload, "{\"temp\" : %s, \"hum\" : %s, \"sID\" : %d, \"volt\" : %ld, ", tempFaren, humidity,  SENSOR_PINS[i], v);
-
-//    Serial.println(payload);
-
-//    if (radio.sendWithRetry(GATEWAYID, payload, strlen(payload)))
-//      Serial.print(" ok!");
-//    else Serial.print(" nothing...");
-//      Serial.println();
+    
       if(!radio.sendWithRetry(GATEWAYID, payload, strlen(payload))){
         radio.send(GATEWAYID, payload, strlen(payload)); //If no ack was recieved then try once more
       }
     Blink(LED, 3);
-    
-  }  
-//  /* Sleep radio and chip */
-//     delay(3000);
-//  // Power down the radio
+  }
+  
+  //Power down  
   radio.sleep();
-//  // Sleep the chip
-//  //Needs to be in a loop because max time allowed by powerDown() is 8s
-//  for(i=0; i<SLEEP_TIME; i++){
-//    //Power down for 8s (max allowed time) just leaving watchdog timer running
-    LowPower.powerDown(SLEEP_8S, ADC_OFF, BOD_OFF);
-//  }
+  LowPower.powerDown(SLEEP_8S, ADC_OFF, BOD_OFF);
+
+   //If there was a failed reading then reset
+  if(NANReading){
+    Reset_AVR();
+  }
 }
 
 
