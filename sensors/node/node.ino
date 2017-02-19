@@ -45,8 +45,8 @@ RFM69_ATC radio;
 
 //********** DHT22 definitions ************************
 #define DHTTYPE DHT22
-#define NUM_CONNECTED_PINS 3
-int SENSOR_PINS[] = {16, 17, 18}; //The digital pins sensors are connected to
+#define NUM_CONNECTED_PINS 4
+int SENSOR_PINS[] = {16, 17, 18, 19}; //The digital pins sensors are connected to
 boolean NANReading = false;
 
 //******** LowPower definitions ***********
@@ -113,7 +113,7 @@ void loop() {
 
     //If failed to read then set flag to reset
     if (isnan(h)|| isnan(t) || isnan(v)) {
-      Blink(LED, 1000);
+//      Blink(LED, 1000);
       sprintf(payload, "{ \"error\" : \"A reading was NAN\", \"sID\" : %d,", SENSOR_PINS[i]);
       if(!radio.sendWithRetry(GATEWAYID, payload, strlen(payload))){
         radio.send(GATEWAYID, payload, strlen(payload)); //If no ack was recieved then try once more
@@ -146,6 +146,7 @@ void loop() {
 
    //If there was a failed reading then reset
   if(NANReading){
+    Blink(LED, 1000);
     Reset_AVR();
   }
 }
