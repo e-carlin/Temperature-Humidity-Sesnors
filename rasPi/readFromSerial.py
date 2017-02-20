@@ -48,7 +48,12 @@ if ser.isOpen():
         numOfLines = 0
 
         while True:
-            response = ser.readline()
+            response = ser.readline() #TODO: Got a timeout here
+                                            # ^CTraceback (most recent call last):
+                                            #   File "rasPi/readFromSerial.py", line 51, in <module>
+                                            #     response = ser.readline()
+                                            #   File "/Library/Python/2.7/site-packages/serial/serialposix.py", line 472, in read
+                                            #     ready, _, _ = select.select([self.fd, self.pipe_abort_read_r], [], [], timeout.time_left())
             #Only print responses with an actual message in them
             if response != "":
                 #TODO: Strip \n from response
@@ -57,7 +62,7 @@ if ser.isOpen():
                 response = response.rstrip()
                 response += " \"timeStamp\"  : \"" + dateString + "\"}"
                 print(response)
-                j = json.loads(response)
+                j = json.loads(response) #TODO: I get an error here if the json is misformatted (only recieve partial transmission)
                 if(j["sID"] == 19):
                     print("\n")
                 # r = requests.post('http://ec2-54-202-217-172.us-west-2.compute.amazonaws.com/api/v1/readings',
