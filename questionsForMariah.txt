@@ -1,3 +1,0 @@
-- Will we have access to one outlet?
-
-- Can we have access to a reliable WiFi connection
