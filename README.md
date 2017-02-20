@@ -1,6 +1,6 @@
 # Wireless Temperature and Humidity Sensors
 Senior project for The University of Puget Sound Capstone in C.S. (CS440).  
-This project consists of building wireless temperature and humidity sensors for the museum cases at the [I'm an inline-style link with title](http://lelooska.org/ "Lelooska Foundation"). 
+This project consists of building wireless temperature and humidity sensors for the museum cases at the [Lelosska Foundation](http://lelooska.org/). 
 
 
 Parts:
