@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  resources :sensors
+  resources :nodes
   #The website root
   root 'index#index'
 
