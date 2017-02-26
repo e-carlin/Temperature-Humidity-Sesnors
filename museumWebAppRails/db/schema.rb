@@ -23,7 +23,7 @@ ActiveRecord::Schema.define(version: 20170223232226) do
     t.integer  "network_id",  null: false
     t.integer  "temperature", null: false
     t.integer  "humidity",    null: false
-    t.datetime "recorded_at"
+    t.datetime "recorded_at", null: false
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
   end
