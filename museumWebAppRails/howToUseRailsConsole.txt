@@ -1,0 +1,57 @@
+The rails console is a super easy way to create records (objects that will be stored in the db i.e a reading, node,...) and manipulate them. Likewise, it is a simple ruby interpreter. For example if you have read that to append to a file in Ruby you do File.open("output.txt","a+") { |f| f.puts("some text") }. Then you can test this out in the console.  
+
+I use the console mostly for debugging purposes. It can be really hard to see where exactly something went wrong when your clicking around on the site and the console creates and easy way to try things line by line and see what works.
+
+For an example usage I figured I'd just run through the testing I did when I implemented foreign keys. 
+
+1) Start the console (*note: you can just type rails c for short)
+	$ rails console
+
+2) Get all nodes currently in the database
+	$ Node.all
+
+3) Create a new node object and reference it as n
+	$ n = Node.new
+
+4) See what n currently looks like
+	$ n
+
+5) Try to save n
+	$ n.save
+	You'll see that a "not null constraint failed: nodes.network_id"
+
+6) So set the network id
+	$ n.network_id = 5 
+
+6) Look at n again to make sure the network_id is what you think it is
+	$ n
+
+7) Now save it
+	$ n.save
+
+8) Create a sensor object and reference it as s
+	$ s = Sensor.new
+
+9) Set s pin 
+	$ s.pin = 5
+
+8) Set its network_id to a non-existent network_id
+	$ s.network_id = 666
+
+9) Try to save it
+	$ s.save
+	Printed on the screen is the SQL query that was run and you'll see that it tried to find a node with network_id = 666. This doesn't exist in our database so we can't create a sensor referencing it. The foreign key worked!
+
+10) Add the proper network_id
+	$ s.network_id = n.network_id
+	Note: You could also say s.network_id = 5 (or any other valid network_id currently in our db)
+
+11) Save s
+	$ s.save
+
+12) See the sensor
+	$ Sensor.all
+
+Thats a basic interaction with the console and one that I used to check if our foreign keys were working. 
+
+The nodes and sensors you added exists in the db. So, if you were to create a new reading, save it, and then in your web browser navigate to /readings you will see the reading you just created.
