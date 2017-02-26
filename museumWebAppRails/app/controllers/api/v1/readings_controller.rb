@@ -1,9 +1,9 @@
 class Api::V1::ReadingsController < Api::V1::BaseController
   def create
-  	pp "***************************"
-  	pp "In API create"
-  	pp reading_params
-  	pp "****************************"
+    pp "***************************"
+    pp "In Reading create"
+    pp reading_params
+    pp "****************************"
 
     if(!reading_params[:error].nil?)
       # render(:alert => 'Error received', :status => 200)
@@ -15,16 +15,35 @@ class Api::V1::ReadingsController < Api::V1::BaseController
       #We should probably add this erorr to our logs
 
     else #This means it is a vaild reading
-        #if(SELECT from Nodes where networkID = reading_params[:node_id] == NULL)
-          #add the node id to the db
-        #if(SELECT from Sensors where sID = reading_params[:sID] == NULL)
-          #add the sensor to the db
+      pp"********************"
+      pp "This is a reading not an error"
+      pp "********************"
+      #Is this a node we haven't seen before?
+      if(Node.find_by(node_id: reading_params[:node_id]).nil?)
+        pp"**************"
+        pp "Node not found so creating a new one"
+        pp "****************"
+        Node.create(:node_id => reading_params[:node_id])  #Create and save a new node
+      end
 
-        #Then proceeed with code below  
-
+      #Is this a sensor we haven't seen before?
+      if(Sensor.find_by(node_id: reading_params[:node_id], pin: reading_params[:pin]).nil?)
+        pp "***********"
+        pp "Pin not found so creating a new one"
+        pp "***********"
+        Sensor.create(:node_id => reading_params[:node_id],
+          :pin => reading_params[:pin])
+      end
+      
+      pp "*************"
+      pp "Saving reading"
+      pp "*************"
+      #Finally we can save the reading
       @reading = Reading.new(:temperature => reading_params[:temp],
         :humidity => reading_params[:hum],
-        :recorded_at => reading_params[:timeStamp])
+        :recorded_at => reading_params[:timeStamp],
+        :node_id => reading_params[:node_id],
+        :pin => reading_params[:pin])
         #add nodeID and sensorID
 
 
@@ -38,7 +57,7 @@ class Api::V1::ReadingsController < Api::V1::BaseController
         :status => 200)
       else
         render(json: {
-          status: 200,
+          status: 400,
           message: "There was an error saving the data",
           params: reading_params
         }.to_json,
@@ -51,6 +70,6 @@ class Api::V1::ReadingsController < Api::V1::BaseController
   private
     # Never trust parameters from the scary internet, only allow the white list through.
     def reading_params
-      params.permit(:temp, :hum, :timeStamp, :volt, :sID, :error) #Add nodeID
+      params.permit(:temp, :hum, :timeStamp, :volt, :node_id, :pin, :error) #Add nodeID
     end
 end
