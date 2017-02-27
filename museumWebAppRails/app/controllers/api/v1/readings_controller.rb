@@ -14,7 +14,7 @@ class Api::V1::ReadingsController < Api::V1::BaseController
       :status => 200)
       #We should probably add this erorr to our logs
 
-    else #This means it is a vaild reading
+    elsif(!reading_params[:temp].nil?) #This means it is a vaild reading
       pp"********************"
       pp "This is a reading not an error"
       pp "********************"
@@ -63,8 +63,14 @@ class Api::V1::ReadingsController < Api::V1::BaseController
         }.to_json,
         :status => 400)
       end
+    else
+      render(json: {
+        status: 400,
+        message: "The json object supplied was invalid",
+        params: reading_params
+      }.to_json,
+      :status => 400)
     end
-
   end
 
   private
