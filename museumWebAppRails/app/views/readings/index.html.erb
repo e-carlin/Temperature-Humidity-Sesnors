@@ -32,7 +32,6 @@
 
 
 <%= line_chart Reading.pluck(:recorded_at, :temperature), xtitle: "Time", ytitle: "Temperature" %>
-<%= line_chart Reading.group_by_day(:recorded_at).count %>
 
 
 
