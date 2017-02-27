@@ -51,3 +51,7 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 # Gems we've added
 # =================
 gem 'clearance', '~> 1.15.1'
+
+gem 'chartkick'
+
+gem 'groupdate'
