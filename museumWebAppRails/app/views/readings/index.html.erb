@@ -1,6 +1,6 @@
 <p id="notice"><%= notice %></p>
 
-<script src="application.js"></script>
+<!-- <script src="application.js"></script> -->
 
 <h1>Readings</h1>
 
@@ -32,6 +32,7 @@
 
 
 <%= line_chart Reading.pluck(:recorded_at, :temperature), xtitle: "Time", ytitle: "Temperature" %>
+<%= line_chart Reading.group_by_day(:recorded_at).count %>
 
 
 
