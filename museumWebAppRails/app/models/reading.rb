@@ -1,6 +1,6 @@
 class Reading < ApplicationRecord
-	belongs_to :node, :foreign_key => 'network_id', 
-	                 :primary_key => 'network_id'
+	belongs_to :node, :foreign_key => 'node_id', 
+	                 :primary_key => 'node_id'
 	belongs_to :sensor, :foreign_key => 'pin', 
 	                 :primary_key => 'pin'
 

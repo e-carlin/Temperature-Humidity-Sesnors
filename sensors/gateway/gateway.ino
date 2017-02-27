@@ -76,7 +76,7 @@ void loop() {
       Serial.print((char)radio.DATA[i]);
     }
     //Attach the nodeID to the sender to the packet
-    Serial.print(" \"nodeID\" : "); //Something like this
+    Serial.print(" \"node_id\" : "); 
     Serial.print(radio.SENDERID);
     Serial.print(",");
     
