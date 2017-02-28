@@ -63,7 +63,7 @@ if ser.isOpen():
                 response += " \"timeStamp\"  : \"" + dateString + "\"}"
                 print(response)
                 j = json.loads(response) #TODO: I get an error here if the json is misformatted (only recieve partial transmission)
-                if(j["sID"] == 19):
+                if(j["nodeID"] == 3):
                     print("\n")
                 # r = requests.post('http://ec2-54-202-217-172.us-west-2.compute.amazonaws.com/api/v1/readings',
                 #     headers = {'Content-type': 'application/json'}, 
