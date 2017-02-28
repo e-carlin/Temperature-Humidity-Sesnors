@@ -16,7 +16,7 @@ ser = serial.Serial()
 # This port will be different of different machines check correct port with
 # $ python -m serial.tools.list_ports
 ser.port = "/dev/cu.usbserial-DN01Q8E0" #For mini-USB cable
-#ser.port = "/dev/cu.usbserial-A5058SOW" #For FTDI cable
+# ser.port = "/dev/cu.usbserial-A5058SOW" #For FTDI cable
 # ser.port = "/dev/ttyUSB0" #For raspi mini-usb cable
 ser.baudrate = 9600
 ser.bytesize = serial.EIGHTBITS #number of bits per bytes

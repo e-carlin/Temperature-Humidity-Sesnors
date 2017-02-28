@@ -1,5 +1,7 @@
 <p id="notice"><%= notice %></p>
 
+<!-- <script src="application.js"></script> -->
+
 <h1>Readings</h1>
 
 <table>
@@ -27,5 +29,12 @@
     <% end %>
   </tbody>
 </table>
+
+
+<%= line_chart Reading.pluck(:recorded_at, :temperature), xtitle: "Time", ytitle: "Temperature" %>
+
+
+<%= line_chart Reading.group_by_hour(:created_at).count %>
+
 
 <br>

@@ -45,8 +45,8 @@ RFM69_ATC radio;
 
 //********** DHT22 definitions ************************
 #define DHTTYPE DHT22
-#define NUM_CONNECTED_PINS 4
-int SENSOR_PINS[] = {16, 17, 18, 19}; //The digital pins sensors are connected to
+#define NUM_CONNECTED_PINS 1
+int SENSOR_PINS[] = {16}; //The digital pins sensors are connected to
 boolean NANReading = false;
 
 //******** LowPower definitions ***********
@@ -142,7 +142,7 @@ void loop() {
   
   //Power down  
   radio.sleep();
-  LowPower.powerDown(SLEEP_8S, ADC_OFF, BOD_OFF);
+  LowPower.powerDown(SLEEP_2S, ADC_OFF, BOD_OFF);
 
    //If there was a failed reading then reset
   if(NANReading){
