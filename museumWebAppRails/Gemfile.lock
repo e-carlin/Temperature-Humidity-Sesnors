@@ -55,6 +55,8 @@ GEM
       execjs
     coffee-script-source (1.12.2)
     concurrent-ruby (1.0.4)
+    dateslices (0.0.4)
+      rails (> 4)
     debug_inspector (0.0.2)
     email_validator (1.6.0)
       activemodel
@@ -168,6 +170,7 @@ DEPENDENCIES
   chartkick
   clearance (~> 1.15.1)
   coffee-rails (~> 4.2)
+  dateslices
   groupdate
   jbuilder (~> 2.5)
   jquery-rails
