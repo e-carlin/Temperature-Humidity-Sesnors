@@ -28,9 +28,9 @@
 #define LED 9 // Moteinos have LEDs on D9
 
 //***** RFM69 definitions ********************************
-#define NODEID        2    //must be unique for each node on same network (range up to 254, 255 is used for broadcast)
-#define NETWORKID     100  //the same on all nodes that talk to each other (range up to 255)
-#define GATEWAYID     1
+#define NODEID        3    //must be unique for each node on same network (range up to 254, 255 is used for broadcast)
+#define NETWORKID     100  //Don't change this. The same on all nodes that talk to each other (range up to 255)
+#define GATEWAYID     1 //Don't change this. Same for all nodes in the network
 #define FREQUENCY     RF69_915MHZ
 #define ENCRYPTKEY    "sampleEncryptKey" //exactly the same 16 characters/bytes on all nodes!
 #define MAX_PACKET_SIZE 61 //The maximum number of bytes in a packet
@@ -45,9 +45,7 @@ RFM69_ATC radio;
 
 //********** DHT22 definitions ************************
 #define DHTTYPE DHT22
-#define NUM_CONNECTED_PINS 4
-int SENSOR_PINS[] = {16, 17, 18, 19}; //The digital pins sensors are connected to
-boolean NANReading = false;
+int SENSOR_PIN = 16; //A2 => Digital 16
 
 //******** LowPower definitions ***********
 #define SLEEP_TIME 35 //SLEEP_TIME * 8 = num seconds device will sleep for in between transmissions
@@ -67,7 +65,6 @@ void setup() {
   //For more variable nodes that can expect to move or experience larger temp drifts a lower margin like -70 to -80 would probably be better
   //Always test your ATC mote in the edge cases in your own environment to ensure ATC will perform as you expect
   radio.enableAutoPower(ATC_RSSI);
-//  Blink(LED, 3);
 }
 
 void Blink(byte PIN, int DELAY_MS)
@@ -101,26 +98,25 @@ long readVcc() {
 void loop() {
   int i;
   char payload[MAX_PACKET_SIZE];
-  
-  //Read each sensor and send data
-  for (i = 0; i < NUM_CONNECTED_PINS; i++) {
-      DHT dht(SENSOR_PINS[i], DHTTYPE);
+
+     // Initialize sensor
+      DHT dht(SENSOR_PIN, DHTTYPE);
       dht.begin();
       
     float h = dht.readHumidity();
     float t = dht.readTemperature(true);  //true => temp. in farenheit
     long v = readVcc();
 
-    //If failed to read then set flag to reset
+    //If failed to read sensor or voltage then send notice and reset
     if (isnan(h)|| isnan(t) || isnan(v)) {
 //      Blink(LED, 1000);
-      sprintf(payload, "{ \"error\" : \"A reading was NAN\", \"sID\" : %d,", SENSOR_PINS[i]);
+      sprintf(payload, "{ \"error\" : \"A reading was NAN\", \"sID\" : %d,", SENSOR_PIN);
       if(!radio.sendWithRetry(GATEWAYID, payload, strlen(payload))){
         radio.send(GATEWAYID, payload, strlen(payload)); //If no ack was recieved then try once more
       }
         
-        NANReading = true; //Set flag
-        continue; //Skip to next sensor
+    Blink(LED, 1000);
+    Reset_AVR();
     }
 
       /* Send the reading */
@@ -132,23 +128,18 @@ void loop() {
     dtostrf(t, 4, 2, tempFaren);
     dtostrf(h, 4, 2, humidity);
 
-    sprintf(payload, "{\"temp\" : %s, \"hum\" : %s, \"sID\" : %d, \"volt\" : %ld, ", tempFaren, humidity,  SENSOR_PINS[i], v);
+    sprintf(payload, "{\"temp\" : %s, \"hum\" : %s, \"sID\" : %d, \"volt\" : %ld, ", tempFaren, humidity,  SENSOR_PIN, v);
     
       if(!radio.sendWithRetry(GATEWAYID, payload, strlen(payload))){
         radio.send(GATEWAYID, payload, strlen(payload)); //If no ack was recieved then try once more
       }
     Blink(LED, 3);
-  }
+
   
   //Power down  
   radio.sleep();
-  LowPower.powerDown(SLEEP_8S, ADC_OFF, BOD_OFF);
+  LowPower.powerDown(SLEEP_2S, ADC_OFF, BOD_OFF);
 
-   //If there was a failed reading then reset
-  if(NANReading){
-    Blink(LED, 1000);
-    Reset_AVR();
-  }
 }
 
 
