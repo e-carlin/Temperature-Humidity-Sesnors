@@ -15,9 +15,9 @@ from datetime import datetime
 ser = serial.Serial()
 # This port will be different of different machines check correct port with
 # $ python -m serial.tools.list_ports
-ser.port = "/dev/cu.usbserial-DN01Q8E0" #For mini-USB cable
+#ser.port = "/dev/cu.usbserial-DN01Q8E0" #For mini-USB cable
 # ser.port = "/dev/cu.usbserial-A5058SOW" #For FTDI cable
-# ser.port = "/dev/ttyUSB0" #For raspi mini-usb cable
+ser.port = "/dev/ttyUSB0" #For raspi mini-usb cable
 ser.baudrate = 9600
 ser.bytesize = serial.EIGHTBITS #number of bits per bytes
 ser.parity = serial.PARITY_NONE #set parity check: no parity
@@ -79,7 +79,7 @@ if ser.isOpen():
                     #     data = json.dumps(j))
                     # print r
                     # print r.content
-                    response = ""
+                    #response = ""
         except Exception, e1:
             print "We caught an error! : " + str(e1)
             time.sleep(0.5) #Sleep a bit so if we really can't recover we aren't flooring the CPU
