@@ -6,7 +6,7 @@ class Api::V1::ReadingsController < Api::V1::BaseController
     pp request.headers['Authorization']
     pp "****************************"
 
-    #There is an authorization header
+    #There is an authorization header && it has vaild credentials
     if((!request.headers['Authorization'].nil?) && (request.headers['Authorization'] == 'rasPiAuth..0246'))
       pp "***********"
       pp "Authorization succesful"
@@ -61,6 +61,8 @@ class Api::V1::ReadingsController < Api::V1::BaseController
               reading: @reading
             }.to_json,
             :status => 200)
+
+          #reading save failed
           else
             render(json: {
               status: 400,
@@ -69,6 +71,8 @@ class Api::V1::ReadingsController < Api::V1::BaseController
             }.to_json,
             :status => 400)
           end
+
+        #The supplied json didn't contain a temp field so it isn't valid
         else
           render(json: {
             status: 400,
@@ -77,6 +81,8 @@ class Api::V1::ReadingsController < Api::V1::BaseController
           }.to_json,
           :status => 400)
         end
+
+      #Supplied creds were bad
       else
         render(json: {
           status: 401,
