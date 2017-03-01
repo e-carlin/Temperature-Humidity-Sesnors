@@ -6,19 +6,18 @@ class Api::V1::ReadingsController < Api::V1::BaseController
     pp request.headers['Authorization']
     pp "****************************"
 
-    #There is an authorization header && it has vaild credentials
+    #There is an authorization header && it contains a valid password
     if((!request.headers['Authorization'].nil?) && (request.headers['Authorization'] == 'rasPiAuth..0246'))
       pp "***********"
       pp "Authorization succesful"
       pp "*************"
         if(!reading_params[:error].nil?)
-          # render(:alert => 'Error received', :status => 200)
           render(json: {
             status: 200,
             message: "Received error"
           }.to_json,
           :status => 200)
-          #We should probably add this erorr to our logs
+          ####### TODO:  We should probably add this erorr to our logs
 
         elsif(!reading_params[:temp].nil?) #This means it is a vaild reading
           pp"********************"
