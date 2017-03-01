@@ -44,50 +44,46 @@ except IOError, e:
 if ser.isOpen():
     while True: #We caught an error. We assume it won't happen next time so just naively try the same code again
         try:
-        ser.flushInput() #flush input buffer, discarding all its contents
-        ser.flushOutput()#flush output buffer, aborting current output and discard all that is in buffer
-        time.sleep(0.5)  #give the serial port sometime to receive the data
-
-        while True:
-            response = ser.readline() #TODO: Got a timeout here
-                                            # ^CTraceback (most recent call last):
-                                            #   File "rasPi/readFromSerial.py", line 51, in <module>
-                                            #     response = ser.readline()
-                                            #   File "/Library/Python/2.7/site-packages/serial/serialposix.py", line 472, in read
-                                            #     ready, _, _ = select.select([self.fd, self.pipe_abort_read_r], [], [], timeout.time_left())
-            #Only print responses with an actual message in them
-            if response != "":
-                #TODO: Strip \n from response
-                dateString = '%Y/%m/%d %H:%M:%S'
-                dateString = str(datetime.now())
-                response = response.rstrip()
-                response += " \"timeStamp\"  : \"" + dateString + "\"}"
-                print(response)
-                j = json.loads(response)
-                if(j["nodeID"] == 3):
-                    print("\n")
-                # r = requests.post('http://ec2-54-202-217-172.us-west-2.compute.amazonaws.com/api/v1/readings',
-                #     headers = {'Content-type': 'application/json'}, 
-                #     data = json.dumps(j))
-                
-                #if(j["sID"] == 19):
-                 #   print("\n")
-                # r = requests.post('http://ec2-54-202-217-172.us-west-2.compute.amazonaws.com/api/v1/readings',
-                #     headers = {'Content-type': 'application/json'}, 
-                #     data = json.dumps(j))
-                # r = requests.post('http://localhost:3000/api/v1/readings',
-                #     headers = {'Content-type': 'application/json'}, 
-                #     data = json.dumps(j))
-                # print r
-                # print r.content
-                response = ""
-
-
-            
-    except Exception, e1:
-        print "We caught an error! : " + str(e1)
-        time.sleep(0.5) #Sleep a bit so if we really can't recover we aren't flooring the CPU
-        continue #Go to the start of the loop and try again
+            ser.flushInput() #flush input buffer, discarding all its contents
+            ser.flushOutput()#flush output buffer, aborting current output and discard all that is in buffer
+            time.sleep(0.5)  #give the serial port sometime to receive the data
+            while True:
+                response = ser.readline() #TODO: Got a timeout here
+                                                # ^CTraceback (most recent call last):
+                                                #   File "rasPi/readFromSerial.py", line 51, in <module>
+                                                #     response = ser.readline()
+                                                #   File "/Library/Python/2.7/site-packages/serial/serialposix.py", line 472, in read
+                                                #     ready, _, _ = select.select([self.fd, self.pipe_abort_read_r], [], [], timeout.time_left())
+                #Only print responses with an actual message in them
+                if response != "":
+                    #TODO: Strip \n from response
+                    dateString = '%Y/%m/%d %H:%M:%S'
+                    dateString = str(datetime.now())
+                    response = response.rstrip()
+                    response += " \"timeStamp\"  : \"" + dateString + "\"}"
+                    print(response)
+                    j = json.loads(response)
+                    if(j["nodeID"] == 3):
+                        print("\n")
+                    # r = requests.post('http://ec2-54-202-217-172.us-west-2.compute.amazonaws.com/api/v1/readings',
+                    #     headers = {'Content-type': 'application/json'}, 
+                    #     data = json.dumps(j))
+                    
+                    #if(j["sID"] == 19):
+                     #   print("\n")
+                    # r = requests.post('http://ec2-54-202-217-172.us-west-2.compute.amazonaws.com/api/v1/readings',
+                    #     headers = {'Content-type': 'application/json'}, 
+                    #     data = json.dumps(j))
+                    # r = requests.post('http://localhost:3000/api/v1/readings',
+                    #     headers = {'Content-type': 'application/json'}, 
+                    #     data = json.dumps(j))
+                    # print r
+                    # print r.content
+                    response = ""
+        except Exception, e1:
+            print "We caught an error! : " + str(e1)
+            time.sleep(0.5) #Sleep a bit so if we really can't recover we aren't flooring the CPU
+            continue #Go to the start of the loop and try again
 
 else:
     print "cannot open serial port "
