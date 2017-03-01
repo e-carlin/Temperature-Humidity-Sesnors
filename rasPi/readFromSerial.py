@@ -2,7 +2,7 @@
 
 # A simple script to read incoming data from a usb port
 # and print it to the console
-
+import pytz # easy_install --upgrade pytz
 import serial, time, requests, json
 from datetime import datetime
 #initialization and open the port
@@ -58,7 +58,7 @@ if ser.isOpen():
                 if response != "":
                     #TODO: Strip \n from response
                     dateString = '%Y/%m/%d %H:%M:%S'
-                    dateString = str(datetime.now())
+                    dateString = str(datetime.now(pytz.timezone('US/Pacific')))
                     print("date string is "+dateString)
                     response = response.rstrip()
                     response += " \"timeStamp\"  : \"" + dateString + "\"}"
