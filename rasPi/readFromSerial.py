@@ -59,7 +59,6 @@ if ser.isOpen():
                     #TODO: Strip \n from response
                     dateString = '%Y/%m/%d %H:%M:%S'
                     dateString = str(datetime.now(pytz.timezone('US/Pacific')))
-                    print("date string is "+dateString)
                     response = response.rstrip()
                     response += " \"timeStamp\"  : \"" + dateString + "\"}"
                     print(response)
