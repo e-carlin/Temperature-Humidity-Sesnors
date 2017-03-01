@@ -8,7 +8,13 @@
 
 <div id="graph">
 
-  <p><%= values = Reading.select(:recorded_at, :temperature).where(pin: 1)%></p>
+  <p><%= values = Reading.select(:recorded_at, :temperature).where(pin: 1).to_a%></p>
+  <%= 
+  values.each do |tuple|
+  	#tuple = tuple.except!("Reading id")
+  	#tuple.shift
+  end
+  	%>
 
   <%= line_chart values,
   		title: "Daily Measurement",
