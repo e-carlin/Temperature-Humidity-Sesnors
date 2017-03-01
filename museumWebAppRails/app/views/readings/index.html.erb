@@ -1,8 +1,8 @@
-<p id="notice"><%= notice %></p>
 
-<script src="application.js"></script>
 
 <h1>Readings</h1>
+
+<a href="readings.csv">Download CSV</a>
 
 <table>
   <thead>
@@ -29,9 +29,6 @@
     <% end %>
   </tbody>
 </table>
-
-
-<%= line_chart Reading.pluck(:recorded_at, :temperature), xtitle: "Time", ytitle: "Temperature" %>
 
 
 
