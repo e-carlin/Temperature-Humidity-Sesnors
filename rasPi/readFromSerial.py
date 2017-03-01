@@ -28,24 +28,25 @@ ser.timeout = 1            #non-block read
 ser.xonxoff = False     #disable software flow control
 ser.rtscts = False     #disable hardware (RTS/CTS) flow control
 ser.dsrdtr = False       #disable hardware (DSR/DTR) flow control
-
+#Try to open the port
 try: 
     print("Opening serial port and waiting for data")
     ser.open()
-except Exception, e:
+except IOError, e:
     print "error open serial port: " + str(e)
+    #Send message to the Cloud
+    r = requests.post('http://ec2-54-202-217-172.us-west-2.compute.amazonaws.com/api/v1/readings',
+    headers = {'Content-type': 'application/json'}, #Should this be Error-type or Content-type? Where do I post the errors?
+    data = json.dumps(e))
+    #execfile("launcher.sh")
     exit()
 
 if ser.isOpen():
-
-    try:
+    while True: #We caught an error. We assume it won't happen next time so just naively try the same code again
+        try:
         ser.flushInput() #flush input buffer, discarding all its contents
         ser.flushOutput()#flush output buffer, aborting current output and discard all that is in buffer
         time.sleep(0.5)  #give the serial port sometime to receive the data
-
-        
-
-        numOfLines = 0
 
         while True:
             response = ser.readline() #TODO: Got a timeout here
@@ -62,9 +63,15 @@ if ser.isOpen():
                 response = response.rstrip()
                 response += " \"timeStamp\"  : \"" + dateString + "\"}"
                 print(response)
-                j = json.loads(response) #TODO: I get an error here if the json is misformatted (only recieve partial transmission)
+                j = json.loads(response)
                 if(j["nodeID"] == 3):
                     print("\n")
+                # r = requests.post('http://ec2-54-202-217-172.us-west-2.compute.amazonaws.com/api/v1/readings',
+                #     headers = {'Content-type': 'application/json'}, 
+                #     data = json.dumps(j))
+                
+                #if(j["sID"] == 19):
+                 #   print("\n")
                 # r = requests.post('http://ec2-54-202-217-172.us-west-2.compute.amazonaws.com/api/v1/readings',
                 #     headers = {'Content-type': 'application/json'}, 
                 #     data = json.dumps(j))
@@ -77,8 +84,9 @@ if ser.isOpen():
 
             
     except Exception, e1:
-        print "error communicating...: " + str(e1)
-        ser.close()
+        print "We caught an error! : " + str(e1)
+        time.sleep(0.5) #Sleep a bit so if we really can't recover we aren't flooring the CPU
+        continue #Go to the start of the loop and try again
 
 else:
     print "cannot open serial port "
