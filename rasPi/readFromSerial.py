@@ -80,6 +80,7 @@ if ser.isOpen():
                 #     data = json.dumps(j))
                 # print r
                 # print r.content
+                response = ""
 
 
             
