@@ -52,8 +52,10 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 # =================
 gem 'clearance', '~> 1.15.1'
 
-gem 'chartkick'
+gem 'chartkick', '~> 2.2.3 '
 
-gem 'groupdate'
+gem 'dateslices', '~> 0.0.4'
 
-gem 'dateslices'
+gem 'bootstrap-sass', '~> 3.3.6'
+
+
