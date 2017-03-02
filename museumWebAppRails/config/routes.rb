@@ -7,6 +7,8 @@ Rails.application.routes.draw do
   #Readings routes
   resources :readings, only: [:index, :destroy, :show]
 
+  resources :graphs
+
   #api
    namespace :api do
      namespace :v1 do

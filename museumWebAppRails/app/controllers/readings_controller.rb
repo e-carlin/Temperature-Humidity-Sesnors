@@ -60,4 +60,5 @@ class ReadingsController < ApplicationController
     def reading_params
       params.fetch(:reading, {})
     end
+
 end

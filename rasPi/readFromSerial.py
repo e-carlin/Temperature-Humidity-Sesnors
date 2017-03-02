@@ -76,11 +76,15 @@ if ser.isOpen():
 
         except Exception, e1:
             print "We caught an error! : " + str(e1)
+            r = requests.post('http://ec2-54-202-217-172.us-west-2.compute.amazonaws.com/api/v1/readings',
+            headers = {'Content-type': 'application/json'}, #Should this be Error-type or Content-type? Where do I post the errors?
+            data = json.dumps(e1))
             time.sleep(0.5) #Sleep a bit so if we really can't recover we aren't flooring the CPU
             continue #Go to the start of the loop and try again
 
 else:
     print "cannot open serial port "
+    #Need to post this error too?
 
 ser.close()
 

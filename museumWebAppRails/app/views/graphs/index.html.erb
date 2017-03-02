@@ -1,0 +1,29 @@
+
+<p id="notice"><%= notice %></p>
+
+<script src="application.js"></script>
+
+<h1>Graph</h1>
+<div align="right"><p>Download Button Below</p></div>
+
+<div id="graph">
+
+  <p><%= values = Reading.select(:recorded_at, :temperature).where(pin: 1).to_a%></p>
+  <%= 
+  values.each do |tuple|
+  	#tuple = tuple.except!("Reading id")
+  	#tuple.shift
+  end
+  	%>
+
+  <%= line_chart values,
+  		title: "Daily Measurement",
+  		xtitle: "Time",
+  		ytitle: "Temperature (F)",
+  		legend: true,
+  		legend: "bottom",
+  		download: true
+   %>
+
+</div>
+
