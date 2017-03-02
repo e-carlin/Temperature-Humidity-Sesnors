@@ -1,24 +1,28 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <%= javascript_include_tag 'application' %>
-  <%= csrf_meta_tag %>
-</head>
-<body>
-  <div id="header">
-    <% if signed_in? -%>
-      <%= button_to t(".sign_out"), sign_out_path, method: :delete %>
-    <% else -%>
-      <%= link_to t(".sign_in"), sign_in_path %>
-    <% end -%>
-  </div>
-
-  <div id="flash">
-    <% flash.each do |key, value| -%>
-      <div id="flash_<%= key %>"><%=h value %></div>
+  <head>
+    <title>Opine</title>
+    <%= csrf_meta_tags %>
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+  </head>
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <ul class="nav navbar-nav">
+    <li><%= link_to 'Welcome', root_path%><li>
+    </ul>
+    <ul class="nav navbar-nav navbar-right">
+    <% if signed_in? %>
+      <li><%= link_to 'Sign out', sign_out_path, method: :delete%></li>
+    <% else %>
+    <li><a href=<%= sign_up_path%>><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+      <li><a href=<%= sign_in_path%>><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
     <% end %>
+    </ul>
   </div>
+</nav>
 
-  <%= yield %>
-</body>
+    <%= yield %>
+
+  </body>
 </html>

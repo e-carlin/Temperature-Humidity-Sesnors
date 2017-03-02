@@ -35,6 +35,8 @@
 </table>
 
 
+<<<<<<< HEAD
+=======
 <%= line_chart Reading.where(:node_id => 1).pluck(:recorded_at, :temperature), xtitle: "Time", ytitle: "Temperature" %>
 
 <div></div>
@@ -42,4 +44,5 @@
 
 <%= line_chart Reading.group(:node_id).group_by_hour(:recorded_at).count %>
 
+>>>>>>> d20330e832da9f80554e9d86de5eb11460731409
 <br>
