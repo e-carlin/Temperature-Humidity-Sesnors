@@ -12,6 +12,9 @@ from datetime import datetime
 #    2. 0: non-blocking mode, return immediately
 #    3. x, x is bigger than 0, float allowed, timeout block call
 
+#Assign a URL variable for cleanliness
+url = 'http://ec2-54-202-217-172.us-west-2.compute.amazonaws.com/api/v1/readings'
+
 ser = serial.Serial()
 # This port will be different of different machines check correct port with
 # $ python -m serial.tools.list_ports
@@ -35,9 +38,10 @@ try:
 except IOError, e:
     print "error open serial port: " + str(e)
     #Send message to the Cloud
-    r = requests.post('http://ec2-54-202-217-172.us-west-2.compute.amazonaws.com/api/v1/readings',
+    
+    r = requests.post(url,
     headers = {'Content-type': 'application/json'}, #Should this be Error-type or Content-type? Where do I post the errors?
-    data = json.dumps(e))
+    data = {'error': e})
     #execfile("launcher.sh")
     exit()
 
@@ -76,9 +80,9 @@ if ser.isOpen():
 
         except Exception, e1:
             print "We caught an error! : " + str(e1)
-            r = requests.post('http://ec2-54-202-217-172.us-west-2.compute.amazonaws.com/api/v1/readings',
+            r = requests.post(url,
             headers = {'Content-type': 'application/json'}, #Should this be Error-type or Content-type? Where do I post the errors?
-            data = json.dumps(e1))
+            data = {'error': e1})
             time.sleep(0.5) #Sleep a bit so if we really can't recover we aren't flooring the CPU
             continue #Go to the start of the loop and try again
 
