@@ -28,7 +28,7 @@
 #define LED 9 // Moteinos have LEDs on D9
 
 //***** RFM69 definitions ********************************
-#define NODEID        4    //must be unique for each node on same network (range up to 254, 255 is used for broadcast)
+#define NODEID        8    //must be unique for each node on same network (range up to 254, 255 is used for broadcast)
 #define NETWORKID     100  //Don't change this. The same on all nodes that talk to each other (range up to 255)
 #define GATEWAYID     1 //Don't change this. Same for all nodes in the network
 #define FREQUENCY     RF69_915MHZ
@@ -46,6 +46,7 @@ RFM69_ATC radio;
 //********** DHT22 definitions ************************
 #define DHTTYPE DHT22
 int SENSOR_PIN = 16; //A2 => Digital 16
+int POWER_PIN = 19; //A5 = Digital 19
 
 //******** LowPower definitions ***********
 #define SLEEP_TIME 35 //SLEEP_TIME * 8 = num seconds device will sleep for in between transmissions
@@ -99,6 +100,9 @@ void loop() {
   int i;
   char payload[MAX_PACKET_SIZE];
 
+    pinMode(POWER_PIN, OUTPUT);
+    digitalWrite(POWER_PIN, HIGH);
+    delay(800);
      // Initialize sensor
       DHT dht(SENSOR_PIN, DHTTYPE);
       dht.begin();
@@ -109,16 +113,15 @@ void loop() {
 
     //If failed to read sensor or voltage then send notice and reset
     if (isnan(h)|| isnan(t) || isnan(v)) {
-//      Blink(LED, 1000);
+      Blink (LED, 1000);
       sprintf(payload, "{ \"error\" : \"A reading was NAN\", \"sID\" : %d,", SENSOR_PIN);
       if(!radio.sendWithRetry(GATEWAYID, payload, strlen(payload))){
         radio.send(GATEWAYID, payload, strlen(payload)); //If no ack was recieved then try once more
       }
-        
-    Blink(LED, 1000); //Commented out for testing
-    Reset_AVR();
+      Reset_AVR();
     }
 
+      
       /* Send the reading */
     char tempFaren[6];
     char humidity[6];
@@ -128,19 +131,17 @@ void loop() {
     dtostrf(t, 4, 2, tempFaren);
     dtostrf(h, 4, 2, humidity);
 
-    sprintf(payload, "{\"temp\" : %s, \"hum\" : %s, \"sID\" : %d, \"volt\" : %ld, ", tempFaren, humidity,  SENSOR_PIN, v);
+    sprintf(payload, "{\"temp\" : %s, \"hum\" : %s, \"sID\" : %d, \"volt\" : %d, ", tempFaren, humidity,  SENSOR_PIN, v);
     
       if(!radio.sendWithRetry(GATEWAYID, payload, strlen(payload))){
         radio.send(GATEWAYID, payload, strlen(payload)); //If no ack was recieved then try once more
       }
     Blink(LED, 3);
-
-  
-  //Power down  
-  radio.sleep();
-  LowPower.powerDown(SLEEP_2S, ADC_OFF, BOD_OFF);
-
+     
+    digitalWrite(POWER_PIN, LOW);
+    delay(3000);
 }
+
 
 
 
