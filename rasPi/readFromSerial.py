@@ -39,9 +39,9 @@ except IOError, e:
     print "error open serial port: " + str(e)
     #Send message to the Cloud
     
-    r = requests.post(url,
-    headers = {'Content-type': 'application/json'}, #Should this be Error-type or Content-type? Where do I post the errors?
-    data = {'error': e})
+    # r = requests.post(url,
+    # headers = {'Content-type': 'application/json'}, #Should this be Error-type or Content-type? Where do I post the errors?
+    # data = {'error': e})
     #execfile("launcher.sh")
     exit()
 
