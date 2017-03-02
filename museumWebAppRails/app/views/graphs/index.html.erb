@@ -8,15 +8,31 @@
 
 <div id="graph">
 
-  <p><%= values = Reading.select(:recorded_at, :temperature).where(pin: 1).to_a%></p>
-  <%= 
-  values.each do |tuple|
-  	#tuple = tuple.except!("Reading id")
-  	#tuple.shift
-  end
-  	%>
+  <p hidden><%= values = Reading.select(:recorded_at, :temperature, :humidity).where(pin: 3).to_a%></p>
 
-  <%= line_chart values,
+  <%=
+      tempValues = Array.new
+
+      values.each do |tuple|
+        newReading = [tuple.recorded_at, tuple.temperature]
+
+        tempValues.push(newReading)
+      end
+  %>
+
+  <%=
+      humValues = Array.new
+
+      values.each do |tuple|
+        newReading = [tuple.recorded_at, tuple.humidity]
+
+        humValues.push(newReading)
+      end
+  %>
+
+
+
+  <%= line_chart tempValues,
   		title: "Daily Measurement",
   		xtitle: "Time",
   		ytitle: "Temperature (F)",
@@ -25,5 +41,13 @@
   		download: true
    %>
 
-</div>
+  <%= line_chart tempValues,
+      title: "Daily Measurement",
+      xtitle: "Time",
+      ytitle: "Humidity (%)",
+      legend: true,
+      legend: "bottom",
+      download: true
+   %>
 
+</div>
