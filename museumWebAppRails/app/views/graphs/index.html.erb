@@ -8,9 +8,9 @@
 
 <div id="graph">
 
-  <p hidden><%= values = Reading.select(:recorded_at, :temperature, :humidity).where(pin: 3).to_a%></p>
+  <p hidden><%= values = Reading.select(:recorded_at, :temperature, :humidity).where(pin: 4).to_a%></p>
 
-  <%=
+  <p hidden><%=
       tempValues = Array.new
 
       values.each do |tuple|
@@ -18,9 +18,9 @@
 
         tempValues.push(newReading)
       end
-  %>
+  %></p>
 
-  <%=
+  <p hidden><%=
       humValues = Array.new
 
       values.each do |tuple|
@@ -28,9 +28,31 @@
 
         humValues.push(newReading)
       end
+  %></p>
+
+  <p hidden><%=
+      startPeriod = DateTime.new(2017, 1, 22)
+      endPeriod = DateTime.new(2017, 1, 26)
+
+      selectDays = Reading.select(:recorded_at, :temperature, :humidity).where(pin: 4, recorded_at: startPeriod.beginning_of_day..endPeriod.end_of_day).to_a
+
+      selectDaysArray = Array.new
+
+      selectDays.each do |tuple|
+        newReading = [tuple.recorded_at, tuple.temperature]
+        selectDaysArray.push(newReading)
+      end
+  %></p>
+
+  <%=
+      line_chart selectDaysArray,
+      title: "Allocated Start/End Date",
+      xtitle: "Time",
+      ytitle: "Temperature (F)",
+      legend: true,
+      legend: "bottom",
+      download: true      
   %>
-
-
 
   <%= line_chart tempValues,
   		title: "Daily Measurement",
@@ -41,13 +63,40 @@
   		download: true
    %>
 
-  <%= line_chart tempValues,
+  <%= line_chart humValues,
       title: "Daily Measurement",
       xtitle: "Time",
       ytitle: "Humidity (%)",
       legend: true,
       legend: "bottom",
       download: true
+   %>
+
+   <%= 
+    multiData = Reading.select(:pin, :recorded_at, :temperature, :humidity).group(:pin).to_a
+    multiData2 = Reading.group(:pin).group_by_day.to_a
+
+    data = Hash.new
+
+    for i in 0..5
+      dataSet = Reading.select(:recorded_at, :temperature, :humidity).where(pin: i)
+
+      data[i] = dataSet
+    end
+   %>
+
+   <%= 
+      Reading.select(:pin, :recorded_at, :temperature, :humidity).group(:pin).to_a
+   %>
+
+   <%=      
+      line_chart multiData2,
+      title: "Multi-Measurements",
+      xtitle: "Time",
+      ytitle: "Temperature",
+      legend: true,
+      legend: "bottom",
+      download:true
    %>
 
    <!-- Graphs to add: Over multiple days (single point?), Multiple sensors -->
