@@ -18,6 +18,12 @@ class Api::V1::ReadingsController < Api::V1::BaseController
           }.to_json,
           :status => 200)
           ####### TODO:  We should probably add this erorr to our logs
+          path = File.join(Rails.root, 'log','moteinoAndPi.log')
+          File.open(path, 'a') { |f|
+          f.puts reading_params
+        }
+       #how would I write out a json? could i c&p the above render()?
+
 
         elsif(!reading_params[:temp].nil?) #This means it is a vaild reading
           pp"********************"
@@ -39,7 +45,7 @@ class Api::V1::ReadingsController < Api::V1::BaseController
             Sensor.create(:node_id => reading_params[:node_id],
               :pin => reading_params[:pin])
           end
-          
+
           pp "*************"
           pp "Saving reading"
           pp "*************"
