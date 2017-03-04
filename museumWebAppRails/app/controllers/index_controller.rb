@@ -12,12 +12,13 @@ class IndexController < ApplicationController
   #  lines = File.open(file).to_a
     lines = IO.readlines(file)
     linesLength = lines.length
-    # i = lineLength, while i > lineLength-5
-      #append line to log, i--
-  #  @logs = ""
-    #  for i in (lineLength).downto(lineLength-5)
-    #    @logs = @logs + IO.readlines(file)[i]
-    #  end
-    @logs = lines[linesLength-5], lines[linesLength-4], lines[linesLength-3], lines[linesLength-2], lines[linesLength-1]
+
+    if linesLength >= 5
+      @logs = lines[linesLength-5], lines[linesLength-4], lines[linesLength-3], lines[linesLength-2], lines[linesLength-1]
+    elsif linesLength != 0
+      #@logs = lines[linesLength-5], lines[linesLength-4], lines[linesLength-3], lines[linesLength-2], lines[linesLength-1]
+      @logs = lines
+    end
+
     end
 end
