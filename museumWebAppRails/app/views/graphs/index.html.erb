@@ -60,12 +60,12 @@
   %>
 
   <%= line_chart tempValues,
-  		title: "Daily Measurement",
-  		xtitle: "Time",
-  		ytitle: "Temperature (F)",
-  		legend: true,
-  		legend: "bottom",
-  		download: true
+      title: "Daily Measurement",
+      xtitle: "Time",
+      ytitle: "Temperature (F)",
+      legend: true,
+      legend: "bottom",
+      download: true
    %>
 
   <%= line_chart humValues,
@@ -77,33 +77,110 @@
       download: true
    %>
 
-   <%= 
-    multiData = Reading.select(:pin, :recorded_at, :temperature, :humidity).group(:pin).to_a
-    multiData2 = Reading.group(:pin).group_by_day.to_a
+   <%=
 
-    data = Hash.new
+      tempAndHumValues = [
+        {
+          :name => "Temp",
+          :data => tempValues
+          },
+        {
+          :name => "Hum",
+          :data => humValues
+          }
+        ]
 
-    for i in 0..5
-      dataSet = Reading.select(:recorded_at, :temperature, :humidity).where(pin: i)
-
-      data[i] = dataSet
-    end
-   %>
-
-   <%= 
-      Reading.select(:pin, :recorded_at, :temperature, :humidity).group(:pin).to_a
-   %>
-
-   <%=      
-      line_chart multiData2,
-      title: "Multi-Measurements",
+      line_chart tempAndHumValues,
+      title: "Temperature AND Humidity",
       xtitle: "Time",
-      ytitle: "Temperature",
+      ytitle: "Temperature & Humidity (respectively)",
       legend: true,
       legend: "bottom",
-      download:true
+      download: true
+
    %>
 
-   <!-- Graphs to add: Over multiple days (single point?), Multiple sensors -->
+   <%=
+
+    sensorOne = Reading.select(:recorded_at, :temperature, :humidity).where(pin: 1).to_a
+    sensorTwo = Reading.select(:recorded_at, :temperature, :humidity).where(pin: 6).to_a
+
+    tempArrayOne = Array.new
+    tempArrayTwo = Array.new
+
+    sensorOne.each do |tuple|
+        newReading = [tuple.recorded_at, tuple.temperature]
+        tempArrayOne.push(newReading)       
+    end
+
+    sensorTwo.each do |tuple|
+        newReading = [tuple.recorded_at, tuple.temperature]
+        tempArrayTwo.push(newReading)       
+    end
+
+    doubleData = [
+      {
+        :name => 1,
+        :data => tempArrayOne
+      },
+      {
+        :name => 2,
+        :data => tempArrayTwo
+      }
+    ]
+
+    line_chart doubleData,
+    title: "Inside/Outside Temps",
+    xtitle: "Time",
+    ytitle: "Temperature (F)",
+    legend: true,
+    legend: "bottom",
+    download: true
+   %>
+
+   <%=
+
+    # multiSensorHash = {}
+    # Sensors we are getting data for
+    sensors = [1,2,3,5,6,7]
+    # Where we're storing the data for the graph
+    # An array of hashes
+    multiSensorArray = []
+
+    for sensor in sensors do
+
+
+      # One data series
+      newHash = {}
+      # The name of the series
+      newHash[:name] = sensor
+      # The juicy data
+      data = Reading.select(:recorded_at, :temperature, :humidity).where(pin: sensor).to_a
+      # Where we'll store the data
+      dataArray = Array.new
+      # Format it
+      data.each do |tuple|
+
+        newReading = [tuple.recorded_at, tuple.temperature]
+        dataArray.push(newReading)       
+
+      end
+      # Store the formatted data in the hash
+      newHash[:data] = dataArray
+      # Add this data series
+      multiSensorArray.push(newHash)
+
+    end
+
+    line_chart multiSensorArray,
+    title: "Plural Sensors",
+    xtitle: "Time",
+    ytitle: "Temperature (F)",
+    legend: true,
+    legend: "bottom",
+    download: true
+
+   %>
 
 </div>
+
