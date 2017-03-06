@@ -128,7 +128,7 @@ void loop() {
   //If failed to read sensor or voltage then send notice and reset
   if (isnan(h)|| isnan(t) || isnan(v)) {
     Blink (LED, 1000); //Let someone watching now there was a problem
-    sprintf(payload, "{ \"error\" : \"A reading was NAN\", \"sID\" : %d,", SENSOR_PIN); //Copy values to the packet
+    sprintf(payload, "{ \"error\" : \"A reading was NAN\","); //Copy values to the packet
 
     //Try sending the packet
     // If no ACK is received try once more
@@ -148,7 +148,7 @@ void loop() {
   dtostrf(h, 4, 2, humidity);
 
   //Build packet
-  sprintf(payload, "{\"temp\" : %s, \"hum\" : %s, \"sID\" : %d, \"volt\" : %d, ", tempFaren, humidity,  SENSOR_PIN, v);
+  sprintf(payload, "{\"temp\" : %s, \"hum\" : %s, \"volt\" : %d, ", tempFaren, humidity, v);
   
     //Try sending the packet
     // If no ACK is received try once more
