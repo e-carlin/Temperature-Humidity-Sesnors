@@ -83,7 +83,6 @@ if ser.isOpen():
             r = requests.post(url,
             headers = {'Content-type': 'application/json'}, #Should this be Error-type or Content-type? Where do I post the errors?
             data = {'error': e1})
-            time.sleep(0.5) #Sleep a bit so if we really can't recover we aren't flooring the CPU
             continue #Go to the start of the loop and try again
 
 else:
