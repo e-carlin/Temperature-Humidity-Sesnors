@@ -1,6 +1,6 @@
 // **********************************************************************************
 // Copyright Felix Rusu 2016, http://www.LowPowerLab.com/contact
-// Modified by Evan Carlin
+// Modified by Evan Carlin, https://github.com/e-carlin/museum_monitoring_sensors
 // **********************************************************************************
 // License
 // **********************************************************************************
@@ -22,7 +22,7 @@
 #include <LowPower.h> //get library from: https://github.com/lowpowerlab/lowpower
                       //writeup here: http://www.rocketscream.com/blog/2011/07/04/lightweight-low-power-arduino-library/
 //***** USB port BAUD *****
-#define SERIAL_BAUD 9600 //9600 seems to work not really sure what it actually means
+//#define SERIAL_BAUD 9600 //Just for testing. 9600 seems to work, not really sure what it actually means
 
 //******* LED **************
 #define LED 9 // Moteinos have LEDs on D9
@@ -47,19 +47,26 @@ RFM69_ATC radio;
 #define DHTTYPE DHT22
 int SENSOR_PIN = 16; //A2 => Digital 16
 int POWER_PIN = 19; //A5 = Digital 19
+DHT dht(SENSOR_PIN, DHTTYPE);
 
 //******** LowPower definitions ***********
-#define SLEEP_TIME 35 //SLEEP_TIME * 8 = num seconds device will sleep for in between transmissions
 #include <avr/wdt.h>
 #define Reset_AVR() wdt_enable(WDTO_15MS); while(1) {} //This resets the chip
-                                                     //Used in cases where a reading was NAN
+
+/*
+* Initializes radio and DHT22
+*/                                                     //Used in cases where a reading was NAN
 void setup() {
+  //For printing when testing
   //Start serial port
-//  Serial.begin(SERIAL_BAUD);
+  //Serial.begin(SERIAL_BAUD);
   
+  //Initialize the radio
   radio.initialize(FREQUENCY, NODEID, NETWORKID);
   radio.encrypt(ENCRYPTKEY);
 
+  // Initialize sensor
+  dht.begin();
 
   //Auto Transmission Control - dials down transmit power to save battery (-100 is the noise floor, -90 is still pretty good)
   //For indoor nodes that are pretty static and at pretty stable temperatures (like a MotionMote) -90dBm is quite safe
@@ -68,6 +75,9 @@ void setup() {
   radio.enableAutoPower(ATC_RSSI);
 }
 
+/*
+* Blinks the LED on pin for DELAY_MS miliseconds
+*/
 void Blink(byte PIN, int DELAY_MS)
 {
   pinMode(PIN, OUTPUT);
@@ -76,7 +86,9 @@ void Blink(byte PIN, int DELAY_MS)
   digitalWrite(PIN, LOW);
 }
 
-// Retrieves the voltage in miniVolts, doesn't require additional hardware
+/*
+* Retrieves the voltage in miniVolts, doesn't require additional hardware
+*/
 long readVcc() {
   // Read 1.1V reference against AVcc
   // set the reference to Vcc and the measurement to the internal 1.1V reference
@@ -95,51 +107,63 @@ long readVcc() {
   return result; // Vcc in millivolts
 }
 
-
+/*
+* The device loops through this taking a reading, transmitting, sleeping, then repeat...
+*/
 void loop() {
-  int i;
-  char payload[MAX_PACKET_SIZE];
+  char payload[MAX_PACKET_SIZE]; //Packet we will place readings in and send
+    char tempFaren[6]; //
+  char humidity[6];
 
-    pinMode(POWER_PIN, OUTPUT);
-    digitalWrite(POWER_PIN, HIGH);
-    delay(800);
-     // Initialize sensor
-      DHT dht(SENSOR_PIN, DHTTYPE);
-      dht.begin();
-      
-    float h = dht.readHumidity();
-    float t = dht.readTemperature(true);  //true => temp. in farenheit
-    long v = readVcc();
+  //Turn on power to the pin and let it stabilize before reading
+  pinMode(POWER_PIN, OUTPUT);
+  digitalWrite(POWER_PIN, HIGH);
+  delay(800);
+   
+  //Take the readings    
+  float h = dht.readHumidity();
+  float t = dht.readTemperature(true);  //true => temp. in farenheit
+  long v = readVcc();
 
-    //If failed to read sensor or voltage then send notice and reset
-    if (isnan(h)|| isnan(t) || isnan(v)) {
-      Blink (LED, 1000);
-      sprintf(payload, "{ \"error\" : \"A reading was NAN\", \"sID\" : %d,", SENSOR_PIN);
-      if(!radio.sendWithRetry(GATEWAYID, payload, strlen(payload))){
-        radio.send(GATEWAYID, payload, strlen(payload)); //If no ack was recieved then try once more
-      }
-      Reset_AVR();
+  //If failed to read sensor or voltage then send notice and reset
+  if (isnan(h)|| isnan(t) || isnan(v)) {
+    Blink (LED, 1000); //Let someone watching now there was a problem
+    sprintf(payload, "{ \"error\" : \"A reading was NAN\", \"sID\" : %d,", SENSOR_PIN); //Copy values to the packet
+
+    //Try sending the packet
+    // If no ACK is received try once more
+    if(!radio.sendWithRetry(GATEWAYID, payload, strlen(payload))){
+      radio.send(GATEWAYID, payload, strlen(payload)); //No ACK so try again
     }
 
-      
-      /* Send the reading */
-    char tempFaren[6];
-    char humidity[6];
+    //Reset the device
+    Reset_AVR();
+  }
 
-    /* This is necessary for sending float in char[] packet */
-    //4 is mininum width, 2 is precision
-    dtostrf(t, 4, 2, tempFaren);
-    dtostrf(h, 4, 2, humidity);
+  /* The reading was successful. Build the packet and send! */
 
-    sprintf(payload, "{\"temp\" : %s, \"hum\" : %s, \"sID\" : %d, \"volt\" : %d, ", tempFaren, humidity,  SENSOR_PIN, v);
-    
-      if(!radio.sendWithRetry(GATEWAYID, payload, strlen(payload))){
-        radio.send(GATEWAYID, payload, strlen(payload)); //If no ack was recieved then try once more
-      }
-    Blink(LED, 3);
-     
-    digitalWrite(POWER_PIN, LOW);
-    delay(3000);
+  //This is necessary for copying floats to a char[]
+  //4 is mininum width, 2 is precision
+  dtostrf(t, 4, 2, tempFaren);
+  dtostrf(h, 4, 2, humidity);
+
+  //Build packet
+  sprintf(payload, "{\"temp\" : %s, \"hum\" : %s, \"sID\" : %d, \"volt\" : %d, ", tempFaren, humidity,  SENSOR_PIN, v);
+  
+    //Try sending the packet
+    // If no ACK is received try once more
+    if(!radio.sendWithRetry(GATEWAYID, payload, strlen(payload))){
+      radio.send(GATEWAYID, payload, strlen(payload)); //No ACK so try again
+    }
+
+  //A little flash to show we transmitted
+  Blink(LED, 3);
+   
+  //Turn of power to the DHT22
+  digitalWrite(POWER_PIN, LOW);
+  
+  radio.sleep();
+  LowPower.powerDown(SLEEP_4S, ADC_OFF, BOD_OFF);
 }
 
 
