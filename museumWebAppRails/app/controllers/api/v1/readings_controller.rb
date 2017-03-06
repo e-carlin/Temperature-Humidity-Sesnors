@@ -19,7 +19,7 @@ class Api::V1::ReadingsController < Api::V1::BaseController
           :status => 200)
           ####### TODO:  We should probably add this erorr to our logs
 
-        elsif(!reading_params[:temp].nil?) #This means it is a vaild reading
+        elsif(!reading_params[:temp].nil? && !reading_params[:hum].nil?) #TWe have temp and hum so it is a valid reading
           pp"********************"
           pp "This is a reading not an error"
           pp "********************"
@@ -30,15 +30,6 @@ class Api::V1::ReadingsController < Api::V1::BaseController
             pp "****************"
             Node.create(:node_id => reading_params[:node_id])  #Create and save a new node
           end
-
-          #Is this a sensor we haven't seen before?
-          if(Sensor.find_by(node_id: reading_params[:node_id], pin: reading_params[:pin]).nil?)
-            pp "***********"
-            pp "Pin not found so creating a new one"
-            pp "***********"
-            Sensor.create(:node_id => reading_params[:node_id],
-              :pin => reading_params[:pin])
-          end
           
           pp "*************"
           pp "Saving reading"
@@ -47,8 +38,7 @@ class Api::V1::ReadingsController < Api::V1::BaseController
           @reading = Reading.new(:temperature => reading_params[:temp],
             :humidity => reading_params[:hum],
             :recorded_at => reading_params[:timeStamp],
-            :node_id => reading_params[:node_id],
-            :pin => reading_params[:pin])
+            :node_id => reading_params[:node_id])
             #add nodeID and sensorID
 
 
@@ -94,6 +84,6 @@ class Api::V1::ReadingsController < Api::V1::BaseController
   private
     # Never trust parameters from the scary internet, only allow the white list through.
     def reading_params
-      params.permit(:temp, :hum, :timeStamp, :volt, :node_id, :pin, :error) #Add nodeID
+      params.permit(:temp, :hum, :timeStamp, :volt, :node_id, :error) #Add nodeID
     end
 end
