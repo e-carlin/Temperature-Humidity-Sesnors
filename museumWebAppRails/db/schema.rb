@@ -13,10 +13,12 @@
 ActiveRecord::Schema.define(version: 20170130002950) do
 
   create_table "nodes", force: :cascade do |t|
-    t.integer  "node_id",    null: false
+    t.integer  "node_id",      null: false
     t.text     "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.integer  "voltage"
+    t.datetime "last_reading"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
   end
 
   create_table "readings", force: :cascade do |t|
