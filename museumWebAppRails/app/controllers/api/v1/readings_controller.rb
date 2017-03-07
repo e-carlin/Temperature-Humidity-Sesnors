@@ -3,7 +3,6 @@ class Api::V1::ReadingsController < Api::V1::BaseController
     pp "***************************"
     pp "In Reading create"
     pp reading_params[:node_id]
-    pp reading_params[:nodeID]
     pp "****************************"
 
     #There is an authorization header && it contains a valid password
@@ -35,7 +34,8 @@ class Api::V1::ReadingsController < Api::V1::BaseController
           pp "Saving reading"
           pp "*************"
           #Finally we can save the reading
-          @reading = Reading.new(:temperature => reading_params[:temp],
+          @reading = Reading.new(:name => Node.find_by(node_id: reading_params[:node_id]).name)
+            :temperature => reading_params[:temp],
             :humidity => reading_params[:hum],
             :recorded_at => reading_params[:timeStamp],
             :node_id => reading_params[:node_id])
@@ -83,6 +83,6 @@ class Api::V1::ReadingsController < Api::V1::BaseController
   private
     # Never trust parameters from the scary internet, only allow the white list through.
     def reading_params
-      params.permit(:temp, :hum, :timeStamp, :volt, :node_id, :error, :nodeID)
+      params.permit(:temp, :hum, :timeStamp, :volt, :node_id, :error)
     end
 end
