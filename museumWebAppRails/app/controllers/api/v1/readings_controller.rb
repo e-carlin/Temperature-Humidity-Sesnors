@@ -2,8 +2,8 @@ class Api::V1::ReadingsController < Api::V1::BaseController
   def create
     pp "***************************"
     pp "In Reading create"
-    pp reading_params
-    pp request.headers['Authorization']
+    pp reading_params[:node_id]
+    pp reading_params[:nodeID]
     pp "****************************"
 
     #There is an authorization header && it contains a valid password
@@ -39,7 +39,6 @@ class Api::V1::ReadingsController < Api::V1::BaseController
             :humidity => reading_params[:hum],
             :recorded_at => reading_params[:timeStamp],
             :node_id => reading_params[:node_id])
-            #add nodeID and sensorID
 
 
           if @reading.save
@@ -84,6 +83,6 @@ class Api::V1::ReadingsController < Api::V1::BaseController
   private
     # Never trust parameters from the scary internet, only allow the white list through.
     def reading_params
-      params.permit(:temp, :hum, :timeStamp, :volt, :node_id, :error) #Add nodeID
+      params.permit(:temp, :hum, :timeStamp, :volt, :node_id, :error, :nodeID)
     end
 end
