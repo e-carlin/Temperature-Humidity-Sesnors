@@ -18,7 +18,7 @@ class GraphsController < ApplicationController
 	# endDate: What is the end date of measurement?
 	def getData(compareTempAndHum, measurement, allSensors, selectSensors, startDate, endDate)
 
-		#Get temperature and humidity from only one sensor
+		# Get temperature and humidity from only one sensor
 		if compareTempAndHum == true 	
 
 			# We assume the first entry is the sensor of interest
@@ -62,7 +62,78 @@ class GraphsController < ApplicationController
 			return dataInput
 		end
 
-		
+		# Get temperature or humidity for all sensors
+		if allSensors == true
+
+			# First, get all of the sensors
+			sensorQuery = Nodes.select(:node_id).to_a
+			# Store the node id's in an array
+			sensors = Array.new
+			# Add the values
+			sensorQuery.each do |tuple|
+				sensors.push(tuple.node_id)
+			end
+
+			# What will be returned to the graphs
+			allSensorData = Array.new
+
+			# Get each data series
+			for sensor in sensors
+
+				# One data series
+				dataSeries = {}
+				# Series Name
+				dataSeries[:name] = sensor
+
+				# The actual data
+				dataQuery = Reading.select(:recorded_at, measurement).where(node_id: sensor, recorded_at: startDate.beginning_of_day..endDate.end_of_day).to_a
+				# Format data for graph
+				dataArray = Array.new
+				dataQuery.each do |tuple|
+					dataArray.push([tuple.recorded_at, tuple.measurment])
+				end
+
+				# Add to hash
+				dataSeries[:data] = dataArray
+				# Push to array
+				allSensorData.push(dataSeries)
+
+			end
+
+			# Return data
+			return allSensorData 
+
+		end
+
+		# Otherwise, we return X-many sensors and compare their measurements
+		# What will be returned to the graphs
+		multiSensorData = Array.new
+
+		# Get each data series
+		for sensor in selectSensors
+
+			# One data series
+			dataSeries = {}
+			# Series Name
+			dataSeries[:name] = sensor
+
+			# The actual data
+			dataQuery = Reading.select(:recorded_at, measurement).where(node_id: sensor, recorded_at: startDate.beginning_of_day..endDate.end_of_day).to_a
+			# Format data for graph
+			dataArray = Array.new
+			dataQuery.each do |tuple|
+				dataArray.push([tuple.recorded_at, tuple.measurment])
+			end
+
+			# Add to hash
+			dataSeries[:data] = dataArray
+			# Push to array
+			multiSensorData.push(dataSeries)
+
+		end
+
+		# Return data
+		return mutliSensorData 	
 
 	end
 
