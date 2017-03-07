@@ -17,7 +17,10 @@
 		{node_id: 1, created_at: '2017-01-01 10:12:15', updated_at: '2017-01-07 12:30:05'},
 		{node_id: 2, created_at: '2017-01-01 10:12:15', updated_at: '2017-01-07 12:30:05'},
 		{node_id: 3, created_at: '2017-01-01 10:12:15', updated_at: '2017-01-07 12:30:05'},
-		{node_id: 4, created_at: '2017-01-01 10:12:15', updated_at: '2017-01-07 12:30:05'}
+		{node_id: 4, created_at: '2017-01-01 10:12:15', updated_at: '2017-01-07 12:30:05'},
+		{node_id: 5, created_at: '2017-01-01 10:12:15', updated_at: '2017-01-07 12:30:05'},
+		{node_id: 6, created_at: '2017-01-01 10:12:15', updated_at: '2017-01-07 12:30:05'},
+		{node_id: 7, created_at: '2017-01-01 10:12:15', updated_at: '2017-01-07 12:30:05'}
 
 		])
 
@@ -32,28 +35,28 @@
 		{ node_id: 1, temperature: 71, humidity: 50, recorded_at: '2017-01-20 12:00:00', created_at: '2017-01-20 12:05:00', updated_at: '2017-01-20 12:05:00'},
 		{ node_id: 1, temperature: 71, humidity: 50, recorded_at: '2017-01-20 16:00:00', created_at: '2017-01-20 16:05:00', updated_at: '2017-01-20 16:05:00'},
 		#Node 1, Sensor 2
-		{ node_id: 1, temperature: 70, humidity: 52, recorded_at: '2017-01-20 08:00:00', created_at: '2017-01-20 08:05:00', updated_at: '2017-01-20 08:05:00'},
-		{ node_id: 1, temperature: 68, humidity: 57, recorded_at: '2017-01-20 12:00:00', created_at: '2017-01-20 12:05:00', updated_at: '2017-01-20 12:05:00'},
-		{ node_id: 1, temperature: 69, humidity: 60, recorded_at: '2017-01-20 16:00:00', created_at: '2017-01-20 16:05:00', updated_at: '2017-01-20 16:05:00'},
+		{ node_id: 2, temperature: 70, humidity: 52, recorded_at: '2017-01-20 08:00:00', created_at: '2017-01-20 08:05:00', updated_at: '2017-01-20 08:05:00'},
+		{ node_id: 2, temperature: 68, humidity: 57, recorded_at: '2017-01-20 12:00:00', created_at: '2017-01-20 12:05:00', updated_at: '2017-01-20 12:05:00'},
+		{ node_id: 2, temperature: 69, humidity: 60, recorded_at: '2017-01-20 16:00:00', created_at: '2017-01-20 16:05:00', updated_at: '2017-01-20 16:05:00'},
 		#Node 1, Sensor 3
-		{ node_id: 1, temperature: 78, humidity: 45, recorded_at: '2017-01-20 08:00:00', created_at: '2017-01-20 08:05:00', updated_at: '2017-01-20 08:05:00'},
-		{ node_id: 1, temperature: 75, humidity: 44, recorded_at: '2017-01-20 12:00:00', created_at: '2017-01-20 12:05:00', updated_at: '2017-01-20 12:05:00'},
-		{ node_id: 1, temperature: 72, humidity: 47, recorded_at: '2017-01-20 16:00:00', created_at: '2017-01-20 16:05:00', updated_at: '2017-01-20 16:05:00'},
+		{ node_id: 3, temperature: 78, humidity: 45, recorded_at: '2017-01-20 08:00:00', created_at: '2017-01-20 08:05:00', updated_at: '2017-01-20 08:05:00'},
+		{ node_id: 3, temperature: 75, humidity: 44, recorded_at: '2017-01-20 12:00:00', created_at: '2017-01-20 12:05:00', updated_at: '2017-01-20 12:05:00'},
+		{ node_id: 3, temperature: 72, humidity: 47, recorded_at: '2017-01-20 16:00:00', created_at: '2017-01-20 16:05:00', updated_at: '2017-01-20 16:05:00'},
 		#Node 2, Sensor 4
-		{ node_id: 2, temperature: 50, humidity: 63, recorded_at: '2017-01-20 08:00:00', created_at: '2017-01-20 08:05:00', updated_at: '2017-01-20 08:05:00'},
-		{ node_id: 2, temperature: 55, humidity: 60, recorded_at: '2017-01-20 12:00:00', created_at: '2017-01-20 12:05:00', updated_at: '2017-01-20 12:05:00'},
-		{ node_id: 2, temperature: 53, humidity: 65, recorded_at: '2017-01-20 16:00:00', created_at: '2017-01-20 16:05:00', updated_at: '2017-01-20 16:05:00'},
+		{ node_id: 4, temperature: 50, humidity: 63, recorded_at: '2017-01-20 08:00:00', created_at: '2017-01-20 08:05:00', updated_at: '2017-01-20 08:05:00'},
+		{ node_id: 4, temperature: 55, humidity: 60, recorded_at: '2017-01-20 12:00:00', created_at: '2017-01-20 12:05:00', updated_at: '2017-01-20 12:05:00'},
+		{ node_id: 4, temperature: 53, humidity: 65, recorded_at: '2017-01-20 16:00:00', created_at: '2017-01-20 16:05:00', updated_at: '2017-01-20 16:05:00'},
 		#Node 3, Sensor 5
-		{ node_id: 3, temperature: 65, humidity: 68, recorded_at: '2017-01-20 08:00:00', created_at: '2017-01-20 08:05:00', updated_at: '2017-01-20 08:05:00'},
-		{ node_id: 3, temperature: 66, humidity: 66, recorded_at: '2017-01-20 12:00:00', created_at: '2017-01-20 12:05:00', updated_at: '2017-01-20 12:05:00'},
-		{ node_id: 3, temperature: 66, humidity: 67, recorded_at: '2017-01-20 16:00:00', created_at: '2017-01-20 16:05:00', updated_at: '2017-01-20 16:05:00'},
+		{ node_id: 5, temperature: 65, humidity: 68, recorded_at: '2017-01-20 08:00:00', created_at: '2017-01-20 08:05:00', updated_at: '2017-01-20 08:05:00'},
+		{ node_id: 5, temperature: 66, humidity: 66, recorded_at: '2017-01-20 12:00:00', created_at: '2017-01-20 12:05:00', updated_at: '2017-01-20 12:05:00'},
+		{ node_id: 5, temperature: 66, humidity: 67, recorded_at: '2017-01-20 16:00:00', created_at: '2017-01-20 16:05:00', updated_at: '2017-01-20 16:05:00'},
 		#Node 3, Sensor 6
-		{ node_id: 3, temperature: 35, humidity: 75, recorded_at: '2017-01-20 08:00:00', created_at: '2017-01-20 08:05:00', updated_at: '2017-01-20 08:05:00'},
-		{ node_id: 3, temperature: 31, humidity: 82, recorded_at: '2017-01-20 12:00:00', created_at: '2017-01-20 12:05:00', updated_at: '2017-01-20 12:05:00'},
-		{ node_id: 3, temperature: 40, humidity: 74, recorded_at: '2017-01-20 16:00:00', created_at: '2017-01-20 16:05:00', updated_at: '2017-01-20 16:05:00'},
+		{ node_id: 6, temperature: 35, humidity: 75, recorded_at: '2017-01-20 08:00:00', created_at: '2017-01-20 08:05:00', updated_at: '2017-01-20 08:05:00'},
+		{ node_id: 6, temperature: 31, humidity: 82, recorded_at: '2017-01-20 12:00:00', created_at: '2017-01-20 12:05:00', updated_at: '2017-01-20 12:05:00'},
+		{ node_id: 6, temperature: 40, humidity: 74, recorded_at: '2017-01-20 16:00:00', created_at: '2017-01-20 16:05:00', updated_at: '2017-01-20 16:05:00'},
 		#Node 4, Sensor 7 (One packet dropped)
-		{ node_id: 4, temperature: 72, humidity: 52, recorded_at: '2017-01-20 08:00:00', created_at: '2017-01-20 08:05:00', updated_at: '2017-01-20 08:05:00'},
-		{ node_id: 4, temperature: 71, humidity: 53, recorded_at: '2017-01-20 16:00:00', created_at: '2017-01-20 16:05:00', updated_at: '2017-01-20 16:05:00'},
+		{ node_id: 7, temperature: 72, humidity: 52, recorded_at: '2017-01-20 08:00:00', created_at: '2017-01-20 08:05:00', updated_at: '2017-01-20 08:05:00'},
+		{ node_id: 7, temperature: 71, humidity: 53, recorded_at: '2017-01-20 16:00:00', created_at: '2017-01-20 16:05:00', updated_at: '2017-01-20 16:05:00'},
 
 		#One week of measurements for sensor 4 (2 dropped packets on teh 25th and 27th)
 		{ node_id: 2, temperature: 50, humidity: 63, recorded_at: '2017-01-21 08:00:00', created_at: '2017-01-21 08:05:00', updated_at: '2017-01-21 08:05:00'},

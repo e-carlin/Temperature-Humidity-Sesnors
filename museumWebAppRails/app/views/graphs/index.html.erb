@@ -7,13 +7,44 @@
 <h1><%= @someValue %></h1>
 <h1><%= @anotherValue %></h1>
 
+<%= form_tag do %>
+
+  <%= check_box_tag(:tempAndHum, "Temp AND Humidity") %>
+  <%= label_tag(:tempAndHum, "Compare temperature and humidity of a single sensor") %>
+
+  <%= select_tag(:tempAndHum, options_for_select([['Temperature', 1],['Humidity', 2]]))%>
+
+  <p hidden><%=
+    sensorQuery = Reading.select(:node_id).distinct.to_a
+    sensorArray = Array.new
+
+    i = 1
+    sensorQuery.each do |tuple|
+      newEntry = [tuple.node_id, i]
+      sensorArray.push(newEntry)
+      i += 1
+    end
+  %></p>
+
+  Choose your sensors
+  <%= check_box_tag(:all, "All") %>
+  <%=  label_tag(:all, "All sensors") %>
+
+  <p hidden><%= for i in 1..sensorArray.length do %>
+    <%= parameter = ":" << i %></p>
+    <%= check_box_tag(parameter, i) %>
+    <%= label_tag(parameter, i) %>
+  <% end %>
+
+
+<% end %>
 
 <h1>Graph</h1>
 <div align="right"><p>Download Button Below</p></div>
 
 <div id="graph">
 
-  <p hidden><%= values = Reading.select(:recorded_at, :temperature, :humidity).where(pin: 4).to_a%></p>
+  <p hidden><%= values = Reading.select(:recorded_at, :temperature, :humidity).where(node_id: 4).to_a%></p>
 
   <p hidden><%=
       tempValues = Array.new
@@ -39,7 +70,7 @@
       startPeriod = DateTime.new(2017, 1, 22)
       endPeriod = DateTime.new(2017, 1, 26)
 
-      selectDays = Reading.select(:recorded_at, :temperature, :humidity).where(pin: 4, recorded_at: startPeriod.beginning_of_day..endPeriod.end_of_day).to_a
+      selectDays = Reading.select(:recorded_at, :temperature, :humidity).where(node_id: 2, recorded_at: startPeriod.beginning_of_day..endPeriod.end_of_day).to_a
 
       selectDaysArray = Array.new
 
@@ -102,8 +133,8 @@
 
    <%=
 
-    sensorOne = Reading.select(:recorded_at, :temperature, :humidity).where(pin: 1).to_a
-    sensorTwo = Reading.select(:recorded_at, :temperature, :humidity).where(pin: 6).to_a
+    sensorOne = Reading.select(:recorded_at, :temperature, :humidity).where(node_id: 1).to_a
+    sensorTwo = Reading.select(:recorded_at, :temperature, :humidity).where(node_id: 6).to_a
 
     tempArrayOne = Array.new
     tempArrayTwo = Array.new
@@ -113,8 +144,8 @@
 
    <%=
 
-    sensorOne = Reading.select(:recorded_at, :temperature, :humidity).where(pin: 1).to_a
-    sensorTwo = Reading.select(:recorded_at, :temperature, :humidity).where(pin: 6).to_a
+    sensorOne = Reading.select(:recorded_at, :temperature, :humidity).where(node_id: 1).to_a
+    sensorTwo = Reading.select(:recorded_at, :temperature, :humidity).where(node_id: 6).to_a
 
     tempArrayOne = Array.new
     tempArrayTwo = Array.new
@@ -151,7 +182,6 @@
 
    <%=
 
-    # multiSensorHash = {}
     # Sensors we are getting data for
     sensors = [1,2,3,5,6,7]
     # Where we're storing the data for the graph
@@ -166,7 +196,7 @@
       # The name of the series
       newHash[:name] = sensor
       # The juicy data
-      data = Reading.select(:recorded_at, :temperature, :humidity).where(pin: sensor).to_a
+      data = Reading.select(:recorded_at, :temperature, :humidity).where(node_id: sensor).to_a
       # Where we'll store the data
       dataArray = Array.new
       # Format it

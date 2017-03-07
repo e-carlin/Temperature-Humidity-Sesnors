@@ -4,6 +4,38 @@
 
 <a href="readings.csv">Download CSV</a>
 
+<%= form_tag do %>
+
+  <%= check_box_tag(:tempAndHum, "Temp AND Humidity") %>
+  <%= label_tag(:tempAndHum, "Compare temperature and humidity of a single sensor") %>
+
+  <%= select_tag(:tempAndHum, options_for_select([['Temperature', 1],['Humidity', 2]]))%>
+
+  <p hidden><%=
+    sensorQuery = Reading.select(:node_id).distinct.to_a
+    sensorArray = Array.new
+
+    i = 1
+    sensorQuery.each do |tuple|
+      newEntry = [tuple.node_id, i]
+      sensorArray.push(newEntry)
+      i += 1
+    end
+  %></p>
+
+  Choose your sensors
+  <%= check_box_tag(:all, "All") %>
+  <%=  label_tag(:all, "All sensors") %>
+
+  <p hidden><%= for i in 1..sensorArray.length do %>
+    <%= parameter = ":" << i %></p>
+    <%= check_box_tag(parameter, i) %>
+    <%= label_tag(parameter, i) %>
+  <% end %>
+
+
+<% end %>
+
 <table>
   <thead>
     <tr>
