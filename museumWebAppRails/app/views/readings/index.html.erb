@@ -40,6 +40,7 @@
   <thead>
     <tr>
     <th>Node_ID</th>
+    <th>Name</th>
     <th>Temperature</th>
     <th>Humidity</th>
     <th>Recorded at</th>
@@ -50,6 +51,7 @@
     <% @readings.each do |reading| %>
       <tr>
         <td><%= reading.node_id%></td>
+        <td><%= reading.name%></td>
         <td><%= reading.temperature%></td>
         <td><%= reading.humidity%></td>
         <td><%= reading.recorded_at%></td>

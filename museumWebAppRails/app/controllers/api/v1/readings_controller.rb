@@ -34,7 +34,7 @@ class Api::V1::ReadingsController < Api::V1::BaseController
           pp "Saving reading"
           pp "*************"
           #Finally we can save the reading
-          @reading = Reading.new(:name => Node.find_by(node_id: reading_params[:node_id]).name)
+          @reading = Reading.new(:name => Node.find_by(node_id: reading_params[:node_id]).name,
             :temperature => reading_params[:temp],
             :humidity => reading_params[:hum],
             :recorded_at => reading_params[:timeStamp],
