@@ -108,6 +108,17 @@
     tempArrayOne = Array.new
     tempArrayTwo = Array.new
 
+
+   %>
+
+   <%=
+
+    sensorOne = Reading.select(:recorded_at, :temperature, :humidity).where(pin: 1).to_a
+    sensorTwo = Reading.select(:recorded_at, :temperature, :humidity).where(pin: 6).to_a
+
+    tempArrayOne = Array.new
+    tempArrayTwo = Array.new
+
     sensorOne.each do |tuple|
         newReading = [tuple.recorded_at, tuple.temperature]
         tempArrayOne.push(newReading)       
