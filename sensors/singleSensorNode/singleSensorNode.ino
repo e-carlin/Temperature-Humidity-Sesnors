@@ -110,7 +110,7 @@ void loop() {
     //If failed to read sensor or voltage then send notice and reset
     if (isnan(h)|| isnan(t) || isnan(v)) {
 //      Blink(LED, 1000);
-      sprintf(payload, "{ \"error\" : \"A reading was NAN\", \"sID\" : %d,", SENSOR_PIN);
+      sprintf(payload, "{ \"error\" : \"A reading was NAN\",");
       if(!radio.sendWithRetry(GATEWAYID, payload, strlen(payload))){
         radio.send(GATEWAYID, payload, strlen(payload)); //If no ack was recieved then try once more
       }
@@ -128,7 +128,7 @@ void loop() {
     dtostrf(t, 4, 2, tempFaren);
     dtostrf(h, 4, 2, humidity);
 
-    sprintf(payload, "{\"temp\" : %s, \"hum\" : %s, \"sID\" : %d, \"volt\" : %ld, ", tempFaren, humidity,  SENSOR_PIN, v);
+    sprintf(payload, "{\"temp\" : %s, \"hum\" : %s, \"volt\" : %ld, ", tempFaren, humidity,  v);
     
       if(!radio.sendWithRetry(GATEWAYID, payload, strlen(payload))){
         radio.send(GATEWAYID, payload, strlen(payload)); //If no ack was recieved then try once more
