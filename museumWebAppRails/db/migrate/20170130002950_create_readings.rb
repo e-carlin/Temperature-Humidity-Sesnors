@@ -3,6 +3,8 @@ class CreateReadings < ActiveRecord::Migration[5.0]
     create_table :nodes do |t|
       t.integer :node_id, null: false, :unique => true #The unique networking id for the node (Assigned in node.ino)
       t.text :name
+      t.integer :voltage
+      t.datetime :last_reading
 
       t.timestamps
     end

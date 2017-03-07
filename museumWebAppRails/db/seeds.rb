@@ -14,13 +14,13 @@
 
 	nodes = Node.create([
 
-		{node_id: 1, created_at: '2017-01-01 10:12:15', updated_at: '2017-01-07 12:30:05'},
-		{node_id: 2, created_at: '2017-01-01 10:12:15', updated_at: '2017-01-07 12:30:05'},
-		{node_id: 3, created_at: '2017-01-01 10:12:15', updated_at: '2017-01-07 12:30:05'},
-		{node_id: 4, created_at: '2017-01-01 10:12:15', updated_at: '2017-01-07 12:30:05'},
-		{node_id: 5, created_at: '2017-01-01 10:12:15', updated_at: '2017-01-07 12:30:05'},
-		{node_id: 6, created_at: '2017-01-01 10:12:15', updated_at: '2017-01-07 12:30:05'},
-		{node_id: 7, created_at: '2017-01-01 10:12:15', updated_at: '2017-01-07 12:30:05'}
+		{node_id: 1, name: "Name for n_id 1", created_at: '2017-01-01 10:12:15', updated_at: '2017-01-07 12:30:05'},
+		{node_id: 2, name: "Name for n_id 2", created_at: '2017-01-01 10:12:15', updated_at: '2017-01-07 12:30:05'},
+		{node_id: 3, name: "Name for n_id 3", created_at: '2017-01-01 10:12:15', updated_at: '2017-01-07 12:30:05'},
+		{node_id: 4, name: "Name for n_id 4", created_at: '2017-01-01 10:12:15', updated_at: '2017-01-07 12:30:05'},
+		{node_id: 5, name: "Name for n_id 5", created_at: '2017-01-01 10:12:15', updated_at: '2017-01-07 12:30:05'},
+		{node_id: 6, name: "Name for n_id 6", created_at: '2017-01-01 10:12:15', updated_at: '2017-01-07 12:30:05'},
+		{node_id: 7, name: "Name for n_id 7", created_at: '2017-01-01 10:12:15', updated_at: '2017-01-07 12:30:05'},
 
 		])
 
