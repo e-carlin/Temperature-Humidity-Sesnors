@@ -21,6 +21,7 @@ ActiveRecord::Schema.define(version: 20170130002950) do
 
   create_table "readings", force: :cascade do |t|
     t.integer  "node_id",     null: false
+    t.text     "name"
     t.integer  "temperature", null: false
     t.integer  "humidity",    null: false
     t.datetime "recorded_at", null: false
