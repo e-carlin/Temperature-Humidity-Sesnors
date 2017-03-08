@@ -1,3 +1,4 @@
+#!/bin/bash
 echo "****** cd to /var/www/museum_monitoring_sensors"
 cd /var/www/museum_monitoring_sensors
 echo "****** Removing any non saved changes"
