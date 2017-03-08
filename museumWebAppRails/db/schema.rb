@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170307195713) do
+ActiveRecord::Schema.define(version: 20170130002950) do
 
   create_table "nodes", force: :cascade do |t|
     t.integer  "node_id",      null: false
@@ -26,16 +26,9 @@ ActiveRecord::Schema.define(version: 20170307195713) do
     t.text     "name"
     t.integer  "temperature", null: false
     t.integer  "humidity",    null: false
-    t.datetime "recorded_at"
+    t.datetime "recorded_at", null: false
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
-  end
-
-  create_table "sensors", force: :cascade do |t|
-    t.integer  "pin",        null: false
-    t.integer  "node_id",    null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
   end
 
   create_table "users", force: :cascade do |t|

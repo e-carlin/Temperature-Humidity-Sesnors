@@ -30,10 +30,14 @@ class Api::V1::ReadingsController < Api::V1::BaseController
             Node.create(:node_id => reading_params[:node_id])  #Create and save a new node
           end
           
+          #Update the node voltage and most recent reading timeStamp
+          node = Node.find_by(node_id: reading_params[:node_id])
+          node.voltage = reading_params[:volt]
+          node.last_reading = reading_params[:timeStamp]
           pp "*************"
           pp "Saving reading"
           pp "*************"
-          #Finally we can save the reading
+          #Save the reading
           @reading = Reading.new(:name => Node.find_by(node_id: reading_params[:node_id]).name,
             :temperature => reading_params[:temp],
             :humidity => reading_params[:hum],
@@ -41,7 +45,7 @@ class Api::V1::ReadingsController < Api::V1::BaseController
             :node_id => reading_params[:node_id])
 
 
-          if @reading.save
+          if @reading.save && node.save
             #200 means everything went well
             render(json: {
               status: 200,
