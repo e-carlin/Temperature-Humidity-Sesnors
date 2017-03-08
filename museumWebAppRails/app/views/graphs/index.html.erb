@@ -85,7 +85,7 @@
   %></p>
 
   <%=
-      line_chart selectDaysArray,
+      line_chart getData(false, "temperature", false, [2], DateTime.new(2017, 1, 22), DateTime.new(2017, 1, 26)),
       title: "Allocated Start/End Date",
       xtitle: "Time",
       ytitle: "Temperature (F)",
@@ -94,7 +94,7 @@
       download: true      
   %>
 
-  <%= line_chart tempValues,
+  <%= line_chart getData(false, "temperature", false, [2], DateTime.new(2017, 1, 22), DateTime.new(2017, 1, 26)),
       title: "Daily Measurement",
       xtitle: "Time",
       ytitle: "Temperature (F)",
@@ -103,7 +103,7 @@
       download: true
    %>
 
-  <%= line_chart humValues,
+  <%= line_chart getData(false, "humidity", false, [2], DateTime.new(2017, 1, 22), DateTime.new(2017, 1, 26)),
       title: "Daily Measurement",
       xtitle: "Time",
       ytitle: "Humidity (%)",
@@ -125,7 +125,7 @@
           }
         ]
 
-      line_chart tempAndHumValues,
+      line_chart getData(true, "humidity", false, [2], DateTime.new(2017, 1, 22), DateTime.new(2017, 1, 26)),
       title: "Temperature AND Humidity",
       xtitle: "Time",
       ytitle: "Temperature & Humidity (respectively)",
@@ -217,7 +217,7 @@
 
     end
 
-    line_chart multiSensorArray,
+    line_chart getData(false, "humidity", true, [2], DateTime.new(2017, 1, 22), DateTime.new(2017, 1, 26)),
     title: "Plural Sensors",
     xtitle: "Time",
     ytitle: "Temperature (F)",

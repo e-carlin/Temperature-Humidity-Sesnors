@@ -66,7 +66,7 @@ class GraphsController < ApplicationController
 		if allSensors == true
 
 			# First, get all of the sensors
-			sensorQuery = Nodes.select(:node_id).to_a
+			sensorQuery = Node.select(:node_id).to_a
 			# Store the node id's in an array
 			sensors = Array.new
 			# Add the values
@@ -86,11 +86,19 @@ class GraphsController < ApplicationController
 				dataSeries[:name] = sensor
 
 				# The actual data
-				dataQuery = Reading.select(:recorded_at, measurement).where(node_id: sensor, recorded_at: startDate.beginning_of_day..endDate.end_of_day).to_a
+				if measurement == "temperature"
+					dataQuery = Reading.select(:recorded_at, :temperature).where(node_id: sensor, recorded_at: startDate.beginning_of_day..endDate.end_of_day).to_a
+				else
+					dataQuery = Reading.select(:recorded_at, :humidity).where(node_id: sensor, recorded_at: startDate.beginning_of_day..endDate.end_of_day).to_a
+				end
 				# Format data for graph
 				dataArray = Array.new
 				dataQuery.each do |tuple|
-					dataArray.push([tuple.recorded_at, tuple.measurment])
+					if measurement == "temperature"
+						dataArray.push([tuple.recorded_at, tuple.temperature])
+					else
+						dataArray.push([tuple.recorded_at, tuple.humidity])
+					end
 				end
 
 				# Add to hash
@@ -118,11 +126,19 @@ class GraphsController < ApplicationController
 			dataSeries[:name] = sensor
 
 			# The actual data
-			dataQuery = Reading.select(:recorded_at, measurement).where(node_id: sensor, recorded_at: startDate.beginning_of_day..endDate.end_of_day).to_a
+				if measurement == "Temperature"
+					dataQuery = Reading.select(:recorded_at, :temperature).where(node_id: sensor, recorded_at: startDate.beginning_of_day..endDate.end_of_day).to_a
+				else
+					dataQuery = Reading.select(:recorded_at, :humidity).where(node_id: sensor, recorded_at: startDate.beginning_of_day..endDate.end_of_day).to_a
+				end			
 			# Format data for graph
 			dataArray = Array.new
 			dataQuery.each do |tuple|
-				dataArray.push([tuple.recorded_at, tuple.measurment])
+				if measurement == "Temperature"
+					dataArray.push([tuple.recorded_at, tuple.temperature])
+				else
+					dataArray.push([tuple.recorded_at, tuple.humidity])
+				end
 			end
 
 			# Add to hash
@@ -133,8 +149,9 @@ class GraphsController < ApplicationController
 		end
 
 		# Return data
-		return mutliSensorData 	
+		return multiSensorData 	
 
 	end
+	helper_method :getData
 
 end
