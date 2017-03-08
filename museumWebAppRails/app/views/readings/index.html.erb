@@ -31,7 +31,11 @@
     <%= label_tag(parameter, i) %>
   <% end %>
 
-
+  <%= date_select(:startDate, "Start Date") %>
+  <%= label_tag(:startDate, "Start") %>
+  <%= date_select(:endDate, "End Date") %>
+  <%= label_tag(:startDate, "End") %>
+  
 <% end %>
 
 <table>

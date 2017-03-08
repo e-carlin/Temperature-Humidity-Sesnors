@@ -124,7 +124,10 @@ void loop() {
   float h = dht.readHumidity();
   float t = dht.readTemperature(true);  //true => temp. in farenheit
   long v = readVcc();
-
+  
+  //Turn of power to the DHT22
+  digitalWrite(POWER_PIN, LOW);
+  
   //If failed to read sensor or voltage then send notice and reset
   if (isnan(h)|| isnan(t) || isnan(v)) {
     Blink (LED, 1000); //Let someone watching now there was a problem
@@ -158,9 +161,6 @@ void loop() {
 
   //A little flash to show we transmitted
   Blink(LED, 3);
-   
-  //Turn of power to the DHT22
-  digitalWrite(POWER_PIN, LOW);
   
   radio.sleep();
   LowPower.powerDown(SLEEP_4S, ADC_OFF, BOD_OFF);

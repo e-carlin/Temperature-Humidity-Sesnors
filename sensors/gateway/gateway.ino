@@ -49,7 +49,7 @@
 #define SERIAL_BAUD 9600
 
 
-#define LED           9 // Moteinos have LEDs on D9
+#define LED  9 // Moteinos have LEDs on D9
 
 
 #ifdef ENABLE_ATC
@@ -75,7 +75,7 @@ void loop() {
     for (byte i = 0; i < radio.DATALEN; i++){
       Serial.print((char)radio.DATA[i]);
     }
-    //Attach the nodeID to the sender to the packet
+    //Attach the node_id to the sender to the packet
     Serial.print(" \"node_id\" : "); 
     Serial.print(radio.SENDERID);
     Serial.print(",");
