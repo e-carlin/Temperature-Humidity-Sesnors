@@ -24,6 +24,13 @@
 
 		])
 
+	users = User.create([
+		{created_at: '2017-01-01 10:12:15', updated_at: '2017-01-07 12:30:05', email: 'mgilbert@pugetsound.edu', encrypted_password: 'BlahBlah', confirmation_token: 'boopboop', remember_token: 'Set'},
+		{created_at: '2017-01-01 10:12:15', updated_at: '2017-01-07 12:30:05', email: 'mbogert@pugetsound.edu', encrypted_password: 'BlahBlah', confirmation_token: 'boopboop', remember_token: 'Set'},
+		{created_at: '2017-01-01 10:12:15', updated_at: '2017-01-07 12:30:05', email: 'ecarlin@pugetsound.edu', encrypted_password: 'BlahBlah', confirmation_token: 'boopboop', remember_token: 'Set'},
+		{created_at: '2017-01-01 10:12:15', updated_at: '2017-01-07 12:30:05', email: 'gabe@pugetsound.edu', encrypted_password: 'BlahBlah', confirmation_token: 'boopboop', remember_token: 'Set'},
+
+		])
 # Empty shell for readings, if more test data is needed
 # 	{ pin: , node_id: , temperature: , humidity: , recorded_at: , created_at: , updated_at: },
 
