@@ -13,7 +13,8 @@ from datetime import datetime
 #    3. x, x is bigger than 0, float allowed, timeout block call
 
 #Assign a URL variable for cleanliness
-url = 'http://ec2-54-202-217-172.us-west-2.compute.amazonaws.com/api/v1/readings'
+# url = 'http://ec2-54-202-217-172.us-west-2.compute.amazonaws.com/api/v1/readings'
+url = 'http://localhost:3000/api/v1/readings'
 
 ser = serial.Serial()
 # This port will be different of different machines check correct port with
@@ -67,17 +68,11 @@ if ser.isOpen():
                     response += " \"timeStamp\"  : \"" + dateString + "\"}"
                     j = json.loads(response)
                     # r = requests.post('http://ec2-54-202-217-172.us-west-2.compute.amazonaws.com/api/v1/readings',
-                    #     headers = {'Content-type': 'application/json'}, 
+                    #     headers = {'Authorization' : 'rasPiAuth..0246', 'Content-type': 'application/json'}, 
                     #     data = json.dumps(j))
-                    r = requests.post('http://localhost:3000/api/v1/readings',
-                        # headers = {'Content-type': 'application/json', 'Authorization' : 'rasPiAuth..-246'}, 
+                    r = requests.post(url,
                         headers={'Authorization' : 'rasPiAuth..0246', 'Content-type': 'application/json'},
                         data = json.dumps(j))
-                    print ""
-                    print "******"
-                    print j
-                    print "**********"
-                    print json.dumps(j)
                     print r
                     print r.content
 

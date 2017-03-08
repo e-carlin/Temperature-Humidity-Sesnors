@@ -1,11 +1,12 @@
 <h1>Sensor Information</h1>
-<table>
+<table class="table table-bordered">
   <thead>
     <tr>
     <th>Sensor number</th>
     <th>Name</th>
-    <th>Current battery Voltage</th>
+    <th>Current battery Voltage (mV)</th>
     <th>Time since last measurment</th>
+    <th>Rename</th>
     </tr>
   </thead>
 
@@ -14,7 +15,13 @@
       <tr>
         <td><%= node.node_id%></td>
         <td><%= node.name%></td>
-        <td><%= node.last_reading%></td>
+        <td><%= node.voltage%></td>
+        <!-- This handles if there has never been a reading from a sensor -->
+        <td><% if node.last_reading.nil? %>
+          <%= "Never" %>
+        <% else %>
+          <%= distance_of_time_in_words(Time.zone.now - node.last_reading) %>
+        <% end %></td>
         <td><%= link_to 'Rename', node %></td>
       </tr>
     <% end %>

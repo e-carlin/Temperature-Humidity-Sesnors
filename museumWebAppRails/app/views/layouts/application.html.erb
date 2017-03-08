@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Opine</title>
+    <title>Lelooska Sensors</title>
     <%= csrf_meta_tags %>
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
@@ -10,7 +10,8 @@
   <div class="container-fluid">
     <ul class="nav navbar-nav">
     <li><%= link_to 'Welcome', root_path%><li>
-    <li><%= link_to 'Nodes', nodes_path%><li>
+    <li><%= link_to 'Sensors', nodes_path%><li>
+    <li><%= link_to 'Readings', readings_path%><li>
     </ul>
     <ul class="nav navbar-nav navbar-right">
     <% if signed_in? %>
