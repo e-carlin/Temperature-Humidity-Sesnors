@@ -1,3 +1,5 @@
+#before_filter :access_for_admin, :except => [:new, :create]
+
 class InvitesController < ApplicationController
   before_action :set_invite, only: [:show, :edit, :update, :destroy]
 
@@ -19,6 +21,14 @@ class InvitesController < ApplicationController
 
   # GET /invites/1/edit
   def edit
+  end
+
+  def send_invitation
+    @invite = Invite.find(params[:id])
+    @invite.invite!
+    mail = InvitationMailer.invite(@invite)
+    mail.deliver
+    redirect_to(invites_url, :notice => "Invite sent to #{@invite.email}")
   end
 
   # POST /invites
