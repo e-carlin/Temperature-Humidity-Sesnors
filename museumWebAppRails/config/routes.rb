@@ -5,9 +5,13 @@ Rails.application.routes.draw do
   #The website root
   root 'index#index'
 
+  #This is for the invitation
+  match '/send_invitation/:id' => 'invites#send_invitation', :via => [:post], :as => 'send_invitation'
+  match '/signup/:invite_code' => 'users#new', :via => [:get], :as => 'redeem_invitation'
+
   #Readings routes
   resources :readings, only: [:index, :destroy, :show]
-
+  resources :invites, only: [:index, :show, :new]
   resources :graphs
 
   #api
@@ -27,9 +31,9 @@ Rails.application.routes.draw do
       controller: "clearance/passwords",
       only: [:create, :edit, :update]
   end
-
-  get "/sign_in" => "clearance/sessions#new", as: "sign_in"
-  delete "/sign_out" => "clearance/sessions#destroy", as: "sign_out"
-  get "/sign_up" => "clearance/users#new", as: "sign_up"
+  #These used to be as: "sign_in"
+  get "/sign_in" => "clearance/sessions#new", as: "sign_in_new"
+  delete "/sign_out" => "clearance/sessions#destroy", as: "sign_out_new"
+  get "/sign_up" => "clearance/users#new", as: "sign_up_new"
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end
