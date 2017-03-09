@@ -51,7 +51,7 @@ if ser.isOpen():
         try:
             ser.flushInput() #flush input buffer, discarding all its contents
             ser.flushOutput()#flush output buffer, aborting current output and discard all that is in buffer
-            time.sleep(0.5)  #give the serial port sometime to receive the data
+            # time.sleep(0.5)  #give the serial port sometime to receive the data
             while True:
                 response = ser.readline() #TODO: Got a timeout here
                                                 # ^CTraceback (most recent call last):
