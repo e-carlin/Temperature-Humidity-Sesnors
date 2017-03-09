@@ -20,4 +20,4 @@ sed -ie "s/keyToBeReplaced/$secretKey/g" config/secrets.yml
 echo "******** Deleting temp file (if it asks you if you wish to delete file say yes)"
 rm config/secrets.ymle
 echo "******** Restarting the app"
-sudo passenger-config restart-app $(pwd)"
+sudo passenger-config restart-app $(pwd)
