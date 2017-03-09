@@ -13,7 +13,7 @@ echo "****** assets compile"
 bundle exec rake assets:precompile db:migrate RAILS_ENV=production
 echo ""
 echo "****** Getting secret key"
-secretKey=bundle exec rake secret
+secretKey=$(bundle exec rake secret)
 echo $secretKey
 echo "******* Replacing scret key"
 sed -ie "s/keyToBeReplaced/$secretKey/g" config/secrets.yml
