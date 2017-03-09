@@ -16,8 +16,12 @@ class Clearance::UsersController < Clearance::BaseController
 
   def create
     @user = user_from_params
+    pp "THIS IS WHERE WE CREATE"
 
     if @user.save
+      #Send email to verify instead
+      send_invitation Invite.find(params[:id])
+      #send_invitation @invite
       sign_in @user
       redirect_back_or url_after_create
     else

@@ -24,6 +24,8 @@ class InvitesController < ApplicationController
   end
 
   def send_invitation
+    pp "New invite sent"
+
     @invite = Invite.find(params[:id])
     @invite.invite!
     mail = InvitationMailer.invite(@invite)

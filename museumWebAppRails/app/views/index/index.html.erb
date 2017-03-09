@@ -1,5 +1,18 @@
 Welcome
 
+<style>
+h2{
+  padding: 20px;
+}
+ div.userinfo{
+   padding: 20px;
+ }
+ 
+</style>
+<head>
+  <%= javascript_include_tag 'application' %>
+  <%= csrf_meta_tag %>
+</head>
 <div class="container">
 
       <form class="form-signin">
@@ -17,24 +30,36 @@ Welcome
       </form>
       <p> Why isn't this showing up?</p>
       <!-- This is to print out the token if it was created -->
+      <%= current_user.email %>
+
+
 
       <p>Below are the tokens sent </p>
+
+
+<h2> Account Info: </h2>
+
+<div class = "userinfo", style="display: inline-block">
+<%= current_user.email %> </div>
+<
+
+
 <h1>Tokens created</h1>
-<table class="table table-bordered">
- <thead>
-   <tr>
-   <th>Email</th>
-   <th>Remember Token</th>
-   </tr>
- </thead>
- <tbody>
-  <% @user.each do |user| %>
-     <tr>
-       <td><%= user.email%></td>
-       <td><%= user.remember_token%></td>
-     </tr>
-   <% end %> 
- </tbody>
-</table>
+<body>
+  <div id="header">
+    <% if signed_in? -%>
+      <%= button_to t(".sign_out"), sign_out_path, method: :delete %>
+    <% else -%>
+      <%= link_to t(".sign_in"), sign_in_path %>
+    <% end -%>
+  </div>
+
+  <div id="flash">
+    <% flash.each do |key, value| -%>
+      <div id="flash_<%= key %>"><%=h value %></div>
+    <% end %>
+  </div>
+
+  <%= yield %>
 <br>
     </div> <!-- /container -->
