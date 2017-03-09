@@ -27,7 +27,7 @@ class Api::V1::ReadingsController < Api::V1::BaseController
             pp"**************"
             pp "Node not found so creating a new one"
             pp "****************"
-            Node.create(:node_id => reading_params[:node_id], :name=> "Evan test name")  #Create and save a new node
+            Node.create(:node_id => reading_params[:node_id])  #Create and save a new node
           end
           
           #Update the node voltage and most recent reading timeStamp
