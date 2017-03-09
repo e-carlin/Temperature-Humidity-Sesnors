@@ -25,6 +25,7 @@ h2{
             <input type="checkbox" value="remember-me"> Remember me
           </label>
         </div>
+        <%= link_to t(".forgot_password"), new_password_path %>
         <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
       </form>
       <p> Why isn't this showing up?</p>
@@ -40,7 +41,6 @@ h2{
 
 <div class = "userinfo", style="display: inline-block">
 <%= current_user.email %> </div>
-<
 
 
 <h1>Tokens created</h1>
