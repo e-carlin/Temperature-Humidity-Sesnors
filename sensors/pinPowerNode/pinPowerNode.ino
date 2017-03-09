@@ -15,7 +15,7 @@
 //
 // Please maintain this license information along with authorship
 // and copyright notices in any redistribution of this code
-// **********************************************************************************
+// ********************************************************************************** 
 #include <RFM69.h>         //get it here: https://www.github.com/lowpowerlab/rfm69
 #include <RFM69_ATC.h>     //get it here: https://www.github.com/lowpowerlab/rfm69
 #include <DHT.h>
@@ -28,7 +28,7 @@
 #define LED 9 // Moteinos have LEDs on D9
 
 //***** RFM69 definitions ********************************
-#define NODEID        8    //must be unique for each node on same network (range up to 254, 255 is used for broadcast)
+#define NODEID        4    //must be unique for each node on same network (range up to 254, 255 is used for broadcast)
 #define NETWORKID     100  //Don't change this. The same on all nodes that talk to each other (range up to 255)
 #define GATEWAYID     1 //Don't change this. Same for all nodes in the network
 #define FREQUENCY     RF69_915MHZ
