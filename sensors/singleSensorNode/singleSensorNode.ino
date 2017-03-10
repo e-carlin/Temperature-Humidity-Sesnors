@@ -28,7 +28,7 @@
 #define LED 9 // Moteinos have LEDs on D9
 
 //***** RFM69 definitions ********************************
-#define NODEID        4    //must be unique for each node on same network (range up to 254, 255 is used for broadcast)
+#define NODEID        3    //must be unique for each node on same network (range up to 254, 255 is used for broadcast)
 #define NETWORKID     100  //Don't change this. The same on all nodes that talk to each other (range up to 255)
 #define GATEWAYID     1 //Don't change this. Same for all nodes in the network
 #define FREQUENCY     RF69_915MHZ
@@ -110,7 +110,7 @@ void loop() {
     //If failed to read sensor or voltage then send notice and reset
     if (isnan(h)|| isnan(t) || isnan(v)) {
 //      Blink(LED, 1000);
-      sprintf(payload, "{ \"error\" : \"A reading was NAN\", \"sID\" : %d,", SENSOR_PIN);
+      sprintf(payload, "{ \"error\" : \"A reading was NAN\",");
       if(!radio.sendWithRetry(GATEWAYID, payload, strlen(payload))){
         radio.send(GATEWAYID, payload, strlen(payload)); //If no ack was recieved then try once more
       }
@@ -128,7 +128,7 @@ void loop() {
     dtostrf(t, 4, 2, tempFaren);
     dtostrf(h, 4, 2, humidity);
 
-    sprintf(payload, "{\"temp\" : %s, \"hum\" : %s, \"sID\" : %d, \"volt\" : %ld, ", tempFaren, humidity,  SENSOR_PIN, v);
+    sprintf(payload, "{\"temp\" : %s, \"hum\" : %s, \"volt\" : %ld, ", tempFaren, humidity,  v);
     
       if(!radio.sendWithRetry(GATEWAYID, payload, strlen(payload))){
         radio.send(GATEWAYID, payload, strlen(payload)); //If no ack was recieved then try once more
@@ -138,8 +138,10 @@ void loop() {
   
   //Power down  
   radio.sleep();
-  LowPower.powerDown(SLEEP_2S, ADC_OFF, BOD_OFF);
-
+  //Need to loop becasue max sleep for powerDown is only 8s
+  for(int i=0; i<3; i++){
+    LowPower.powerDown(SLEEP_4S, ADC_OFF, BOD_OFF);
+  }
 }
 
 

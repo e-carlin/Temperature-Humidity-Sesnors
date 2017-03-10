@@ -2,7 +2,7 @@
 
 # A simple script to read incoming data from a usb port
 # and print it to the console
-import pytz # easy_install --upgrade pytz
+import pytz # sudo easy_install --upgrade pytz
 import serial, time, requests, json
 from datetime import datetime
 #initialization and open the port
@@ -14,6 +14,7 @@ from datetime import datetime
 
 #Assign a URL variable for cleanliness
 url = 'http://ec2-54-202-217-172.us-west-2.compute.amazonaws.com/api/v1/readings'
+# url = 'http://localhost:3000/api/v1/readings'
 
 ser = serial.Serial()
 # This port will be different of different machines check correct port with
@@ -50,7 +51,7 @@ if ser.isOpen():
         try:
             ser.flushInput() #flush input buffer, discarding all its contents
             ser.flushOutput()#flush output buffer, aborting current output and discard all that is in buffer
-            time.sleep(0.5)  #give the serial port sometime to receive the data
+            # time.sleep(0.5)  #give the serial port sometime to receive the data
             while True:
                 response = ser.readline() #TODO: Got a timeout here
                                                 # ^CTraceback (most recent call last):
@@ -65,18 +66,12 @@ if ser.isOpen():
                     dateString = str(datetime.now(pytz.timezone('US/Pacific')))
                     response = response.rstrip()
                     response += " \"timeStamp\"  : \"" + dateString + "\"}"
-                    print(response)
                     j = json.loads(response)
-                    if(j["nodeID"] == 3):
-                        print("\n")
-                    # r = requests.post('http://ec2-54-202-217-172.us-west-2.compute.amazonaws.com/api/v1/readings',
-                    #     headers = {'Content-type': 'application/json'}, 
-                    #     data = json.dumps(j))
-                    # r = requests.post('http://localhost:3000/api/v1/readings',
-                    #     headers = {'Content-type': 'application/json'}, 
-                    #     data = json.dumps(j))
-                    # print r
-                    # print r.content
+                    r = requests.post(url,
+                        headers={'Authorization' : 'rasPiAuth..0246', 'Content-type': 'application/json'},
+                        data = json.dumps(j))
+                    print r
+                    print r.content
 
         except Exception, e1:
             print "We caught an error! : " + str(e1)

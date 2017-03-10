@@ -2,8 +2,7 @@ class Api::V1::ReadingsController < Api::V1::BaseController
   def create
     pp "***************************"
     pp "In Reading create"
-    pp reading_params
-    pp request.headers['Authorization']
+    pp reading_params[:node_id]
     pp "****************************"
 
     #There is an authorization header && it contains a valid password
@@ -25,7 +24,7 @@ class Api::V1::ReadingsController < Api::V1::BaseController
        #how would I write out a json? could i c&p the above render()?
 
 
-        elsif(!reading_params[:temp].nil?) #This means it is a vaild reading
+        elsif(!reading_params[:temp].nil? && !reading_params[:hum].nil?) #TWe have temp and hum so it is a valid reading
           pp"********************"
           pp "This is a reading not an error"
           pp "********************"
@@ -46,19 +45,26 @@ class Api::V1::ReadingsController < Api::V1::BaseController
               :pin => reading_params[:pin])
           end
 
+          #Update the node voltage and most recent reading timeStamp
+          node = Node.find_by(node_id: reading_params[:node_id])
+          node.voltage = reading_params[:volt]
+          node.last_reading = reading_params[:timeStamp]
           pp "*************"
           pp "Saving reading"
           pp "*************"
-          #Finally we can save the reading
-          @reading = Reading.new(:temperature => reading_params[:temp],
+          #Save the reading
+          @reading = Reading.new(:name => Node.find_by(node_id: reading_params[:node_id]).name,
+            :temperature => reading_params[:temp],
             :humidity => reading_params[:hum],
             :recorded_at => reading_params[:timeStamp],
-            :node_id => reading_params[:node_id],
-            :pin => reading_params[:pin])
-            #add nodeID and sensorID
+            :node_id => reading_params[:node_id])
+
+          pp "**********"
+          pp @reading.name
+          pp "*************"
 
 
-          if @reading.save
+          if @reading.save && node.save
             #200 means everything went well
             render(json: {
               status: 200,
@@ -100,6 +106,6 @@ class Api::V1::ReadingsController < Api::V1::BaseController
   private
     # Never trust parameters from the scary internet, only allow the white list through.
     def reading_params
-      params.permit(:temp, :hum, :timeStamp, :volt, :node_id, :pin, :error) #Add nodeID
+      params.permit(:temp, :hum, :timeStamp, :volt, :node_id, :error)
     end
 end
