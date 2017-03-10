@@ -4,7 +4,7 @@ class ReadingsController < ApplicationController
   # GET /readings
   # GET /readings.json
   def index
-    @readings = Reading.all
+    @readings = Reading.last(20).reverse
     respond_to do |format|
       format.html
       format.csv { send_data @readings.to_csv }
