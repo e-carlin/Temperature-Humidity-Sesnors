@@ -12,12 +12,17 @@ class IndexController < ApplicationController
   #  lines = File.open(file).to_a
     lines = IO.readlines(file)
     linesLength = lines.length
-
+    @logs = ""
     if linesLength >= 5
-      @logs = lines[linesLength-5], lines[linesLength-4], lines[linesLength-3], lines[linesLength-2], lines[linesLength-1]
+      for i in linesLength-5..linesLength-1
+        @logs << lines[i].gsub("\n", " ")
+      end
     elsif linesLength != 0
       #@logs = lines[linesLength-5], lines[linesLength-4], lines[linesLength-3], lines[linesLength-2], lines[linesLength-1]
-      @logs = lines
+      for i in 0..linesLength-1
+        @logs << lines[i].gsub("\n", " ")
+      end
+    #  @logs = lines
     end
 
     end
