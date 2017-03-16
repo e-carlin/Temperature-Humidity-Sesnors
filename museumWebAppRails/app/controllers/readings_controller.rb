@@ -4,7 +4,8 @@ class ReadingsController < ApplicationController
   # GET /readings
   # GET /readings.json
   def index
-    @readings = Reading.last(20).reverse
+    # TODO Fix this 
+    @readings = Reading.select(:node_id, :recorded_at, :temperature, :humidity).where(recorded_at: startDate.beginning_of_day..endDate.end_of_day)
     respond_to do |format|
       format.html
       format.csv { send_data Reading.all.to_csv }
