@@ -1,19 +1,18 @@
 <h1>Readings</h1>
 
 <a href="readings.csv">Download CSV</a>
+<h3>Specify Date Range</h3>
 
-NEED TO FIX THIS FORM
-<%= form_tag("", method: "post") do %>
+<%= form_for :reading, url: readings_path, method: :get do %>
 
-  <h2> Specify date range </h2>
-  <%= label_tag(:startDate, "Start Date") %>
-  <%= date_select(:startDate, "Start Date") %>
+  <%= label_tag(:start_date, "Start Date") %>
+  <%= select_date Date.today, prefix: :start_date %>
   </br>
-  <%= label_tag(:startDate, "End Date") %>  
-  <%= date_select(:endDate, "End Date") %>
+  <%= label_tag(:end_date, "End Date") %>
+  <%= select_date Date.today, prefix: :end_date %>
   </br>
   <%= submit_tag("Filter") %>
-  
+
 <% end %>
 
 <table class="table table-bordered">
@@ -41,3 +40,4 @@ NEED TO FIX THIS FORM
   </tbody>
 </table>
 <br>
+
