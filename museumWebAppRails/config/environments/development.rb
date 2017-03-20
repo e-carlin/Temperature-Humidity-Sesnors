@@ -63,26 +63,6 @@ Rails.application.configure do
   config.assets.quiet = true
 
 
-<<<<<<< HEAD
-############## Our addition #################
- # URL for clearance emails
- # config.action_mailer.default_url_options = { host: 'localhost:3000' }
- config.action_mailer.delivery_method = :smtp
- # SMTP settings for gmail
- config.action_mailer.smtp_settings = {
-  :address              => "smtp.gmail.com",
-  :port                 => 587,
-  :user_name            => 'mgilbert311@gmail.com',
-  :password             => '8dzhg632',
-  :authentication       => "plain",
- :enable_starttls_auto => true
- }
- #############################################
-
-
-
-=======
->>>>>>> a69cf63e80dfac21d11bd85663e03b9722eecdef
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
 
