@@ -12,6 +12,13 @@ h2{
   <%= javascript_include_tag 'application' %>
   <%= csrf_meta_tag %>
 </head>
+
+
+<% if current_user.try(:admin?) -%>
+      <p> Hello admin! </p>
+      <%= current_admin %>
+<% end %>
+
 <div class="container">
 
       <form class="form-signin">
@@ -31,6 +38,7 @@ h2{
       <p> Why isn't this showing up?</p>
       <!-- This is to print out the token if it was created -->
       <%= current_user.email %>
+      <%= current_admin %>
 
 
 

@@ -58,6 +58,9 @@ gem 'chartkick', '~> 2.2.3'
 
 gem 'dateslices', '~>0.0.4'
 
+#authentication and admin privileges
+gem 'devise'
+
 gem 'bootstrap-sass', '~> 3.3.6'
 
 gem 'autoprefixer-rails'

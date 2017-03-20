@@ -8,7 +8,6 @@ class CreateReadings < ActiveRecord::Migration[5.0]
 
       t.timestamps
     end
-
     create_table :readings do |t|
     	t.integer :node_id, null: false # F key to node.node_id
       t.text :name

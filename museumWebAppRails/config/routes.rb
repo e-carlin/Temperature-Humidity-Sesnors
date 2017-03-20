@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  #devise_for :admins
+  #devise_for :users
   resources :invites
   resources :sensors
   resources :nodes
@@ -11,7 +13,7 @@ Rails.application.routes.draw do
 
   #Readings routes
   resources :readings, only: [:index, :destroy, :show]
-  resources :invites, only: [:index, :show, :create]
+  #resources :invites, only: [:index, :show, :create]
   resources :graphs
 
   #api
@@ -23,6 +25,8 @@ Rails.application.routes.draw do
 
 if Clearance.configuration.routes_enabled?
   Rails.application.routes.draw do
+  devise_for :admins
+  devise_for :users
     resources :passwords,
       controller: 'clearance/passwords',
       only: [:create, :new]

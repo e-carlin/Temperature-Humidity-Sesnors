@@ -4,6 +4,7 @@ class CreateInvites < ActiveRecord::Migration[5.0]
 
       t.timestamps
    end
+end
    def self.up
      create_table :invites do |t|
 	    t.string :firstname
@@ -17,4 +18,4 @@ class CreateInvites < ActiveRecord::Migration[5.0]
   	  end
 	end
 #   end
-# end
+end

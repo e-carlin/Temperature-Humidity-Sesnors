@@ -1,9 +1,18 @@
 class User < ApplicationRecord
+  #before_action :authenticate_user!
+  # Include default devise modules. Others available are:
+  # :confirmable, :lockable, :timeoutable and :omniauthable
+  devise :database_authenticatable, :registerable,
+         :recoverable, :rememberable, :trackable, :validatable
   include Clearance::User
   #validates :email, :format => { :with => /@pugetsound.edu/, :message => "must end in @pugetsound.edu" }
 end
 
 # class User < ApplicationRecord
+  # Include default devise modules. Others available are:
+  # :confirmable, :lockable, :timeoutable and :omniauthable
+  #devise :database_authenticatable, :registerable,
+   #      :recoverable, :rememberable, :trackable, :validatable
 # 	include Clearance::User
 # 	require 'digest/sha1'
 # 	require 'email_validator'
@@ -18,6 +27,10 @@ end
 # 	  # default, but can be changed with {Configuration#user_model=}.
 # 	  #
 # 	  #     class User
+  # Include default devise modules. Others available are:
+  # :confirmable, :lockable, :timeoutable and :omniauthable
+  #devise :database_authenticatable, :registerable,
+   #      :recoverable, :rememberable, :trackable, :validatable
 # 	  #       include Clearance::User
 # 	  #
 # 	  #       # ...
