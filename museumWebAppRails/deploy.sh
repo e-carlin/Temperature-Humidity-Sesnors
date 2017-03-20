@@ -13,6 +13,11 @@ echo "****** assets compile"
 bundle exec rake assets:precompile db:migrate RAILS_ENV=production
 echo ""
 echo "****** Getting secret key"
-bundle exec rake secret
-echo "****** Please place the secret key in config/secrets.yml in place of <%= ENV[SECRET_KEY_BASE] %>"
-echo "****** Once you have done this run: sudo passenger-config restart-app $(pwd)"
+secretKey=$(bundle exec rake secret)
+echo $secretKey
+echo "******* Replacing scret key"
+sed -ie "s/keyToBeReplaced/$secretKey/g" config/secrets.yml
+echo "******** Deleting temp file (if it asks you if you wish to delete file say yes)"
+rm config/secrets.ymle
+echo "******** Restarting the app"
+sudo passenger-config restart-app $(pwd)

@@ -38,7 +38,8 @@
   
 <% end %>
 
-<table>
+<table class="table table-bordered">
+<h2>Most recent 20 readings</h2>
   <thead>
     <tr>
     <th>Node_ID</th>
@@ -57,8 +58,6 @@
         <td><%= reading.temperature%></td>
         <td><%= reading.humidity%></td>
         <td><%= reading.recorded_at%></td>
-        <td><%= link_to 'Show', reading %></td>
-        <td><%= link_to 'Destroy', reading, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>
   </tbody>
