@@ -13,7 +13,8 @@ class Api::V1::ReadingsController < Api::V1::BaseController
         if(!reading_params[:error].nil?)
           render(json: {
             status: 200,
-            message: "Received error"
+            message: "Received error",
+            data: reading_params
           }.to_json,
           :status => 200)
           ####### TODO:  We should probably add this erorr to our logs
