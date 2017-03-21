@@ -1,45 +1,22 @@
 <h1>Readings</h1>
 
 <a href="readings.csv">Download CSV</a>
+<h3>Specify Date Range</h3>
 
-<%= form_tag do %>
+<%= form_for :reading, url: readings_path, method: :get do %>
 
-  <%= check_box_tag(:tempAndHum, "Temp AND Humidity") %>
-  <%= label_tag(:tempAndHum, "Compare temperature and humidity of a single sensor") %>
+  <%= label_tag(:start_date, "Start Date") %>
+  <%= select_date Date.today, prefix: :start_date %>
+  </br>
+  <%= label_tag(:end_date, "End Date") %>
+  <%= select_date Date.today, prefix: :end_date %>
+  </br>
+  <%= submit_tag("Filter") %>
 
-  <%= select_tag(:tempAndHum, options_for_select([['Temperature', 1],['Humidity', 2]]))%>
-
-  <p hidden><%=
-    sensorQuery = Reading.select(:node_id).distinct.to_a
-    sensorArray = Array.new
-
-    i = 1
-    sensorQuery.each do |tuple|
-      newEntry = [tuple.node_id, i]
-      sensorArray.push(newEntry)
-      i += 1
-    end
-  %></p>
-
-  Choose your sensors
-  <%= check_box_tag(:all, "All") %>
-  <%=  label_tag(:all, "All sensors") %>
-
-  <p hidden><%= for i in 1..sensorArray.length do %>
-    <%= parameter = ":" << i %></p>
-    <%= check_box_tag(parameter, i) %>
-    <%= label_tag(parameter, i) %>
-  <% end %>
-
-  <%= date_select(:startDate, "Start Date") %>
-  <%= label_tag(:startDate, "Start") %>
-  <%= date_select(:endDate, "End Date") %>
-  <%= label_tag(:startDate, "End") %>
-  
 <% end %>
 
 <table class="table table-bordered">
-<h2>Most recent 20 readings</h2>
+<h2>Readings for the given date range</h2>
   <thead>
     <tr>
     <th>Node_ID</th>
@@ -63,3 +40,4 @@
   </tbody>
 </table>
 <br>
+
