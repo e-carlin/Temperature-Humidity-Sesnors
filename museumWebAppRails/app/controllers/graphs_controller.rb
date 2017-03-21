@@ -1,157 +1,87 @@
 class GraphsController < ApplicationController
+	
 	def show
 		#render template: "pages/#{params[:page]}" #TOOD: Do we need this? we don't have a show view...
 	end
 
 	def index
-		@someValue = "I could be a list, or an int, or anything..."
-		@anotherValue = "I'm another value and I can be anything too."
-		#We should build the arrays there in the controller and then pass them to the view.
+		@nodeList = nodes
 	end
 
-	# Parameters we need
-	# compareTempAndHum: Are we only comparing temperature and humidity for one sensor?
-	# measurement: Is it temperature, or humidity?
-	# allSensors: Do we want data from every single sensor?
-	# selectSensors: Which specific sensors do we want data from?
-	# startDate: What is the start date of measurement?
-	# endDate: What is the end date of measurement?
-	def getData(compareTempAndHum, measurement, allSensors, selectSensors, startDate, endDate)
-
-		# Get temperature and humidity from only one sensor
-		if compareTempAndHum == true 	
-
-			# We assume the first entry is the sensor of interest
-			sensor = selectSensors[0]	
-
-			# Query the data we want
-			dataQuery = Reading.select(:recorded_at, :temperature, :humidity).where(node_id: sensor, recorded_at: startDate.beginning_of_day..endDate.end_of_day).to_a
-
-			# Format data for chart
-			dataInput = []
-
-			# Add temperature data series
-			tempHash = {}
-			# Name
-			tempHash[:temp] = "Temperature"
-			# Data
-			tempArray = Array.new
-			dataQuery.each do |tuple|
-
-				newReading = [tuple.recorded_at, tuple.temperature]
-				tempArray.push(newReading)
-
-			end
-			tempHash[:data] = tempArray
-
-			# Add Humidity data series
-			humHash = {}
-			# Name
-			humHash[:temp] = "Humidity"
-			# Data
-			humArray = Array.new
-			dataQuery.each do |tuple|
-
-				newReading = [tuple.recorded_at, tuple.humidity]
-				humArray.push(newReading)
-
-			end
-			humHash[:data] = humArray
-
-			# Return data 
-			return dataInput
+	# Returns an array of node id's
+	def nodes
+		# Query the database
+		nodeQuery = Node.select(:node_id)
+		# Place the query in an array
+		nodeArray = Array.new
+		nodeQuery.each do |node|
+			nodeArray.push [node.node_id]
 		end
+		return nodeArray
+	end
+	helper_method :numNodes
 
-		# Get temperature or humidity for all sensors
-		if allSensors == true
+	# Returns a node's name based on its id
+	def nodeName(id)
+		nameQuery = Node.select(:name).where(node_id: id)
 
-			# First, get all of the sensors
-			sensorQuery = Node.select(:node_id).to_a
-			# Store the node id's in an array
-			sensors = Array.new
-			# Add the values
-			sensorQuery.each do |tuple|
-				sensors.push(tuple.node_id)
-			end
+		# This only loops through once, but I don't know how to extract just one tuple from a query
+		name = ""
+		nameQuery.each do |tuple|
+			name = tuple.name
+		end
+		return name
+	end
+	helper_method :nodeName
 
-			# What will be returned to the graphs
-			allSensorData = Array.new
+	#Gets the past day's readings of both temperature and humidty for a given sensor
+	def getData(sensor)
 
-			# Get each data series
-			for sensor in sensors
+		# We return the data in an array of hashes
+		dataInput = []		
 
-				# One data series
-				dataSeries = {}
-				# Series Name
-				dataSeries[:name] = sensor
+		# Query the data
+		dataQuery = Reading.select(:recorded_at, :temperature, :humidity).where(node_id: sensor, recorded_at: Date.today.beginning_of_day..Date.today.end_of_day).to_a
 
-				# The actual data
-				if measurement == "temperature"
-					dataQuery = Reading.select(:recorded_at, :temperature).where(node_id: sensor, recorded_at: startDate.beginning_of_day..endDate.end_of_day).to_a
-				else
-					dataQuery = Reading.select(:recorded_at, :humidity).where(node_id: sensor, recorded_at: startDate.beginning_of_day..endDate.end_of_day).to_a
-				end
-				# Format data for graph
-				dataArray = Array.new
-				dataQuery.each do |tuple|
-					if measurement == "temperature"
-						dataArray.push([tuple.recorded_at, tuple.temperature])
-					else
-						dataArray.push([tuple.recorded_at, tuple.humidity])
-					end
-				end
+		# Format the data appropriately
+		# The values have to be stored in array
+		tempArray = Array.new
+		humArray = Array.new
 
-				# Add to hash
-				dataSeries[:data] = dataArray
-				# Push to array
-				allSensorData.push(dataSeries)
+		# Take values from the queries and put them in tuple
+		dataQuery.each do |query|
 
-			end
+			newTempReading = [query.recorded_at, query.temperature]
+			newHumReading = [query.recorded_at, query.humidity]
 
-			# Return data
-			return allSensorData 
+			tempArray.push(newTempReading)
+			humArray.push(newHumReading)
 
 		end
 
-		# Otherwise, we return X-many sensors and compare their measurements
-		# What will be returned to the graphs
-		multiSensorData = Array.new
+		# Format the hashes
+		tempHash = {}
+		humHash = {}
 
-		# Get each data series
-		for sensor in selectSensors
+		# Temperature
+		tempHash[:name] = "Temperature (F)"
+		tempHash[:data] = tempArray
 
-			# One data series
-			dataSeries = {}
-			# Series Name
-			dataSeries[:name] = sensor
+		# Humidity 
+		humHash[:name] = "Humidity (%)"
+		humHash[:data] = humArray
 
-			# The actual data
-				if measurement == "Temperature"
-					dataQuery = Reading.select(:recorded_at, :temperature).where(node_id: sensor, recorded_at: startDate.beginning_of_day..endDate.end_of_day).to_a
-				else
-					dataQuery = Reading.select(:recorded_at, :humidity).where(node_id: sensor, recorded_at: startDate.beginning_of_day..endDate.end_of_day).to_a
-				end			
-			# Format data for graph
-			dataArray = Array.new
-			dataQuery.each do |tuple|
-				if measurement == "Temperature"
-					dataArray.push([tuple.recorded_at, tuple.temperature])
-				else
-					dataArray.push([tuple.recorded_at, tuple.humidity])
-				end
-			end
-
-			# Add to hash
-			dataSeries[:data] = dataArray
-			# Push to array
-			multiSensorData.push(dataSeries)
-
-		end
-
-		# Return data
-		return multiSensorData 	
+		# Add the hashes to the data input and return
+		dataInput.push(tempHash)
+		dataInput.push(humHash)
+		return dataInput
 
 	end
 	helper_method :getData
 
+
+	
+
 end
+
+

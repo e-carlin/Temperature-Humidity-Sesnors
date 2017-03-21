@@ -3,229 +3,24 @@
 
 <script src="application.js"></script>
 
-<!-- These come from the controller -->
-<h1><%= @someValue %></h1>
-<h1><%= @anotherValue %></h1>
+<h1>Today's Measurements</h1>
 
-<%= form_tag do %>
+<%= @nodeList.each do |node|%>
 
-  <%= check_box_tag(:tempAndHum, "Temp AND Humidity") %>
-  <%= label_tag(:tempAndHum, "Compare temperature and humidity of a single sensor") %>
+<%=
 
-  <%= select_tag(:tempAndHum, options_for_select([['Temperature', 1],['Humidity', 2]]))%>
+  line_chart getData(node),
+  title: nodeName(node),
+  xtitle: "Time",
+  ytitle: "Temperature/Humidity",
+  legend: true,
+  legend: "bottom",
+  download: true
+  
+%>
 
-  <p hidden><%=
-    sensorQuery = Reading.select(:node_id).distinct.to_a
-    sensorArray = Array.new
+</br>
+<hr>
+</br>
 
-    i = 1
-    sensorQuery.each do |tuple|
-      newEntry = [tuple.node_id, i]
-      sensorArray.push(newEntry)
-      i += 1
-    end
-  %></p>
-
-  Choose your sensors
-  <%= check_box_tag(:all, "All") %>
-  <%=  label_tag(:all, "All sensors") %>
-
-  <p hidden><%= for i in 1..sensorArray.length do %>
-    <%= parameter = ":" << i %></p>
-    <%= check_box_tag(parameter, i) %>
-    <%= label_tag(parameter, i) %>
-  <% end %>
-
-  <%= date_select(:startDate, "Start Date") %>
-  <%= label_tag(:startDate, "Start") %>
-  <%= date_select(:endDate, "End Date") %>
-  <%= label_tag(:startDate, "End") %>
-
-<% end %>
-
-<h1>Graph</h1>
-<div align="right"><p>Download Button Below</p></div>
-
-<div id="graph">
-
-  <p hidden><%= values = Reading.select(:recorded_at, :temperature, :humidity).where(node_id: 4).to_a%></p>
-
-  <p hidden><%=
-      tempValues = Array.new
-
-      values.each do |tuple|
-        newReading = [tuple.recorded_at, tuple.temperature]
-
-        tempValues.push(newReading)
-      end
-  %></p>
-
-  <p hidden><%=
-      humValues = Array.new
-
-      values.each do |tuple|
-        newReading = [tuple.recorded_at, tuple.humidity]
-
-        humValues.push(newReading)
-      end
-  %></p>
-
-  <p hidden><%=
-      startPeriod = DateTime.new(2017, 1, 22)
-      endPeriod = DateTime.new(2017, 1, 26)
-
-      selectDays = Reading.select(:recorded_at, :temperature, :humidity).where(node_id: 2, recorded_at: startPeriod.beginning_of_day..endPeriod.end_of_day).to_a
-
-      selectDaysArray = Array.new
-
-      selectDays.each do |tuple|
-        newReading = [tuple.recorded_at, tuple.temperature]
-        selectDaysArray.push(newReading)
-      end
-  %></p>
-
-  <%=
-      line_chart getData(false, "temperature", false, [2], DateTime.new(2017, 1, 22), DateTime.new(2017, 1, 26)),
-      title: "Allocated Start/End Date",
-      xtitle: "Time",
-      ytitle: "Temperature (F)",
-      legend: true,
-      legend: "bottom",
-      download: true      
-  %>
-
-  <%= line_chart getData(false, "temperature", false, [2], DateTime.new(2017, 1, 22), DateTime.new(2017, 1, 26)),
-      title: "Daily Measurement",
-      xtitle: "Time",
-      ytitle: "Temperature (F)",
-      legend: true,
-      legend: "bottom",
-      download: true
-   %>
-
-  <%= line_chart getData(false, "humidity", false, [2], DateTime.new(2017, 1, 22), DateTime.new(2017, 1, 26)),
-      title: "Daily Measurement",
-      xtitle: "Time",
-      ytitle: "Humidity (%)",
-      legend: true,
-      legend: "bottom",
-      download: true
-   %>
-
-   <%=
-
-      tempAndHumValues = [
-        {
-          :name => "Temp",
-          :data => tempValues
-          },
-        {
-          :name => "Hum",
-          :data => humValues
-          }
-        ]
-
-      line_chart getData(true, "humidity", false, [2], DateTime.new(2017, 1, 22), DateTime.new(2017, 1, 26)),
-      title: "Temperature AND Humidity",
-      xtitle: "Time",
-      ytitle: "Temperature & Humidity (respectively)",
-      legend: true,
-      legend: "bottom",
-      download: true
-
-   %>
-
-   <%=
-
-    sensorOne = Reading.select(:recorded_at, :temperature, :humidity).where(node_id: 1).to_a
-    sensorTwo = Reading.select(:recorded_at, :temperature, :humidity).where(node_id: 6).to_a
-
-    tempArrayOne = Array.new
-    tempArrayTwo = Array.new
-
-
-   %>
-
-   <%=
-
-    sensorOne = Reading.select(:recorded_at, :temperature, :humidity).where(node_id: 1).to_a
-    sensorTwo = Reading.select(:recorded_at, :temperature, :humidity).where(node_id: 6).to_a
-
-    tempArrayOne = Array.new
-    tempArrayTwo = Array.new
-
-    sensorOne.each do |tuple|
-        newReading = [tuple.recorded_at, tuple.temperature]
-        tempArrayOne.push(newReading)       
-    end
-
-    sensorTwo.each do |tuple|
-        newReading = [tuple.recorded_at, tuple.temperature]
-        tempArrayTwo.push(newReading)       
-    end
-
-    doubleData = [
-      {
-        :name => 1,
-        :data => tempArrayOne
-      },
-      {
-        :name => 2,
-        :data => tempArrayTwo
-      }
-    ]
-
-    line_chart doubleData,
-    title: "Inside/Outside Temps",
-    xtitle: "Time",
-    ytitle: "Temperature (F)",
-    legend: true,
-    legend: "bottom",
-    download: true
-   %>
-
-   <%=
-
-    # Sensors we are getting data for
-    sensors = [1,2,3,5,6,7]
-    # Where we're storing the data for the graph
-    # An array of hashes
-    multiSensorArray = []
-
-    for sensor in sensors do
-
-
-      # One data series
-      newHash = {}
-      # The name of the series
-      newHash[:name] = sensor
-      # The juicy data
-      data = Reading.select(:recorded_at, :temperature, :humidity).where(node_id: sensor).to_a
-      # Where we'll store the data
-      dataArray = Array.new
-      # Format it
-      data.each do |tuple|
-
-        newReading = [tuple.recorded_at, tuple.temperature]
-        dataArray.push(newReading)       
-
-      end
-      # Store the formatted data in the hash
-      newHash[:data] = dataArray
-      # Add this data series
-      multiSensorArray.push(newHash)
-
-    end
-
-    line_chart getData(false, "humidity", true, [2], DateTime.new(2017, 1, 22), DateTime.new(2017, 1, 26)),
-    title: "Plural Sensors",
-    xtitle: "Time",
-    ytitle: "Temperature (F)",
-    legend: true,
-    legend: "bottom",
-    download: true
-
-   %>
-
-</div>
-
+<p hidden><% end %></p>
