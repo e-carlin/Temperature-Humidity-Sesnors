@@ -9,10 +9,24 @@ class GraphsController < ApplicationController
 		#We should build the arrays there in the controller and then pass them to the view.
 	end
 
+	# Returns how many nodes we have in our arsenal
 	def numNodes
 		return Node.select(:node_id).count
 	end
 	helper_method :numNodes
+
+	# Returns a node's name based on its id
+	def nodeName(id)
+		nameQuery = Node.select(:name).where(node_id: id)
+
+		# This only loops through once, but I don't know how to extract just one tuple from a query
+		name = ""
+		nameQuery.each do |tuple|
+			name = tuple.name
+		end
+		return name
+	end
+	helper_method :nodeName
 
 	#Gets the past day's readings of both temperature and humidty for a given sensor
 	def getData(sensor)

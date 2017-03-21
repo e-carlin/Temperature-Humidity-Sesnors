@@ -6,6 +6,7 @@ class ReadingsController < ApplicationController
   def index
 
     @last_20 = Reading.order(:name, :recorded_at).select(:node_id, :name, :recorded_at, :temperature, :humidity).last(20)
+    @node_names = Node.select(:node_id, :name)
 
     # Specify date range
     if(!params[:start_date].nil? && !params[:end_date].nil?) then
