@@ -52,6 +52,9 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 # =================
 gem 'clearance', '~> 1.15.1'
 
+#Adding gem 'devise' for authentication and emal config
+#gem 'devise'
+
 gem 'chartkick', '~> 2.2.3'
 
 #gem 'groupdate'
