@@ -5,12 +5,12 @@
 
 <h1>Today's Measurements</h1>
 
-<%= for i in 1..numNodes do %>
+<%= @nodeList.each do |node|%>
 
 <%=
 
-  line_chart getData(i),
-  title: nodeName(i),
+  line_chart getData(node),
+  title: nodeName(node),
   xtitle: "Time",
   ytitle: "Temperature/Humidity",
   legend: true,
