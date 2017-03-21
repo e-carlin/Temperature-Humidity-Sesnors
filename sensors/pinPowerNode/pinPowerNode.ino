@@ -52,6 +52,7 @@ DHT dht(SENSOR_PIN, DHTTYPE);
 //******** LowPower definitions ***********
 #include <avr/wdt.h>
 #define Reset_AVR() wdt_enable(WDTO_15MS); while(1) {} //This resets the chip
+#define SLEEP_TIME 15 //SLEEP_TIME *8 = number of seconds between transmissions
 
 /*
 * Initializes radio and DHT22
@@ -165,7 +166,7 @@ void loop() {
   //Power down
   radio.sleep();
   //Need to loop becasue max sleep for powerDown is only 8s
-  for(int i=0; i<3; i++){
+  for(int i=0; i<SLEEP_TIME; i++){
     LowPower.powerDown(SLEEP_4S, ADC_OFF, BOD_OFF);
   }
 }
