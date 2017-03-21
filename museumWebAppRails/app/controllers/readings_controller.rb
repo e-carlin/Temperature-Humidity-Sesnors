@@ -4,6 +4,9 @@ class ReadingsController < ApplicationController
   # GET /readings
   # GET /readings.json
   def index
+
+    @last_20 = Reading.order(:name, :recorded_at).select(:node_id, :name, :recorded_at, :temperature, :humidity).last(20)
+
     # Specify date range
     if(!params[:start_date].nil? && !params[:end_date].nil?) then
       @startDate = Date.civil(params[:start_date][:year].to_i, params[:start_date][:month].to_i, params[:start_date][:day].to_i)
@@ -20,8 +23,8 @@ class ReadingsController < ApplicationController
     @readings = Reading.select(:node_id, :name, :recorded_at, :temperature, :humidity).where(recorded_at: @startDate.beginning_of_day..@endDate.end_of_day)
     respond_to do |format|
       format.html
-      format.csv { send_data Reading.select(:node_id, :name, :recorded_at, :temperature, :humidity).where(recorded_at: $fileStartDate.beginning_of_day..$fileEndDate.end_of_day).to_csv }
-      format.xls { send_data Reading.select(:node_id, :name, :recorded_at, :temperature, :humidity).where(recorded_at: $fileStartDate.beginning_of_day..$fileEndDate.end_of_day).to_csv(col_sep: "\t") }
+      format.csv { send_data Reading.order(:name, :recorded_at).select(:node_id, :name, :recorded_at, :temperature, :humidity).where(recorded_at: $fileStartDate.beginning_of_day..$fileEndDate.end_of_day).to_csv }
+      format.xls { send_data Reading.order(:name, :recorded_at).select(:node_id, :name, :recorded_at, :temperature, :humidity).where(recorded_at: $fileStartDate.beginning_of_day..$fileEndDate.end_of_day).to_csv(col_sep: "\t") }
     end
   end
 
