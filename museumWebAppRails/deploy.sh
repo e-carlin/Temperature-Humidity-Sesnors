@@ -2,9 +2,9 @@
 echo "****** cd to /var/www/museum_monitoring_sensors"
 cd /var/www/museum_monitoring_sensors
 echo "****** Removing any non saved changes"
-sudo git checkout .
+git checkout .
 echo "****** Pulling the latest code"
-sudo git pull
+git pull
 echo "****** cd into app"
 cd museumWebAppRails
 echo "****** bundle install"
