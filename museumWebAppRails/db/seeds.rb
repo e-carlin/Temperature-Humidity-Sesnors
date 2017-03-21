@@ -111,31 +111,31 @@
 		{ node_id: 7, temperature: 71, humidity: 53, recorded_at: '2017-03-15 16:00:00', created_at: '2017-03-15 16:05:00', updated_at: '2017-03-15 16:05:00'},
 
 		# March 21st
-		{ node_id: 1, temperature: 71, humidity: 50, recorded_at: '2017-03-21 08:00:00', created_at: '2017-03-21 08:05:00', updated_at: '2017-03-21 08:05:00'},
-		{ node_id: 1, temperature: 71, humidity: 50, recorded_at: '2017-03-21 12:00:00', created_at: '2017-03-21 12:05:00', updated_at: '2017-03-21 12:05:00'},
-		{ node_id: 1, temperature: 71, humidity: 50, recorded_at: '2017-03-21 16:00:00', created_at: '2017-03-21 16:05:00', updated_at: '2017-03-21 16:05:00'},
+		{ node_id: 1, name: "Name for n_id 1", temperature: 71, humidity: 50, recorded_at: '2017-03-21 08:00:00', created_at: '2017-03-21 08:05:00', updated_at: '2017-03-21 08:05:00'},
+		{ node_id: 1, name: "Name for n_id 1", temperature: 71, humidity: 50, recorded_at: '2017-03-21 12:00:00', created_at: '2017-03-21 12:05:00', updated_at: '2017-03-21 12:05:00'},
+		{ node_id: 1, name: "Name for n_id 1", temperature: 71, humidity: 50, recorded_at: '2017-03-21 16:00:00', created_at: '2017-03-21 16:05:00', updated_at: '2017-03-21 16:05:00'},
 
-		{ node_id: 2, temperature: 70, humidity: 52, recorded_at: '2017-03-21 08:00:00', created_at: '2017-03-21 08:05:00', updated_at: '2017-03-21 08:05:00'},
-		{ node_id: 2, temperature: 68, humidity: 57, recorded_at: '2017-03-21 12:00:00', created_at: '2017-03-21 12:05:00', updated_at: '2017-03-21 12:05:00'},
-		{ node_id: 2, temperature: 69, humidity: 60, recorded_at: '2017-03-21 16:00:00', created_at: '2017-03-21 16:05:00', updated_at: '2017-03-21 16:05:00'},	
+		{ node_id: 2, name: "Name for n_id 2", temperature: 70, humidity: 52, recorded_at: '2017-03-21 08:00:00', created_at: '2017-03-21 08:05:00', updated_at: '2017-03-21 08:05:00'},
+		{ node_id: 2, name: "Name for n_id 2", temperature: 68, humidity: 57, recorded_at: '2017-03-21 12:00:00', created_at: '2017-03-21 12:05:00', updated_at: '2017-03-21 12:05:00'},
+		{ node_id: 2, name: "Name for n_id 2", temperature: 69, humidity: 60, recorded_at: '2017-03-21 16:00:00', created_at: '2017-03-21 16:05:00', updated_at: '2017-03-21 16:05:00'},	
 		
-		{ node_id: 3, temperature: 78, humidity: 45, recorded_at: '2017-03-21 08:00:00', created_at: '2017-03-21 08:05:00', updated_at: '2017-03-21 08:05:00'},
-		{ node_id: 3, temperature: 75, humidity: 44, recorded_at: '2017-03-21 12:00:00', created_at: '2017-03-21 12:05:00', updated_at: '2017-03-21 12:05:00'},
-		{ node_id: 3, temperature: 72, humidity: 47, recorded_at: '2017-03-21 16:00:00', created_at: '2017-03-21 16:05:00', updated_at: '2017-03-21 16:05:00'},
+		{ node_id: 3, name: "Name for n_id 3", temperature: 78, humidity: 45, recorded_at: '2017-03-21 08:00:00', created_at: '2017-03-21 08:05:00', updated_at: '2017-03-21 08:05:00'},
+		{ node_id: 3, name: "Name for n_id 3", temperature: 75, humidity: 44, recorded_at: '2017-03-21 12:00:00', created_at: '2017-03-21 12:05:00', updated_at: '2017-03-21 12:05:00'},
+		{ node_id: 3, name: "Name for n_id 3", temperature: 72, humidity: 47, recorded_at: '2017-03-21 16:00:00', created_at: '2017-03-21 16:05:00', updated_at: '2017-03-21 16:05:00'},
 
-		{ node_id: 4, temperature: 50, humidity: 63, recorded_at: '2017-03-21 08:00:00', created_at: '2017-03-21 08:05:00', updated_at: '2017-03-21 08:05:00'},
-		{ node_id: 4, temperature: 55, humidity: 60, recorded_at: '2017-03-21 12:00:00', created_at: '2017-03-21 12:05:00', updated_at: '2017-03-21 12:05:00'},
-		{ node_id: 4, temperature: 53, humidity: 65, recorded_at: '2017-03-21 16:00:00', created_at: '2017-03-21 16:05:00', updated_at: '2017-03-21 16:05:00'},
+		{ node_id: 4, name: "Name for n_id 4", temperature: 50, humidity: 63, recorded_at: '2017-03-21 08:00:00', created_at: '2017-03-21 08:05:00', updated_at: '2017-03-21 08:05:00'},
+		{ node_id: 4, name: "Name for n_id 4", temperature: 55, humidity: 60, recorded_at: '2017-03-21 12:00:00', created_at: '2017-03-21 12:05:00', updated_at: '2017-03-21 12:05:00'},
+		{ node_id: 4, name: "Name for n_id 4", temperature: 53, humidity: 65, recorded_at: '2017-03-21 16:00:00', created_at: '2017-03-21 16:05:00', updated_at: '2017-03-21 16:05:00'},
 
-		{ node_id: 5, temperature: 65, humidity: 68, recorded_at: '2017-03-21 08:00:00', created_at: '2017-03-21 08:05:00', updated_at: '2017-03-21 08:05:00'},
-		{ node_id: 5, temperature: 66, humidity: 66, recorded_at: '2017-03-21 12:00:00', created_at: '2017-03-21 12:05:00', updated_at: '2017-03-21 12:05:00'},
-		{ node_id: 5, temperature: 66, humidity: 67, recorded_at: '2017-03-21 16:00:00', created_at: '2017-03-21 16:05:00', updated_at: '2017-03-21 16:05:00'},
+		{ node_id: 5, name: "Name for n_id 5", temperature: 65, humidity: 68, recorded_at: '2017-03-21 08:00:00', created_at: '2017-03-21 08:05:00', updated_at: '2017-03-21 08:05:00'},
+		{ node_id: 5, name: "Name for n_id 5", temperature: 66, humidity: 66, recorded_at: '2017-03-21 12:00:00', created_at: '2017-03-21 12:05:00', updated_at: '2017-03-21 12:05:00'},
+		{ node_id: 5, name: "Name for n_id 5", temperature: 66, humidity: 67, recorded_at: '2017-03-21 16:00:00', created_at: '2017-03-21 16:05:00', updated_at: '2017-03-21 16:05:00'},
 
-		{ node_id: 6, temperature: 35, humidity: 75, recorded_at: '2017-03-21 08:00:00', created_at: '2017-03-21 08:05:00', updated_at: '2017-03-21 08:05:00'},
-		{ node_id: 6, temperature: 31, humidity: 82, recorded_at: '2017-03-21 12:00:00', created_at: '2017-03-21 12:05:00', updated_at: '2017-03-21 12:05:00'},
-		{ node_id: 6, temperature: 40, humidity: 74, recorded_at: '2017-03-21 16:00:00', created_at: '2017-03-21 16:05:00', updated_at: '2017-03-21 16:05:00'},
+		{ node_id: 6, name: "Name for n_id 6", temperature: 35, humidity: 75, recorded_at: '2017-03-21 08:00:00', created_at: '2017-03-21 08:05:00', updated_at: '2017-03-21 08:05:00'},
+		{ node_id: 6, name: "Name for n_id 6", temperature: 31, humidity: 82, recorded_at: '2017-03-21 12:00:00', created_at: '2017-03-21 12:05:00', updated_at: '2017-03-21 12:05:00'},
+		{ node_id: 6, name: "Name for n_id 6", temperature: 40, humidity: 74, recorded_at: '2017-03-21 16:00:00', created_at: '2017-03-21 16:05:00', updated_at: '2017-03-21 16:05:00'},
 
-		{ node_id: 7, temperature: 72, humidity: 52, recorded_at: '2017-03-21 08:00:00', created_at: '2017-03-21 08:05:00', updated_at: '2017-03-21 08:05:00'},
-		{ node_id: 7, temperature: 71, humidity: 53, recorded_at: '2017-03-21 16:00:00', created_at: '2017-03-21 16:05:00', updated_at: '2017-03-21 16:05:00'}
+		{ node_id: 7, name: "Name for n_id 7", temperature: 72, humidity: 52, recorded_at: '2017-03-21 08:00:00', created_at: '2017-03-21 08:05:00', updated_at: '2017-03-21 08:05:00'},
+		{ node_id: 7, name: "Name for n_id 7", temperature: 71, humidity: 53, recorded_at: '2017-03-21 16:00:00', created_at: '2017-03-21 16:05:00', updated_at: '2017-03-21 16:05:00'}
 
 		])

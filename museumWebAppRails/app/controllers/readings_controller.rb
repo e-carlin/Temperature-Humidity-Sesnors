@@ -15,10 +15,12 @@ class ReadingsController < ApplicationController
       # The globals are meant for if users want csv's or xls' of files
       $fileStartDate = @startDate
       $fileEndDate = @endDate
+      @notification = "You can now download your file"
     # Default (no args) will be the current date
     else    
       @startDate = Date.today.beginning_of_day
       @endDate = Date.today.end_of_day
+      @notification = "Specify your date range and click the 'Create File' button above"
     end
     # Query the data
     @readings = Reading.select(:node_id, :name, :recorded_at, :temperature, :humidity).where(recorded_at: @startDate.beginning_of_day..@endDate.end_of_day)
