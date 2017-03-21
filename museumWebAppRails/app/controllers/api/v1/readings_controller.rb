@@ -17,6 +17,12 @@ class Api::V1::ReadingsController < Api::V1::BaseController
           }.to_json,
           :status => 200)
           ####### TODO:  We should probably add this erorr to our logs
+          path = File.join(Rails.root, 'log','moteinoAndPi.log')
+          File.open(path, 'a') { |f|
+          f.puts reading_params << "\n"
+        }
+       #how would I write out a json? could i c&p the above render()?
+
 
         elsif(!reading_params[:temp].nil? && !reading_params[:hum].nil?) #TWe have temp and hum so it is a valid reading
           pp"********************"
@@ -29,7 +35,16 @@ class Api::V1::ReadingsController < Api::V1::BaseController
             pp "****************"
             Node.create(:node_id => reading_params[:node_id])  #Create and save a new node
           end
-          
+
+          #Is this a sensor we haven't seen before?
+          if(Sensor.find_by(node_id: reading_params[:node_id], pin: reading_params[:pin]).nil?)
+            pp "***********"
+            pp "Pin not found so creating a new one"
+            pp "***********"
+            Sensor.create(:node_id => reading_params[:node_id],
+              :pin => reading_params[:pin])
+          end
+
           #Update the node voltage and most recent reading timeStamp
           node = Node.find_by(node_id: reading_params[:node_id])
           node.voltage = reading_params[:volt]

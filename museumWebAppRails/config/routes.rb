@@ -9,6 +9,9 @@ Rails.application.routes.draw do
 
   resources :graphs
 
+  #error log routes
+  get '/logs' => 'index#logs'
+
   #api
    namespace :api do
      namespace :v1 do
