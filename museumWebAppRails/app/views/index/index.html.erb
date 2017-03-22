@@ -30,6 +30,13 @@ Welcome
                 <!-- <div class="panel-footer">Forgotten password?
                 <%= link_to t("Reset here"), new_password_path %> -->
                 </div>
+                <% if !current_user.nil? %>
+                        current_user.email
+                        <%= current_user.email %>
+                    <% if current_user.admin? %>
+                       <%= current_user.admin %>
+                    <% end %>
+                 <% end %>
                 Don't have an account? <%= link_to "Sign up here", sign_up_path %>
             </div>
         </div>
