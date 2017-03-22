@@ -19,7 +19,7 @@ class Api::V1::ReadingsController < Api::V1::BaseController
           ####### TODO:  We should probably add this erorr to our logs
           path = File.join(Rails.root, 'log','moteinoAndPi.log')
           File.open(path, 'a') { |f|
-          f.puts reading_params << "\n"
+          f.puts reading_params.to_json << "\n"
         }
        #how would I write out a json? could i c&p the above render()?
 
