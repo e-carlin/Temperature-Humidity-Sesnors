@@ -40,15 +40,6 @@ class Api::V1::ReadingsController < Api::V1::BaseController
             Node.create(:node_id => reading_params[:node_id])  #Create and save a new node
           end
 
-          #Is this a sensor we haven't seen before?
-          if(Sensor.find_by(node_id: reading_params[:node_id], pin: reading_params[:pin]).nil?)
-            pp "***********"
-            pp "Pin not found so creating a new one"
-            pp "***********"
-            Sensor.create(:node_id => reading_params[:node_id],
-              :pin => reading_params[:pin])
-          end
-
           #Update the node voltage and most recent reading timeStamp
           node = Node.find_by(node_id: reading_params[:node_id])
           node.voltage = reading_params[:volt]

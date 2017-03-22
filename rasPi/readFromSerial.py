@@ -19,9 +19,9 @@ url = 'http://ec2-54-202-217-172.us-west-2.compute.amazonaws.com/api/v1/readings
 ser = serial.Serial()
 # This port will be different of different machines check correct port with
 # $ python -m serial.tools.list_ports
-#ser.port = "/dev/cu.usbserial-DN01Q8E0" #For mini-USB cable
+ser.port = "/dev/cu.usbserial-DN01Q8E0" #For mini-USB cable
 # ser.port = "/dev/cu.usbserial-A5058SOW" #For FTDI cable
-ser.port = "/dev/ttyUSB0" #For raspi mini-usb cable
+# ser.port = "/dev/ttyUSB0" #For raspi mini-usb cable
 ser.baudrate = 9600
 ser.bytesize = serial.EIGHTBITS #number of bits per bytes
 ser.parity = serial.PARITY_NONE #set parity check: no parity
@@ -81,7 +81,7 @@ if ser.isOpen():
             try: 
                 #Try to post the error to the website for easy to view logging
                 r = requests.post(url,
-                headers = {'Content-type': 'application/json'}, 
+                headers={'Authorization' : 'rasPiAuth..0246', 'Content-type': 'application/json'}, 
                 data = {'error': e})
                 print r
                 print r.content

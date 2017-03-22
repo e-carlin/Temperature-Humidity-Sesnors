@@ -163,12 +163,13 @@ void loop() {
   //A little flash to show we transmitted
   Blink(LED, 3);
 
-  //Power down
-  radio.sleep();
-  //Need to loop becasue max sleep for powerDown is only 8s
-  for(int i=0; i<SLEEP_TIME; i++){
-    LowPower.powerDown(SLEEP_4S, ADC_OFF, BOD_OFF);
-  }
+//  //Power down
+//  radio.sleep();
+//  //Need to loop becasue max sleep for powerDown is only 8s
+//  for(int i=0; i<SLEEP_TIME; i++){
+//    LowPower.powerDown(SLEEP_4S, ADC_OFF, BOD_OFF);
+//  }
+delay(3000);
 }
 
 
