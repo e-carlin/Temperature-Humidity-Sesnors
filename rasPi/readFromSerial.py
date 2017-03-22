@@ -32,57 +32,67 @@ ser.timeout = 1            #non-block read
 ser.xonxoff = False     #disable software flow control
 ser.rtscts = False     #disable hardware (RTS/CTS) flow control
 ser.dsrdtr = False       #disable hardware (DSR/DTR) flow control
-#Try to open the port
-try: 
-    print("Opening serial port and waiting for data")
-    ser.open()
-except IOError, e:
-    print "error open serial port: " + str(e)
-    #Send message to the Cloud
-    
-    # r = requests.post(url,
-    # headers = {'Content-type': 'application/json'}, #Should this be Error-type or Content-type? Where do I post the errors?
-    # data = {'error': e})
-    #execfile("launcher.sh")
-    exit()
 
+
+#Try to open the serial port
+while not ser.isOpen():
+    try: 
+        ser.open()
+    except IOError, e:
+        print "'message' : 'Problem opening serial port' \n 'error' : " + str(e)
+        time.sleep(1) #Sleep for one second 
+        continue
+
+#The serial port is open
 if ser.isOpen():
     while True: #We caught an error. We assume it won't happen next time so just naively try the same code again
         try:
             ser.flushInput() #flush input buffer, discarding all its contents
             ser.flushOutput()#flush output buffer, aborting current output and discard all that is in buffer
             # time.sleep(0.5)  #give the serial port sometime to receive the data
+
+            #**** This is the main loop ****
+            #Loop around waiting for input data and sending it to the web
             while True:
-                response = ser.readline() #TODO: Got a timeout here
-                                                # ^CTraceback (most recent call last):
-                                                #   File "rasPi/readFromSerial.py", line 51, in <module>
-                                                #     response = ser.readline()
-                                                #   File "/Library/Python/2.7/site-packages/serial/serialposix.py", line 472, in read
-                                                #     ready, _, _ = select.select([self.fd, self.pipe_abort_read_r], [], [], timeout.time_left())
+                #Read in input from USB port (the gateway moteino is attached via USB)
+                response = ser.readline()
+
                 #Only print responses with an actual message in them
                 if response != "":
-                    #TODO: Strip \n from response
+                    #Set up a properly formatted timesatmp
                     dateString = '%Y/%m/%d %H:%M:%S'
                     dateString = str(datetime.now(pytz.timezone('US/Pacific')))
                     response = response.rstrip()
+
                     response += " \"timeStamp\"  : \"" + dateString + "\"}"
                     j = json.loads(response)
+                    #Send the response to the web
                     r = requests.post(url,
                         headers={'Authorization' : 'rasPiAuth..0246', 'Content-type': 'application/json'},
                         data = json.dumps(j))
+                    #Print the results for testing purposes
+                    #TODO: Remove
                     print r
                     print r.content
 
-        except Exception, e1:
-            print "We caught an error! : " + str(e1)
-            r = requests.post(url,
-            headers = {'Content-type': 'application/json'}, #Should this be Error-type or Content-type? Where do I post the errors?
-            data = {'error': e1})
-            continue #Go to the start of the loop and try again
+        #We caught an error somewhere in reading from USB and posting to web
+        except Exception, e:
+            print "We caught an error! : " + str(e)
+            try: 
+                #Try to post the error to the website for easy to view logging
+                r = requests.post(url,
+                headers = {'Content-type': 'application/json'}, 
+                data = {'error': e})
+                print r
+                print r.content
+                #Go to the start of the loop and try again
+                continue
 
-else:
-    print "cannot open serial port "
-    #Need to post this error too?
+            #There was an error trying to POST the error message so don't post this time
+            except Exception, e:
+                print "'message' : 'Caught an error trying to POST another error to website,\n 'error' : "+e
+                #Go back to start of reading in loop
+                continue
 
 ser.close()
 
