@@ -8,9 +8,7 @@ class IndexController < ApplicationController
 
     #file = Rails.root + "/log/moteinoAndPi.log"
     file = File.join(Rails.root, 'log','moteinoAndPi.log')
-    if file.nil?
-      return @logs = ""
-    end
+    
   #  lines = File.open(file).to_a
     lines = IO.readlines(file)
     linesLength = lines.length
