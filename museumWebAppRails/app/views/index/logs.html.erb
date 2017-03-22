@@ -1,1 +1,3 @@
-<%= simple_format(@logs) %>
+<% @logs.split("\n").each do |log| %>
+  <%= log %><br>
+<% end %>

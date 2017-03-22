@@ -11,9 +11,13 @@ class Api::V1::ReadingsController < Api::V1::BaseController
       pp "Authorization succesful"
       pp "*************"
         if(!reading_params[:error].nil?)
+          pp "**************"
+          pp "This is an error"
+          pp "***************"
           render(json: {
             status: 200,
-            message: "Received error"
+            message: "Received error",
+            data: reading_params
           }.to_json,
           :status => 200)
           ####### TODO:  We should probably add this erorr to our logs
@@ -26,7 +30,7 @@ class Api::V1::ReadingsController < Api::V1::BaseController
 
         elsif(!reading_params[:temp].nil? && !reading_params[:hum].nil?) #TWe have temp and hum so it is a valid reading
           pp"********************"
-          pp "This is a reading not an error"
+          pp "This is a valid reading"
           pp "********************"
           #Is this a node we haven't seen before?
           if(Node.find_by(node_id: reading_params[:node_id]).nil?)

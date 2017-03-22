@@ -1,4 +1,5 @@
 class IndexController < ApplicationController
+  include ActionView::Helpers::TextHelper
 
   def logs
 
@@ -15,12 +16,13 @@ class IndexController < ApplicationController
     @logs = ""
     if linesLength >= 5
       for i in linesLength-5..linesLength-1
-        @logs << lines[i].gsub("\n", " ")
+        #@logs << lines[i].gsub("\n", "")
+        @logs << lines[i]
       end
     elsif linesLength != 0
       #@logs = lines[linesLength-5], lines[linesLength-4], lines[linesLength-3], lines[linesLength-2], lines[linesLength-1]
       for i in 0..linesLength-1
-        @logs << lines[i].gsub("\n", " ")
+        @logs << lines[i]
       end
     #  @logs = lines
     end

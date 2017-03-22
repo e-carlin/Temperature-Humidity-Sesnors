@@ -4,11 +4,30 @@ class ReadingsController < ApplicationController
   # GET /readings
   # GET /readings.json
   def index
-    @readings = Reading.last(20).reverse
+
+    @last_20 = Reading.order(:name, :recorded_at).select(:node_id, :name, :recorded_at, :temperature, :humidity).last(20)
+    @node_names = Node.select(:node_id, :name)
+
+    # Specify date range
+    if(!params[:start_date].nil? && !params[:end_date].nil?) then
+      @startDate = Date.civil(params[:start_date][:year].to_i, params[:start_date][:month].to_i, params[:start_date][:day].to_i)
+      @endDate = Date.civil(params[:end_date][:year].to_i, params[:end_date][:month].to_i, params[:end_date][:day].to_i)
+      # The globals are meant for if users want csv's or xls' of files
+      $fileStartDate = @startDate
+      $fileEndDate = @endDate
+      @notification = "You can now download your file"
+    # Default (no args) will be the current date
+    else    
+      @startDate = Date.today.beginning_of_day
+      @endDate = Date.today.end_of_day
+      @notification = "Specify your date range and click the 'Create File' button above"
+    end
+    # Query the data
+    @readings = Reading.select(:node_id, :name, :recorded_at, :temperature, :humidity).where(recorded_at: @startDate.beginning_of_day..@endDate.end_of_day)
     respond_to do |format|
       format.html
-      format.csv { send_data Reading.all.to_csv }
-      format.xls { send_data Reading.all.to_csv(col_sep: "\t") }
+      format.csv { send_data Reading.order(:name, :recorded_at).select(:node_id, :name, :recorded_at, :temperature, :humidity).where(recorded_at: $fileStartDate.beginning_of_day..$fileEndDate.end_of_day).to_csv }
+      format.xls { send_data Reading.order(:name, :recorded_at).select(:node_id, :name, :recorded_at, :temperature, :humidity).where(recorded_at: $fileStartDate.beginning_of_day..$fileEndDate.end_of_day).to_csv(col_sep: "\t") }
     end
   end
 
