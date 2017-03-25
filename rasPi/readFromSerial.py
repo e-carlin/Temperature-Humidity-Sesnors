@@ -21,7 +21,8 @@ ser = serial.Serial()
 # $ python -m serial.tools.list_ports
 # ser.port = "/dev/cu.usbserial-DN01Q8E0" #For mini-USB cable
 # ser.port = "/dev/cu.usbserial-A5058SOW" #For FTDI cable
-ser.port = "/dev/ttyUSB0" #For raspi mini-usb cable
+# ser.port = "/dev/ttyUSB0" #For raspi mini-usb cable
+ser.port = "/dev/moteino" #There is a symlink in /etc/udev/rules.d/99-usb-serial.rules that looks for the Moteino product info and creates this symlink
 ser.baudrate = 9600
 ser.bytesize = serial.EIGHTBITS #number of bits per bytes
 ser.parity = serial.PARITY_NONE #set parity check: no parity
