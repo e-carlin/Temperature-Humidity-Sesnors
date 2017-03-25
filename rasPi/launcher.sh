@@ -2,7 +2,6 @@
 # launcher.sh
 # Starts the python script automatically
 
-cd /
-cd home/pi/readFromSerial.py
+cd /home/pi/museum_monitoring_sensors/rasPi/
 sudo python readFromSerial.py
 cd /
