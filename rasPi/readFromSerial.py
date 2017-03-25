@@ -46,6 +46,7 @@ while not ser.isOpen():
 
 #The serial port is open
 if ser.isOpen():
+    print "Serial port is open. Waiting for data..."
     while True: #We caught an error. We assume it won't happen next time so just naively try the same code again
         try:
             ser.flushInput() #flush input buffer, discarding all its contents
