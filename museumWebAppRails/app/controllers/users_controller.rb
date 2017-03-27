@@ -9,6 +9,18 @@ class UsersController < Clearance::UsersController
 
 	end
 
+	def create
+    @user = user_from_params
+
+    if @user.save
+      #sign_in @user #Don't necessarily want to sign the user in after they sign up so that admins can 
+      #redirect the user back to the user page so that they can verify that the user has been added
+      redirect_to users_path
+    else
+      render template: "users/new"
+    end
+  end
+
 	#Need to overwrite this so that admins can sign others up
 	def redirect_signed_in_users
     # if signed_in?
