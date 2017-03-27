@@ -4,7 +4,6 @@
     <tr>
     <th>Email</th>
     <th>Admin?</th>
-    <th> Change Password</th>
     <th>Delete</th>
     </tr>
   </thead>
@@ -13,7 +12,6 @@
       <tr>
         <td><%= user.email%></td>
         <td><%= user.admin?%></td>
-        <td><%= link_to t(".forgot_password"), new_password_path %></td>
        <td>
        <% if current_user.admin? && !current_user.nil? %>
     |   <%= link_to "delete", user, method: :delete,
