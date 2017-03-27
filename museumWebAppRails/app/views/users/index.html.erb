@@ -1,0 +1,32 @@
+<% if !current_user.nil? %>
+        redirect_to sign_in
+    <% if current_user.admin? %>
+  <% end %>
+  <% end %>
+
+<h1>User Information</h1>
+<table class="table table-bordered">
+  <thead>
+    <tr>
+    <th>Email</th>
+    <th>Admin?</th>
+    <th>Delete?</th>
+    
+    </tr>
+  </thead>
+  <tbody>
+    <% @users.each do |user| %>
+      <tr>
+        <td><%= user.email%></td>
+        <td><%= user.admin?%></td>
+       <td>
+       <% if current_user.admin? && !current_user.nil? %>
+    |   <%= link_to "delete", user, method: :delete,
+                              data: { confirm: "You sure?" } %>
+  <% end %>
+  </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<br>

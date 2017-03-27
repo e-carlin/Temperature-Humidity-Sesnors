@@ -1,6 +1,7 @@
 class IndexController < ApplicationController
   include ActionView::Helpers::TextHelper
-
+#Added to make sure that only logged in users can access our site
+  #before_action :require_login 
   def logs
     #@logs = "some logs"
     #@logs = `tail -n 5 /home/gabe/Desktop/capstone2/museum_monitoring_sensors/museumWebAppRails/log/moteinoAndPi.log`.split("\n")
