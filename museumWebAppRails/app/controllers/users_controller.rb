@@ -8,21 +8,16 @@ class UsersController < Clearance::UsersController
 		end
 
 	end
-#Need to overwrite this so that admins can sign others up
-def redirect_signed_in_users
+
+	#Need to overwrite this so that admins can sign others up
+	def redirect_signed_in_users
     # if signed_in?
     #   redirect_to Clearance.configuration.redirect_url
     # end
-  end
-# DELETE /users/1
-  # DELETE /users/1.json
+  	end
+
 	def destroy
-		#@user.destroy
 		User.find(params[:id]).destroy
-		# respond_to do |format|
-  #     		format.html { redirect_to candidates_url, notice: 'User was successfully destroyed.' }
-  #     		format.json { head :no_content }
-  #   end
 		redirect_to users_path
 	end
 
@@ -42,15 +37,9 @@ def redirect_signed_in_users
   		@users = User.all
   	end
 
-
+  	#Mark - I don't beleive we need this method anymore
 	def show
-		#@user = User.find(:email)
     	@user = User.find(params[:id])
-		# respond_to do |format|
-  #     		format.html { render :html => @user } # show.html.erb
-  #     		format.xml  { render :xml => @user }
-  #   	end
-    	#render('show')
 
 	end
 
@@ -58,7 +47,4 @@ def redirect_signed_in_users
 		@User.admin == true
 	end
 
-	# def is_admin
-	# 	return  true if self.admin == true
-	# end
 end
