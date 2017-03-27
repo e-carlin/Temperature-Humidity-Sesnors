@@ -21,7 +21,8 @@ ser = serial.Serial()
 # $ python -m serial.tools.list_ports
 # ser.port = "/dev/cu.usbserial-DN01Q8E0" #For mini-USB cable
 # ser.port = "/dev/cu.usbserial-A5058SOW" #For FTDI cable
-ser.port = "/dev/ttyUSB0" #For raspi mini-usb cable
+# ser.port = "/dev/ttyUSB0" #For raspi mini-usb cable
+ser.port = "/dev/moteino" #There is a symlink in /etc/udev/rules.d/99-usb-serial.rules that looks for the Moteino product info and creates this symlink
 ser.baudrate = 9600
 ser.bytesize = serial.EIGHTBITS #number of bits per bytes
 ser.parity = serial.PARITY_NONE #set parity check: no parity
@@ -45,6 +46,7 @@ while not ser.isOpen():
 
 #The serial port is open
 if ser.isOpen():
+    print "Serial port is open. Waiting for data..."
     while True: #We caught an error. We assume it won't happen next time so just naively try the same code again
         try:
             ser.flushInput() #flush input buffer, discarding all its contents
