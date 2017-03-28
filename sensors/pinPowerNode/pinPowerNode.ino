@@ -28,7 +28,7 @@
 #define LED 9 // Moteinos have LEDs on D9
 
 //***** RFM69 definitions ********************************
-#define NODEID        4    //must be unique for each node on same network (range up to 254, 255 is used for broadcast)
+#define NODEID        3    //must be unique for each node on same network (range up to 254, 255 is used for broadcast)
 #define NETWORKID     100  //Don't change this. The same on all nodes that talk to each other (range up to 255)
 #define GATEWAYID     1 //Don't change this. Same for all nodes in the network
 #define FREQUENCY     RF69_915MHZ
@@ -52,15 +52,16 @@ DHT dht(SENSOR_PIN, DHTTYPE);
 //******** LowPower definitions ***********
 #include <avr/wdt.h>
 #define Reset_AVR() wdt_enable(WDTO_15MS); while(1) {} //This resets the chip
-#define SLEEP_TIME 15 //SLEEP_TIME *8 = number of seconds between transmissions
+#define SLEEP_TIME 20 //SLEEP_TIME *8 = number of seconds between transmissions
+long randNumber;
 
 /*
 * Initializes radio and DHT22
 */                                                     //Used in cases where a reading was NAN
 void setup() {
-  //For printing when testing
-  //Start serial port
-  //Serial.begin(SERIAL_BAUD);
+  //Seed random number generator 
+  //Analog 0 is unconnected so the noise on it will give a good random seed
+ randomSeed(analogRead(0));
   
   //Initialize the radio
   radio.initialize(FREQUENCY, NODEID, NETWORKID);
@@ -163,13 +164,14 @@ void loop() {
   //A little flash to show we transmitted
   Blink(LED, 3);
 
-//  //Power down
-//  radio.sleep();
-//  //Need to loop becasue max sleep for powerDown is only 8s
-//  for(int i=0; i<SLEEP_TIME; i++){
-//    LowPower.powerDown(SLEEP_4S, ADC_OFF, BOD_OFF);
-//  }
-delay(3000);
+  //Power down
+  radio.sleep();
+  randNumber = random(SLEEP_TIME);
+  //Need to loop becasue max sleep for powerDown is only 8s
+  for(int i=0; i<randNumber; i++){
+    LowPower.powerDown(SLEEP_8S, ADC_OFF, BOD_OFF);
+}
+//delay(3000);
 }
 
 
