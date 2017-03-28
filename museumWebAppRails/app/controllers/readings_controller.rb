@@ -6,7 +6,7 @@ class ReadingsController < ApplicationController
   # GET /readings.json
   def index
 
-    @last_20 = Reading.order(:name, :recorded_at).select(:node_id, :name, :recorded_at, :temperature, :humidity).last(20)
+    @last_20 = Reading.select(:node_id, :name, :recorded_at, :temperature, :humidity).last(20)
     @node_names = Node.select(:node_id, :name)
 
     # Specify date range
