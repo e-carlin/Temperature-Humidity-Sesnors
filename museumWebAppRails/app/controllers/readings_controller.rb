@@ -1,6 +1,7 @@
 class ReadingsController < ApplicationController
   before_action :set_reading, only: [:show, :edit, :update, :destroy]
-
+  #Added to make sure that only logged in users can access our site
+  before_action :require_login 
   # GET /readings
   # GET /readings.json
   def index

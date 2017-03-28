@@ -1,12 +1,36 @@
 class UsersController < Clearance::UsersController
+	#Added to make sure that only logged in users can access our site
+	before_action :require_login 
 	def new
 		super
-		@Invite.create
+		if @user.nil?
+			@Invite.create
+		end
+
 	end
+
+	def create
+    @user = user_from_params
+
+    if @user.save
+      #sign_in @user #Don't necessarily want to sign the user in after they sign up so that admins can 
+      #redirect the user back to the user page so that they can verify that the user has been added
+      redirect_to users_path
+    else
+      render template: "users/new"
+    end
+  end
+
+	#Need to overwrite this so that admins can sign others up
+	def redirect_signed_in_users
+    # if signed_in?
+    #   redirect_to Clearance.configuration.redirect_url
+    # end
+  	end
 
 	def destroy
 		User.find(params[:id]).destroy
-		redirect_to root_path
+		redirect_to users_path
 	end
 
 	#Overwrote this method to add the admin field when a user is created
@@ -21,15 +45,18 @@ class UsersController < Clearance::UsersController
    		 end
   	end
 
+  	def index
+  		@users = User.all
+  	end
 
-		def show
-		end
+  	#Mark - I don't beleive we need this method anymore
+	def show
+    	@user = User.find(params[:id])
+
+	end
 
 	def admin?
 		@User.admin == true
 	end
 
-	def is_admin
-		return true if self.admin == true
-	end
 end

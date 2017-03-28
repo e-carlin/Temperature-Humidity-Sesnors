@@ -1,0 +1,21 @@
+<h1>User Information</h1>
+<table class="table table-bordered">
+  <thead>
+    <tr>
+    <th>Email</th>
+    <th>Admin?</th>
+    <th>Delete?</th>
+    
+    </tr>
+  </thead>
+  <tbody>
+    <% @users.each do |user| %>
+      <tr>
+        <td><%= user.email%></td>
+        <td><%= user.admin?%></td>
+       <td><%= link_to "destroy", user %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<br>

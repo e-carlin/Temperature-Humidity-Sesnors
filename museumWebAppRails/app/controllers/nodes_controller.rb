@@ -1,4 +1,6 @@
 class NodesController < ApplicationController
+	#Added to make sure that only logged in users can access our site
+	before_action :require_login 
 	def index
 		@nodes = Node.all
 	end

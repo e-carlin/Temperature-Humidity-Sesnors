@@ -11,6 +11,11 @@ Rails.application.routes.draw do
 
   #error log routes
   get '/logs' => 'index#logs'
+ 
+  #for viewing the users
+  #get '/users' => 'users#show'
+  #get '/users' => 'users#destroy'
+  #match 'Destroy' => 'users#destroy', via: :get 
 
   #api
    namespace :api do
@@ -25,7 +30,8 @@ Rails.application.routes.draw do
   resource :session, controller: "clearance/sessions", only: [:create]
 
   # need to use our users controller because we overwrote it
-  resources :users, controller: "users", only: [:create] do
+  #Mark - added show/destroy to be able to show all users
+  resources :users, controller: "users", only: [:create, :show, :destroy, :index] do
     resource :password,
       controller: "clearance/passwords",
       only: [:create, :edit, :update]
@@ -33,6 +39,9 @@ Rails.application.routes.draw do
 
   get "/sign_in" => "clearance/sessions#new", as: "sign_in"
   delete "/sign_out" => "clearance/sessions#destroy", as: "sign_out"
-  get "/sign_up" => "clearance/users#new", as: "sign_up"
+  #get "/sign_up" => "clearance/users#new", as: "sign_up"
+  #Need to use our user controller for the sign up page
+  get "/sign_up" => "users#new", as: "sign_up"
+
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end
