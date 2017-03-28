@@ -84,7 +84,7 @@ if ser.isOpen():
                 #Try to post the error to the website for easy to view logging
                 r = requests.post(url,
                 headers={'Authorization' : 'rasPiAuth..0246', 'Content-type': 'application/json'}, 
-                data = {'error': e})
+                data = {'error': str(e)})
                 print r
                 print r.content
                 #Go to the start of the loop and try again
@@ -92,7 +92,7 @@ if ser.isOpen():
 
             #There was an error trying to POST the error message so don't post this time
             except Exception, e:
-                print "'message' : 'Caught an error trying to POST another error to website,\n 'error' : "+e
+                print "'message' : 'Caught an error trying to POST another error to website,\n 'error' : "+str(e)
                 #Go back to start of reading in loop
                 continue
 
