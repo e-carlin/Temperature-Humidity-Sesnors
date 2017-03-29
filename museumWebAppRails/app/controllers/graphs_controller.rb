@@ -81,6 +81,89 @@ class GraphsController < ApplicationController
 	end
 	helper_method :getData
 
+	# Gets the past day's temperature readings from all sensors
+	def allTemp
+
+		# We return the data in an array of hashes
+		dataInput = []		
+
+		# Query the data (every reading that has happened today)
+		dataQuery = Reading.select(:recorded_at, :node_id, :temperature).where(recorded_at: Date.today.beginning_of_day..Date.today.end_of_day).to_a
+
+		# Each data hash will be for a single node
+		@nodeList.each do |node|
+
+			# The hash
+			nodeHash = {}
+			# The name
+			nodeHash[:name] = nodeName(node)
+			# What we will put the data in
+			dataArray = Array.new
+
+			# Add data to the array
+			dataQuery.each do |tuple|
+
+				# This reading comes from our node of interest
+				if tuple.node_id == node.node_id
+					dataArray.push[tuple.recorded_at, tuple.temperature]
+				end
+
+			end
+
+			# Set the data value
+			nodeHash[:data] = dataArray
+			# Add this node's information to our array
+			dataInput.push(nodeHash)
+
+		end
+
+		# Return the result
+		return dataInput
+
+	end
+	helper_method :allTemp
+
+	# Gets the past day's humidity readings from all sensors
+	def allHum
+
+		# We return the data in an array of hashes
+		dataInput = []		
+
+		# Query the data (every reading that has happened today)
+		dataQuery = Reading.select(:recorded_at, :node_id, :humidity).where(recorded_at: Date.today.beginning_of_day..Date.today.end_of_day).to_a
+
+		# Each data hash will be for a single node
+		@nodeList.each do |node|
+
+			# The hash
+			nodeHash = {}
+			# The name
+			nodeHash[:name] = nodeName(node)
+			# What we will put the data in
+			dataArray = Array.new
+
+			# Add data to the array
+			dataQuery.each do |tuple|
+
+				# This reading comes from our node of interest
+				if tuple.node_id == node.node_id
+					dataArray.push[tuple.recorded_at, tuple.humidity]
+				end
+
+			end
+
+			# Set the data value
+			nodeHash[:data] = dataArray
+			# Add this node's information to our array
+			dataInput.push(nodeHash)
+
+		end
+
+		# Return the result
+		return dataInput
+
+	end
+	helper_method :allHum
 
 	
 

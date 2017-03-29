@@ -24,3 +24,27 @@
 </br>
 
 <p hidden><% end %></p>
+
+<%=
+
+	line_chart allTemp,
+	title: "All Temperatures",
+	xtitle: "Time",
+	ytitle: "Temperature (F)",
+	legend: true,
+	legend: "bottom",
+	download: true
+
+%>
+
+<%=
+
+	line_chart allHum,
+	title: "All Humidities",
+	xtitle: "Time",
+	ytitle: "Humidity (%)",
+	legend: true,
+	legend: "bottom",
+	download: true
+
+%>
