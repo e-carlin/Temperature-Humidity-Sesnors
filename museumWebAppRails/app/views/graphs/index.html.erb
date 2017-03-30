@@ -7,6 +7,7 @@
 
 <%= @nodeList.each do |node|%>
 
+<graph>
 <%=
 
   line_chart getData(node),
@@ -15,9 +16,12 @@
   ytitle: "Temperature/Humidity",
   legend: true,
   legend: "bottom",
-  download: true
+  download: true,
+  max: upperQuartile(node),
+  min: lowerQuartile(node)
   
 %>
+</graph>
 
 </br>
 <hr>
@@ -25,6 +29,7 @@
 
 <p hidden><% end %></p>
 
+<graph>
 <%=
 
 	line_chart allTemp,
@@ -33,10 +38,14 @@
 	ytitle: "Temperature (F)",
 	legend: true,
 	legend: "bottom",
-	download: true
+	download: true,
+	max: upperQuartile(maxNode(true)),
+	min: lowerQuartile(minNode(true))
 
 %>
+</graph>
 
+<graph>
 <%=
 
 	line_chart allHum,
@@ -45,6 +54,9 @@
 	ytitle: "Humidity (%)",
 	legend: true,
 	legend: "bottom",
-	download: true
+	download: true,
+	max: upperQuartile(maxNode(false)),
+	min: lowerQuartile(minNode(false))
 
 %>
+</graph>
