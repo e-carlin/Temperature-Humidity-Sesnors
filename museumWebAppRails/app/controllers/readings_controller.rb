@@ -27,6 +27,9 @@ class ReadingsController < ApplicationController
     @readings = Reading.select(:node_id, :name, :recorded_at, :temperature, :humidity).where(recorded_at: @startDate.beginning_of_day..@endDate.end_of_day)
     respond_to do |format|
       format.html
+      # TODO In the .csv 
+      # 1: Use the params to set $fileStartDate and $fileEndDate
+      # 2: Have the button link the user to 'readings.csv'
       format.csv { send_data Reading.order(:name, :recorded_at).select(:node_id, :name, :recorded_at, :temperature, :humidity).where(recorded_at: $fileStartDate.beginning_of_day..$fileEndDate.end_of_day).to_csv }
       format.xls { send_data Reading.order(:name, :recorded_at).select(:node_id, :name, :recorded_at, :temperature, :humidity).where(recorded_at: $fileStartDate.beginning_of_day..$fileEndDate.end_of_day).to_csv(col_sep: "\t") }
     end
