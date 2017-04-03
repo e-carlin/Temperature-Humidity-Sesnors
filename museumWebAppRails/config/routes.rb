@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   resources :nodes
   #The website root
   root 'index#index'
+  #root 'readings#index'
 
   #Readings routes
   resources :readings, only: [:index, :destroy, :show]

@@ -1,3 +1,89 @@
 // Place all the styles related to the index controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+
+$lightblue : #87e0fd; 	/* Here's how you assign the values to a variable */
+$darkblue : #2cafe3;
+$cpad: 20px;		/* Variables are not limited to colors, you can use it to store values too*/
+$primaryColor: #333;
+$color: #800000;
+
+
+body {
+	background-image: -webkit-linear-gradient(bottom, $color  23%, #A9A9A9 100%);
+	background-image: -moz-linear-gradient(top, $color  23%, #D3D3D3 100%);
+	background-attachment:fixed;
+	font: 100% Helvetica, sans-serif;
+	
+}
+
+.navbar-header {
+		color: #800000;
+}
+
+#header {
+	background-color: #000000;
+	padding: 10px;
+
+}
+
+#content {
+    border: 2px solid #ccc;
+    background-color: #000000;
+    padding:20px;
+    .box-right {
+        float : right;
+        border: 1px solid #000;
+   h1 {
+            font-size: 24px;
+        }
+    }
+}
+
+.button {
+	background-color: #000000;
+	color: #800000;
+}
+
+
+#ul {
+	color: #800000;
+
+}
+
+.container-form {
+	background-color: #FFFFFF;
+	padding: 20px;
+	font: 100% Helvetica, sans-serif;
+	font-size: 20px;
+    text-align: center;
+
+}
+
+.center {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 100%;
+    text-align: center;
+}
+
+.div {
+    border: 1px solid black;
+    outline: 1px solid red;
+    outline-offset: 15px;
+}
+
+.container {
+	padding: 10px;
+	background-color: #FFFFFF;
+	color: #800000;
+}
+
+
+
+.content {	
+	padding: $cpad;
+	color: #800000;
+}

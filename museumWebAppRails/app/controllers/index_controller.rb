@@ -1,6 +1,6 @@
 class IndexController < ApplicationController
   include ActionView::Helpers::TextHelper
-#Added to make sure that only logged in users can access our site
+  #Added to make sure that only logged in users can access our site
   #before_action :require_login 
   def logs
     #@logs = "some logs"
@@ -27,5 +27,9 @@ class IndexController < ApplicationController
     #  @logs = lines
     end
 
+    end
+
+    def delete
+      
     end
 end

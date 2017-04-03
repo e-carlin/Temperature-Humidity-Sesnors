@@ -1,3 +1,4 @@
 <% @logs.split("\n").each do |log| %>
   <%= log %><br>
 <% end %>
+<%= link_to "Delete error Logs", {:action => 'delete' }%>

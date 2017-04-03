@@ -1,6 +1,6 @@
 class UsersController < Clearance::UsersController
 	#Added to make sure that only logged in users can access our site
-	before_action :require_login 
+	#before_action :require_login 
 	def new
 		super
 		if @user.nil?
@@ -29,7 +29,9 @@ class UsersController < Clearance::UsersController
   	end
 
 	def destroy
-		User.find(params[:id]).destroy
+		#Before we destroy an User we want to make sure there is at least 1 admin
+    #Left just in case someone tries to delete the database
+    User.find(params[:id]).destroy
 		redirect_to users_path
 	end
 
