@@ -19,5 +19,6 @@ Parts:
 ## Battery powered sensor
 ![Alt text](./fritzingDiagrams/batteryPower.png?raw=true)
 
-## Wired power sensor
-![Alt text](./fritzingDiagrams/wiredPower.png?raw=true)
+## All of the Moteinos  
+![Alt text](./fritzingDiagrams/allMoteinos.jpg?raw=true)
+
