@@ -7,9 +7,8 @@
   </div>
 
 <div class="container-form">
-<%= form_for :reading, url: readings_path, method: :get do %>
-<h1>Readings</h1>
-<br>
+<!--<%= form_for :reading, url: readings_path, method: :get do %>-->
+<!--<br>--> 
 
 <p>Specify the date range you want for readings, then click the download button</p>
 <%= form_for :reading, url: 'readings.xls', method: :get do %>
@@ -23,6 +22,7 @@
   <%= submit_tag("Download File") %>
 
 <% end %>
+
 <p><%= @notification %></p>
 
 <span>
@@ -35,10 +35,12 @@
   <a href="readings.xls">Download Excel File</a>
 </span>
 
+</div>
+
+<div class="container-form">
 <form action="readings.html">
   <input type="submit" value="Refresh" />
 </form>
-
 </div>
 
 <div class="container">
@@ -71,5 +73,4 @@
   </tbody>
 </table>
 </div>
-<br>
-
+<% end %>
