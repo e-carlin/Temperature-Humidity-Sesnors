@@ -1,6 +1,6 @@
 class GraphsController < ApplicationController
 		#Added to make sure that only logged in users can access our site
-	#before_action :require_login 
+	before_action :require_login 
 
 	def show
 		#render template: "pages/#{params[:page]}" #TOOD: Do we need this? we don't have a show view...
