@@ -15,6 +15,7 @@
 # Ignore prod and dev logfiles and tempfiles.
 /log/production.log
 /log/development.log
+/log/moteinoAndPi.log
 /tmp/*
 !/log/.keep
 !/tmp/.keep
@@ -24,4 +25,3 @@
 
 #Ignore assets that are only on production
 public/assets/**
-
