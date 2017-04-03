@@ -1,6 +1,6 @@
 class GraphsController < ApplicationController
 		#Added to make sure that only logged in users can access our site
-	before_action :require_login 
+	#before_action :require_login 
 
 	def show
 		#render template: "pages/#{params[:page]}" #TOOD: Do we need this? we don't have a show view...
@@ -88,10 +88,16 @@ class GraphsController < ApplicationController
 		# Max temperature value from the node in the past day
 		max_temp = Reading.select(:temperature, :recorded_at).where(node_id: node, recorded_at: Date.today.beginning_of_day..Date.today.end_of_day).maximum(:temperature)
 		# Determine the parameter with the highest value
-		max_val = [max_hum, max_temp].max		
+		max_val = [max_hum, max_temp].max	
+
+		# Check if node has returned any values for the current day
 		# Set the max bound into quartiles
-		offset = 25 - (max_val % 25)
-		return max_val + offset
+		unless max_val.nil? 
+			offset = 25 - (max_val % 25)
+			return max_val + offset
+		end
+		# Otherwise, set default max for empty graph
+		return 100
 	end
 	helper_method :upperQuartile
 
@@ -105,9 +111,15 @@ class GraphsController < ApplicationController
 		min_temp = Reading.select(:temperature, :recorded_at).where(node_id: node, recorded_at: Date.today.beginning_of_day..Date.today.end_of_day).minimum(:temperature)
 		# Determine the parameter with the lowest value
 		min_val = [min_hum, min_temp].min
+
+		# Check if node has returned any values for the current day
 		# Set the min bound into quartiles
-		offset = (min_val % 25)
-		return min_val - (offset)
+		unless min_val.nil?
+			offset = (min_val % 25)
+			return min_val - (offset)
+		end
+		# Graph will be empty, set default min
+		return 0
 	end
 	helper_method :lowerQuartile
 
