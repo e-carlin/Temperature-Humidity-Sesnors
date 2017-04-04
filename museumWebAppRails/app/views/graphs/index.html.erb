@@ -9,6 +9,7 @@
 </div>
 
 <%= @nodeList.each do |node|%>
+<div class="graph">
 
 <graph>
 <%=
@@ -24,6 +25,7 @@
   min: lowerQuartile(node)
   
 %>
+</div>
 </graph>
 
 </br>
@@ -32,6 +34,7 @@
 
 <p hidden><% end %></p>
 
+<div class="graph">
 <graph>
 <%=
 
@@ -47,11 +50,12 @@
 
 %>
 </graph>
-
+</div>
 </br>
 <hr>
 </br>
 
+<div class="graph">
 <graph>
 <%=
 
@@ -67,3 +71,4 @@
 
 %>
 </graph>
+</div>
