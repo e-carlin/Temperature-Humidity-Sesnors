@@ -11,8 +11,7 @@ $color: #800000;
 
 
 body {
-	background-image: -webkit-linear-gradient(bottom, $color  23%, #A9A9A9 100%);
-	background-image: -moz-linear-gradient(top, $color  23%, #D3D3D3 100%);
+	background-color: #A9A9A9;
 	background-attachment:fixed;
 	font: 100% Helvetica, sans-serif;
 	
@@ -20,32 +19,45 @@ body {
 
 .navbar-header {
 		color: #800000;
+		background-color: #FFFFFF;
+}
+.nav navbar-nav {
+		color: #800000;
+		background-color: #FFFFFF;
 }
 
 #header {
 	background-color: #000000;
 	padding: 10px;
+	font-color: #000000;
 
 }
 
-#content {
-    border: 2px solid #ccc;
-    background-color: #000000;
+.content {
     padding:20px;
+    text-align: center;
     .box-right {
         float : right;
         border: 1px solid #000;
-   h1 {
-            font-size: 24px;
-        }
+  
     }
 }
+
+.h1 {
+           	font-size: 64px;
+    		color: #FFFFFF;
+        }
 
 .button {
 	background-color: #000000;
 	color: #800000;
 }
 
+.box {
+	padding: 20px;
+	background-color: #000000;
+	font-color: #FFFFFF;
+}
 
 #ul {
 	color: #800000;
@@ -58,11 +70,12 @@ body {
 }
 
 .container-form {
-	background-color: #FFFFFF;
+	background-color: #FF0000;
 	padding: 20px;
 	font: 100% Helvetica, sans-serif;
 	font-size: 20px;
     text-align: center;
+    border: 2px;
 
 }
 
@@ -84,6 +97,9 @@ body {
 	padding: 10px;
 	background-color: #FFFFFF;
 	color: #800000;
+	text-align: center;
+	 border: 2px;
+
 }
 
 

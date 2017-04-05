@@ -3,10 +3,10 @@
 <script src="application.js"></script>
 
   <div class="text-center">
-    <h1>Readings</h1>
+    <div class="h1">Readings</div>
   </div>
 
-<div class="container-form">
+<div class="container">
 <!--<%= form_for :reading, url: readings_path, method: :get do %>-->
 <!--<br>--> 
 
@@ -25,17 +25,28 @@
 
 <p><%= @notification %></p>
 
+<form action="readings.html">
+  <input type="submit" value="Refresh" />
+</form>
+
 </div>
 
+<!--
 <div class="container-form">
 <form action="readings.html">
   <input type="submit" value="Refresh" />
 </form>
 </div>
 
+
 <div class="container">
-<!-- Just to separate the sections -->
+ Just to separate the sections -->
 </div>
+
+<div class="content">
+ <!--Just to separate the sections -->
+</div>
+
 
 <div class="container">
 <table class="table table-bordered">
