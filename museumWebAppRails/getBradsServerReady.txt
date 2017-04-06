@@ -56,7 +56,7 @@ sudo /usr/sbin/passenger-memory-stats
 
 cd /var/www/
 
-sudo chown -R ubuntu museum_monitoring_sensors/
+sudo chown -R evan museum_monitoring_sensors/
 
 cd museum_monitoring_sensors/
 
@@ -71,7 +71,7 @@ sudo nano /etc/apache2/sites-enabled/museumWebAppRails.conf
 #Place these file contents in museumWebAppRails.conf
 
 <VirtualHost *:80>
-        ServerName  ######THE EC2 url or maybe lelooska.org
+        ServerName  lelooska.org
         DocumentRoot /var/www/html
 
         Alias /sensors /var/www/museum_monitoring_sensors/museumWebAppRails/public
@@ -94,6 +94,6 @@ sudo apache2ctl restart
 #To seed the first production user do
 bundle exec rails console production
 
-User.create!(:email=>'admin@test.com',:admin => true,:password=>'adminpass')
+User.create!(:email=>'evan@carlin.com',:admin => true,:password=>'123456')
 
 #Update config/environments/prdouction.rb with the correct domain name for emails prob lelooska.org/sensors maybe just lelooska.org
