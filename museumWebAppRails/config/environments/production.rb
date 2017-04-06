@@ -1,6 +1,7 @@
 Rails.application.configure do
   config.root_directory = '/sensors'
-    config.assets.prefix = '/sensors/assets/'
+  config.assets.prefix = '/sensors/assets/'
+  RAILS_RELATIVE_URL_ROOT= "/sensors"
   # Settings specified here will take precedence over those in config/application.rb.
 
   # Code is not reloaded between requests.
