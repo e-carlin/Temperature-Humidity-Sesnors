@@ -74,6 +74,10 @@ sudo nano /etc/apache2/sites-enabled/museumWebAppRails.conf
         ServerName  lelooska.org
         DocumentRoot /var/www/html
 
+        <Directory /var/www/html/>
+            AllowOverride All
+        </Directory>
+
         Alias /sensors /var/www/museum_monitoring_sensors/museumWebAppRails/public
         <Location /sensors>
             PassengerBaseURI /sensors
