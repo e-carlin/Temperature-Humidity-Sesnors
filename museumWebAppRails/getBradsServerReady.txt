@@ -38,7 +38,7 @@ sudo ln -sf /usr/bin/nodejs /usr/local/bin/node
 sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 561F9B9CAC40B2F7
 sudo apt-get install -y apt-transport-https ca-certificates
 
-# Add our APT repository
+# Add passenger APT repository
 sudo sh -c 'echo deb https://oss-binaries.phusionpassenger.com/apt/passenger trusty main > /etc/apt/sources.list.d/passenger.list'
 sudo apt-get update
 
@@ -71,7 +71,7 @@ sudo nano /etc/apache2/sites-enabled/museumWebAppRails.conf
 #Place these file contents in museumWebAppRails.conf
 
 <VirtualHost *:80>
-        ServerName  ec2-52-11-161-114.us-west-2.compute.amazonaws.com
+        ServerName  ######THE EC2 url or maybe lelooska.org
         DocumentRoot /var/www/html
 
         Alias /sensors /var/www/museum_monitoring_sensors/museumWebAppRails/public
