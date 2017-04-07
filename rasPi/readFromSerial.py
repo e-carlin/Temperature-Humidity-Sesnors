@@ -15,7 +15,7 @@ from datetime import datetime
 #Assign a URL variable for cleanliness
 # url = 'http://ec2-54-202-217-172.us-west-2.compute.amazonaws.com/api/v1/readings'
 # url = 'http://localhost:3000/api/v1/readings'
-url = 'http://lelooska.org/api/v1/readings'
+url = 'http://lelooska.org/sensors/api/v1/readings'
 
 ser = serial.Serial()
 # This port will be different of different machines check correct port with
