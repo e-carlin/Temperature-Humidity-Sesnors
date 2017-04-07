@@ -1,0 +1,103 @@
+ssh into server
+
+sudo apt-get install git 
+
+cd /var/www
+
+sudo git clone https://github.com/e-carlin/museum_monitoring_sensors.git
+
+
+sudo apt-get update
+sudo apt-get install -y curl gnupg build-essential
+
+#Get rvm
+sudo gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3
+curl -sSL https://get.rvm.io | sudo bash -s stable
+sudo usermod -a -G rvm `whoami`
+
+if sudo grep -q secure_path /etc/sudoers; then sudo sh -c "echo export rvmsudo_secure_path=1 >> /etc/profile.d/rvm_secure_path.sh" && echo Environment variable installed; fi
+
+exit
+
+ssh in again
+
+#This is a little hacky
+sudo chmod -R a+xwr /usr/local/rvm
+
+rvm install ruby-2.3.3
+
+rvm --default use ruby-2.3.3
+
+gem install bundler --no-rdoc --no-ri
+
+#A javascript runtime is needed for rails assets pipeline node.js provides this
+sudo apt-get install -y nodejs &&
+sudo ln -sf /usr/bin/nodejs /usr/local/bin/node
+
+# Install our PGP key and add HTTPS support for APT
+sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 561F9B9CAC40B2F7
+sudo apt-get install -y apt-transport-https ca-certificates
+
+# Add passenger APT repository
+sudo sh -c 'echo deb https://oss-binaries.phusionpassenger.com/apt/passenger trusty main > /etc/apt/sources.list.d/passenger.list'
+sudo apt-get update
+
+# Install Passenger + Apache module
+sudo apt-get install -y libapache2-mod-passenger
+
+sudo a2enmod passenger
+sudo apache2ctl restart
+
+#VALIDATE install
+sudo /usr/bin/passenger-config validate-install
+
+#Make sure apache and passenger are running
+sudo /usr/sbin/passenger-memory-stats
+
+cd /var/www/
+
+sudo chown -R evan museum_monitoring_sensors/
+
+cd museum_monitoring_sensors/
+
+rvm use ruby-2.3.3
+
+cd museumWebAppRails/
+
+./deploy.sh
+
+sudo nano /etc/apache2/sites-enabled/museumWebAppRails.conf
+
+#Place these file contents in museumWebAppRails.conf
+
+<VirtualHost *:80>
+        ServerName  lelooska.org
+        DocumentRoot /var/www/html
+
+        <Directory /var/www/html/>
+            AllowOverride All
+        </Directory>
+
+        Alias /sensors /var/www/museum_monitoring_sensors/museumWebAppRails/public
+        <Location /sensors>
+            PassengerBaseURI /sensors
+            PassengerAppRoot /var/www/museum_monitoring_sensors/museumWebAppRails
+
+        </Location>
+        <Directory /var/www/museum_monitoring_sensors/museumWebAppRails/public>
+            Allow from all
+            Options -MultiViews
+            Require all granted
+        </Directory>
+</VirtualHost>
+
+sudo apache2ctl restart
+
+#Done! 
+
+#To seed the first production user do
+bundle exec rails console production
+
+User.create!(:email=>'evan@carlin.com',:admin => true,:password=>'123456')
+
+#Update config/environments/prdouction.rb with the correct domain name for emails prob lelooska.org/sensors maybe just lelooska.org

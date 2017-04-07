@@ -1,4 +1,6 @@
 Rails.application.configure do
+  config.root_directory = '/sensors'
+  RAILS_RELATIVE_URL_ROOT= "/sensors"
   # Settings specified here will take precedence over those in config/application.rb.
 
   # Code is not reloaded between requests.
@@ -59,7 +61,7 @@ Rails.application.configure do
 
   ############## Our addition #################
   # URL for clearance emails
-  config.action_mailer.default_url_options = { host: 'ec2-54-202-217-172.us-west-2.compute.amazonaws.com' }
+  config.action_mailer.default_url_options = { host: 'lelooska.org' }
   config.action_mailer.delivery_method = :smtp
   # SMTP settings for gmail
   config.action_mailer.smtp_settings = {

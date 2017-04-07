@@ -94,6 +94,10 @@ class GraphsController < ApplicationController
 		# Set the max bound into quartiles
 		unless max_val.nil? 
 			offset = 25 - (max_val % 25)
+			# Visibility adjustment
+			if offset == 0 
+				offset = 5
+			end
 			return max_val + offset
 		end
 		# Otherwise, set default max for empty graph
@@ -116,6 +120,10 @@ class GraphsController < ApplicationController
 		# Set the min bound into quartiles
 		unless min_val.nil?
 			offset = (min_val % 25)
+			# Visibility adjustment
+			if offset == 0 
+				offset = 5
+			end			
 			return min_val - (offset)
 		end
 		# Graph will be empty, set default min

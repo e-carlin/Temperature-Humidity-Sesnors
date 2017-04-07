@@ -13,8 +13,9 @@ from datetime import datetime
 #    3. x, x is bigger than 0, float allowed, timeout block call
 
 #Assign a URL variable for cleanliness
-url = 'http://ec2-54-202-217-172.us-west-2.compute.amazonaws.com/api/v1/readings'
+# url = 'http://ec2-54-202-217-172.us-west-2.compute.amazonaws.com/api/v1/readings'
 # url = 'http://localhost:3000/api/v1/readings'
+url = 'http://lelooska.org/sensors/api/v1/readings'
 
 ser = serial.Serial()
 # This port will be different of different machines check correct port with
