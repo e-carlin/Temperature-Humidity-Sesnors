@@ -1,8 +1,9 @@
 class UsersController < Clearance::UsersController
 	#Added to make sure that only logged in users can access our site
-	#before_action :require_login 
+	before_action :require_login 
 	def new
-		super
+		
+    super
 		if @user.nil?
 			@Invite.create
 		end
@@ -10,6 +11,7 @@ class UsersController < Clearance::UsersController
 	end
 
 	def create
+    
     @user = user_from_params
 
     if @user.save
