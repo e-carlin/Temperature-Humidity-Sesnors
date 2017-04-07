@@ -97,7 +97,7 @@ void Blink(byte PIN, int DELAY_MS)
 }
 
 /*
-* Retrieves the voltage in miniVolts, doesn't require additional hardware
+* Retrieves the voltage in millivolts, doesn't require additional hardware
 */
 long readVcc() {
   // Read 1.1V reference against AVcc
