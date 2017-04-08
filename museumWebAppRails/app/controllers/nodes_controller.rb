@@ -2,7 +2,7 @@ class NodesController < ApplicationController
 	#Added to make sure that only logged in users can access our site
 	before_action :require_login 
 	def index
-		@nodes = Node.all
+		@nodes = Node.all.order(:node_id)
 	end
 
 	def show
