@@ -10,9 +10,7 @@ class NodesController < ApplicationController
 	end
 
 	def update
-		pp "&&&&&&&&&&&&"
 		pp update_node_params
-		pp "&&&&&&&&&&&&"
 		@node = Node.find(node_params[:id])
 		if @node.update_attributes(update_node_params)
 			flash[:notice] = "Node name updated"
