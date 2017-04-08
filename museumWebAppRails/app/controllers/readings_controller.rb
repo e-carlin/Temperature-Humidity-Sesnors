@@ -7,7 +7,7 @@ class ReadingsController < ApplicationController
   def index
 
     @hidden = "true"
-    @last_20 = Reading.select(:node_id, :name, :recorded_at, :temperature, :humidity).last(20)
+    @last_20 = Reading.select(:node_id, :name, :recorded_at, :temperature, :humidity).last(20).sort_by { |m| m[:recorded_at] }.reverse
     @node_names = Node.select(:node_id, :name)
 
     # Specify date range
