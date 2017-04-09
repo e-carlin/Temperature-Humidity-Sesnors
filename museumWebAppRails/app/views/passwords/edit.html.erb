@@ -1,18 +1,9 @@
-<div id="clearance" class="password-reset">
-  <h2><%= t(".title") %></h2>
+<div class="container-form">
+  <h1> Hello </h1>
+  <%= form_for current_user, method: "post" do |f| %>
+<%= f.label :new_password %><br />
+<%= f.text_field :password %><br />
+<%= f.submit %>
+<% end %>
 
-  <p><%= t(".description") %></p>
-
-  <%= form_for :password_reset,
-        url: user_password_path(@user, token: @user.confirmation_token),
-        html: { method: :put } do |form| %>
-    <div class="password-field">
-      <%= form.label :password %>
-      <%= form.password_field :password %>
-    </div>
-
-    <div class="submit-field">
-      <%= form.submit %>
-    </div>
-  <% end %>
 </div>

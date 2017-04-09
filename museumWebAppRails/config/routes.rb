@@ -35,7 +35,8 @@ Rails.application.routes.draw do
   resources :users, controller: "users", only: [:create, :show, :destroy, :index] do
     resource :password,
       controller: "clearance/passwords",
-      only: [:create, :edit, :update]
+      #This used to have :edit
+      only: [:create, :update]
   end
 
   get "/sign_in" => "clearance/sessions#new", as: "sign_in"
@@ -43,6 +44,7 @@ Rails.application.routes.draw do
   #get "/sign_up" => "clearance/users#new", as: "sign_up"
   #Need to use our user controller for the sign up page
   get "/sign_up" => "users#new", as: "sign_up"
-
+  get "/edit_password" => "passwords#index", as: "edit"
+  post "/edit_password" => "passwords#edit", as: "edit_pass"
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

@@ -2,11 +2,18 @@ class UsersController < Clearance::UsersController
 	#Added to make sure that only logged in users can access our site
 	before_action :require_login 
 	def new
-		
-    super
 		if @user.nil?
-			@Invite.create
-		end
+      if !current_user.admin?
+        redirect_to sign_in_path
+      else
+        super
+        if @user.nil?
+          @Invite.create
+        end
+      end
+    end
+   
+    
 
 	end
 
@@ -50,17 +57,47 @@ class UsersController < Clearance::UsersController
   	end
 
   	def index
-  		@users = User.all
+  		if @user.nil?
+        if !current_user.admin?
+          redirect_to sign_in_path
+        else
+          @users = User.all
+        end
+      end
   	end
 
   	#Mark - I don't beleive we need this method anymore
 	def show
     	@user = User.find(params[:id])
-
 	end
 
 	def admin?
 		@User.admin == true
 	end
+
+  
+  def edit
+    @user = find_user_for_edit
+    pp "In user "
+    if params[:token]
+      session[:password_reset_token] = params[:token]
+      redirect_to url_for
+    else
+      render template: 'passwords/edit'
+    end
+  end
+  #Helper methods for edit
+def find_user_for_edit
+    find_user_by_id_and_confirmation_token
+  end
+
+def find_user_by_id_and_confirmation_token
+    user_param = Clearance.configuration.user_id_parameter
+    token = session[:password_reset_token] || params[:token]
+
+    Clearance.configuration.user_model.
+      find_by_id_and_confirmation_token params[user_param], token.to_s
+  end
+
 
 end

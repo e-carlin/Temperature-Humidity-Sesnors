@@ -17,7 +17,7 @@
     <li><%= link_to 'Readings', readings_path%><li>
     <li><%= link_to 'Error Log', logs_path%><li>
     <li><%= link_to 'Graphs', graphs_path%><li>
-    <li><%= link_to 'Change Password', 'clearance/passwords#edit'%><li>
+    <li><%= link_to 'Change Password', edit_path %><li>
 
     <% if current_user.admin? %>
     <!-- hide the rest of the tabs unless they are an admin -->
