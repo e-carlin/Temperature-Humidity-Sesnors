@@ -46,7 +46,7 @@ class UsersController < Clearance::UsersController
 
 	#Overwrote this method to add the admin field when a user is created
 	def user_from_params
-		email = user_params.delete(:email)
+		  email = user_params.delete(:email)
     	password = user_params.delete(:password)
     	admin = user_params.delete(:admin)
     	Clearance.configuration.user_model.new(user_params).tap do |user|
@@ -75,18 +75,38 @@ class UsersController < Clearance::UsersController
 		@User.admin == true
 	end
 
-  
-  def edit
-    @user = find_user_for_edit
-    pp "In user "
-    if params[:token]
-      session[:password_reset_token] = params[:token]
-      redirect_to url_for
-    else
-      render template: 'passwords/edit'
+   def edit
+    @user = User.find_by_email(params[:email])
+    if !@user.nil?
+      render 'update'
     end
   end
-  #Helper methods for edit
+
+  def update
+    @user = User.find(params[:id])
+    if @user.update_attributes(user_params)
+      # Handle a successful update.
+      redirect_to graphs_path
+    else
+      #Can't find the user so they can't be here
+      render sign_in_path
+      #render 'edit'
+    end
+  end
+
+  private
+  def user_params
+    params.require(:user).permit(:email, :password)
+                
+    #params[Clearance.configuration.user_parameter] || Hash.new
+  end
+  
+  #Helper methods for edit (probably don't need)
+
+ def find_user_for_update
+    find_user_by_id_and_confirmation_token
+  end
+
 def find_user_for_edit
     find_user_by_id_and_confirmation_token
   end
@@ -99,5 +119,17 @@ def find_user_by_id_and_confirmation_token
       find_by_id_and_confirmation_token params[user_param], token.to_s
   end
 
+def password_reset_params
+   #params[:password]
+    if params.has_key? :user
+      ActiveSupport::Deprecation.warn %{Since locales functionality was added, accessing params[:user] is no longer supported.}
+      params[:user][:password]
+      #params[:password]
+
+    else
+      params[:password]
+      #params[:password_reset][:password]
+    end
+  end
 
 end

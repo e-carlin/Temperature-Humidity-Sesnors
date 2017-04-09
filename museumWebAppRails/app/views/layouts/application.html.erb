@@ -17,11 +17,9 @@
     <li><%= link_to 'Readings', readings_path%><li>
     <li><%= link_to 'Error Log', logs_path%><li>
     <li><%= link_to 'Graphs', graphs_path%><li>
-    <li><%= link_to 'Change Password', edit_path %><li>
-
+    <li><%= link_to 'Change Password', update_user_password_path(current_user.email) %><li>
     <% if current_user.admin? %>
     <!-- hide the rest of the tabs unless they are an admin -->
-
     <li><%= link_to 'Users', users_path%><li>
     <li><%= link_to 'Sign Up', sign_up_path%><li>
 

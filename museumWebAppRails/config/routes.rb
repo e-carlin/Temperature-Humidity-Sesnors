@@ -32,7 +32,7 @@ Rails.application.routes.draw do
 
   # need to use our users controller because we overwrote it
   #Mark - added show/destroy to be able to show all users
-  resources :users, controller: "users", only: [:create, :show, :destroy, :index] do
+  resources :users, controller: "users", only: [:create, :show, :destroy, :index, :update, :edit] do
     resource :password,
       controller: "clearance/passwords",
       #This used to have :edit
@@ -44,7 +44,12 @@ Rails.application.routes.draw do
   #get "/sign_up" => "clearance/users#new", as: "sign_up"
   #Need to use our user controller for the sign up page
   get "/sign_up" => "users#new", as: "sign_up"
-  get "/edit_password" => "passwords#index", as: "edit"
-  post "/edit_password" => "passwords#edit", as: "edit_pass"
+  #get "/edit_password" => "passwords#index", as: "edit"
+  #get "/update_password/:email" => "users#update", :constraints => { :email => /.+@.+\..*/ }, as: "update_user_password"
+
+  #Need to have the email be passed as a field
+  get "/update_password/:email" => "users#edit", :constraints => { :email => /.+@.+\..*/ }, as: "update_user_password"
+
+  #get "/update_password/:email" => "users#update", as: "update_user_password"
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

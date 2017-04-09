@@ -2,8 +2,7 @@ class PasswordsController < Clearance::PasswordsController
 #Might not need this controller
 #overwrite the edit method so that we can hide it from the outside
 def edit
-     pp "In main part"
-
+	#don't really need this method
     @user = current_user
     #@user = find_user_for_edit
     if params[:token]
