@@ -30,7 +30,7 @@
 //***** RFM69 definitions ********************************
 
 //================= THIS NUMBER MUST BE UNIQUE FOR EACH SENSOR ==================
-#define NODEID        11    //must be unique for each node on same network (range up to 254, 255 is used for broadcast)
+#define NODEID        9    //must be unique for each node on same network (range up to 254, 255 is used for broadcast)
 //=====================================================================
 
 #define NETWORKID     100  //Don't change this. The same on all nodes that talk to each other (range up to 255)
@@ -53,13 +53,13 @@ int SENSOR_PIN = 19; //A2 => Digital 16
 int POWER_PIN = 16; //A5 = Digital 19
 DHT dht(SENSOR_PIN, DHTTYPE);
 
-//******** LowPower definitions ***********
+//******** LowPower definitions ***********************************
 #include <avr/wdt.h>
 #define Reset_AVR() wdt_enable(WDTO_15MS); while(1) {} //This resets the chip
 //Sleep timing
 long randSleepOffset;
 //Each value is multiplied by 8 because the lowpower sleep timer can only sleep for a maximum of 8 sec.
-#define MIN_SLEEP 75 //MIN_SLEEP_TIME * 8 = minimum number of seconds between transmissions
+#define MIN_SLEEP 90 //MIN_SLEEP_TIME * 8 = minimum number of seconds between transmissions
 #define MAX_SLEEP_OFFSET 15 // MAX_SLEEP_OFFSET * 8 = maximum number of seconds to add to MIN_SLEEP_TIME
 // (MIN_SLEEP * 8) <= sleepTime <= (MIN_SLEEP_TIME * 8) + (MAX_SLEEP_OFFSET * 8)
 
@@ -97,7 +97,7 @@ void Blink(byte PIN, int DELAY_MS)
 }
 
 /*
-* Retrieves the voltage in miniVolts, doesn't require additional hardware
+* Retrieves the voltage in millivolts, doesn't require additional hardware
 */
 long readVcc() {
   // Read 1.1V reference against AVcc

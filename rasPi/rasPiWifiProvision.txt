@@ -24,9 +24,17 @@ network={
     psk="network-password"
 }
 
-7) Disconnect from ethernet and reboot
+7) Natvigate to dhpcd.conf
+	$ sudo nano /etc/dhcpcd.conf
 
-8) Sometimes when you SSH into the Pi now there are RSA key problems if so
+8) Create a static ip
+	static ip_address=192.168.1.200/24 #The static ip address for the Pi
+	static routers=192.168.1.1  #The IP of your router
+	static domain_name_servers=192.168.1.1	 # The ip of your DNS (probably same as router)
+
+9) Disconnect from ethernet and reboot
+
+10) Sometimes when you SSH into the Pi now there are RSA key problems if so
 	1) Delete old key
 		$ ssh-keygen -R <Old Pi IP address>
 

@@ -1,19 +1,8 @@
 class Api::V1::ReadingsController < Api::V1::BaseController
   def create
-    pp "***************************"
-    pp "In Reading create"
-    pp reading_params[:node_id]
-    pp "****************************"
-
     #There is an authorization header && it contains a valid password
     if((!request.headers['Authorization'].nil?) && (request.headers['Authorization'] == 'rasPiAuth..0246'))
-      pp "***********"
-      pp "Authorization succesful"
-      pp "*************"
         if(!reading_params[:error].nil?)
-          pp "**************"
-          pp "This is an error"
-          pp "***************"
           render(json: {
             status: 200,
             message: "Received error",
@@ -29,14 +18,8 @@ class Api::V1::ReadingsController < Api::V1::BaseController
 
 
         elsif(!reading_params[:temp].nil? && !reading_params[:hum].nil?) #TWe have temp and hum so it is a valid reading
-          pp"********************"
-          pp "This is a valid reading"
-          pp "********************"
           #Is this a node we haven't seen before?
           if(Node.find_by(node_id: reading_params[:node_id]).nil?)
-            pp"**************"
-            pp "Node not found so creating a new one"
-            pp "****************"
             Node.create(:node_id => reading_params[:node_id])  #Create and save a new node
           end
 
@@ -44,20 +27,13 @@ class Api::V1::ReadingsController < Api::V1::BaseController
           node = Node.find_by(node_id: reading_params[:node_id])
           node.voltage = reading_params[:volt]
           node.last_reading = reading_params[:timeStamp]
-          pp "*************"
-          pp "Saving reading"
-          pp "*************"
+         
           #Save the reading
           @reading = Reading.new(:name => Node.find_by(node_id: reading_params[:node_id]).name,
             :temperature => reading_params[:temp],
             :humidity => reading_params[:hum],
             :recorded_at => reading_params[:timeStamp],
             :node_id => reading_params[:node_id])
-
-          pp "**********"
-          pp @reading.name
-          pp "*************"
-
 
           if @reading.save && node.save
             #200 means everything went well
