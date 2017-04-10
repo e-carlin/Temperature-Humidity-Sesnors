@@ -83,6 +83,7 @@ class UsersController < Clearance::UsersController
   end
 
   def update
+    #Find the user
     @user = User.find(params[:id])
     if @user.update_attributes(user_params)
       # Handle a successful update.
