@@ -17,7 +17,7 @@ class GraphsController < ApplicationController
 		if t_or_h == true
 
 			# Get minimum value
-			min_val = Reading.select(:temperature, :recorded_at).where(recorded_at: Date.today.beginning_of_day..Date.today.end_of_day).minimum(:temperature)
+			min_val = Reading.select(:temperature, :recorded_at).where(recorded_at: Time.zone.now.beginning_of_day..Time.zone.now.end_of_day).minimum(:temperature)
 			# Return the node (or nodes) with the minimum values
 			node_query = Reading.select(:node_id, :temperature).where(temperature: min_val)
 			node_query.each do |query|
@@ -30,7 +30,7 @@ class GraphsController < ApplicationController
 		else
 
 			# Get minimum value
-			min_val = Reading.select(:humidity, :recorded_at).where(recorded_at: Date.today.beginning_of_day..Date.today.end_of_day).minimum(:humidity)
+			min_val = Reading.select(:humidity, :recorded_at).where(recorded_at: Time.zone.now.beginning_of_day..Time.zone.now.end_of_day).minimum(:humidity)
 			# Return the node (or nodes) with the minimum values
 			node_query = Reading.select(:node_id, :humidity).where(humidity: min_val)
 			node_query.each do |query|
@@ -51,7 +51,7 @@ class GraphsController < ApplicationController
 		if t_or_h == true
 
 			# Get maximum value
-			max_val = Reading.select(:temperature, :recorded_at).where(recorded_at: Date.today.beginning_of_day..Date.today.end_of_day).maximum(:temperature)
+			max_val = Reading.select(:temperature, :recorded_at).where(recorded_at: Time.zone.now.beginning_of_day..Time.zone.now.end_of_day).maximum(:temperature)
 			# Return the node (or nodes) with the maximum values
 			node_query = Reading.select(:node_id, :temperature).where(temperature: max_val)
 			node_query.each do |query|
@@ -64,7 +64,7 @@ class GraphsController < ApplicationController
 		else
 
 			# Get maximum value
-			max_val = Reading.select(:humidity, :recorded_at).where(recorded_at: Date.today.beginning_of_day..Date.today.end_of_day).maximum(:humidity)
+			max_val = Reading.select(:humidity, :recorded_at).where(recorded_at: Time.zone.now.beginning_of_day..Time.zone.now.end_of_day).maximum(:humidity)
 			# Return the node (or nodes) with the maximum values
 			node_query = Reading.select(:node_id, :humidity).where(humidity: max_val)
 			node_query.each do |query|
@@ -84,9 +84,9 @@ class GraphsController < ApplicationController
 	# Param node: The node_id of the node of interest
 	def upperQuartile(node)
 		# Max humidity value from the node in the past day
-		max_hum = Reading.select(:humidty, :recorded_at).where(node_id: node, recorded_at: Date.today.beginning_of_day..Date.today.end_of_day).maximum(:humidity)
+		max_hum = Reading.select(:humidty, :recorded_at).where(node_id: node, recorded_at: Time.zone.now.beginning_of_day..Time.zone.now.end_of_day).maximum(:humidity)
 		# Max temperature value from the node in the past day
-		max_temp = Reading.select(:temperature, :recorded_at).where(node_id: node, recorded_at: Date.today.beginning_of_day..Date.today.end_of_day).maximum(:temperature)
+		max_temp = Reading.select(:temperature, :recorded_at).where(node_id: node, recorded_at: Time.zone.now.beginning_of_day..Time.zone.now.end_of_day).maximum(:temperature)
 		# Determine the parameter with the highest value
 		max_val = [max_hum, max_temp].max	
 
@@ -110,9 +110,9 @@ class GraphsController < ApplicationController
 	# Param node: The node_id of the node of interest
 	def lowerQuartile(node)
 		# Min humidity value from the node in the past day
-		min_hum = Reading.select(:humidity, :recorded_at).where(node_id: node, recorded_at: Date.today.beginning_of_day..Date.today.end_of_day).minimum(:humidity)
+		min_hum = Reading.select(:humidity, :recorded_at).where(node_id: node, recorded_at: Time.zone.now.beginning_of_day..Time.zone.now.end_of_day).minimum(:humidity)
 		# Min temperature value from the node in the past day
-		min_temp = Reading.select(:temperature, :recorded_at).where(node_id: node, recorded_at: Date.today.beginning_of_day..Date.today.end_of_day).minimum(:temperature)
+		min_temp = Reading.select(:temperature, :recorded_at).where(node_id: node, recorded_at: Time.zone.now.beginning_of_day..Time.zone.now.end_of_day).minimum(:temperature)
 		# Determine the parameter with the lowest value
 		min_val = [min_hum, min_temp].min
 
@@ -164,7 +164,7 @@ class GraphsController < ApplicationController
 		dataInput = []		
 
 		# Query the data
-		dataQuery = Reading.select(:recorded_at, :temperature, :humidity).where(node_id: sensor, recorded_at: Date.today.beginning_of_day..Date.today.end_of_day).to_a
+		dataQuery = Reading.select(:recorded_at, :temperature, :humidity).where(node_id: sensor, recorded_at: Time.zone.now.beginning_of_day..Time.zone.now.end_of_day).to_a
 
 		# Format the data appropriately
 		# The values have to be stored in array
@@ -209,7 +209,7 @@ class GraphsController < ApplicationController
 		dataInput = []		
 
 		# Query the data (every reading that has happened today)
-		dataQuery = Reading.select(:recorded_at, :node_id, :temperature).where(recorded_at: Date.today.beginning_of_day..Date.today.end_of_day).to_a
+		dataQuery = Reading.select(:recorded_at, :node_id, :temperature).where(recorded_at: Time.zone.now.beginning_of_day..Time.zone.now.end_of_day).to_a
 
 		# Each data hash will be for a single node
 		@nodeList.each do |node|
@@ -256,7 +256,7 @@ class GraphsController < ApplicationController
 		dataInput = []		
 
 		# Query the data (every reading that has happened today)
-		dataQuery = Reading.select(:recorded_at, :node_id, :humidity).where(recorded_at: Date.today.beginning_of_day..Date.today.end_of_day).to_a
+		dataQuery = Reading.select(:recorded_at, :node_id, :humidity).where(recorded_at: Time.zone.now.beginning_of_day..Time.zone.now.end_of_day).to_a
 
 		# Each data hash will be for a single node
 		@nodeList.each do |node|
