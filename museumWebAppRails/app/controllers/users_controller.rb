@@ -110,13 +110,13 @@ class UsersController < Clearance::UsersController
   
   #Helper methods for edit (probably don't need)
 
- def find_user_for_update
-    find_user_by_id_and_confirmation_token
-  end
+#  def find_user_for_update
+#     find_user_by_id_and_confirmation_token
+#   end
 
-def find_user_for_edit
-    find_user_by_id_and_confirmation_token
-  end
+# def find_user_for_edit
+#     find_user_by_id_and_confirmation_token
+#   end
 
 # def find_user_by_id_and_confirmation_token
 #     user_param = Clearance.configuration.user_id_parameter
@@ -126,17 +126,17 @@ def find_user_for_edit
 #       find_by_id_and_confirmation_token params[user_param], token.to_s
 #   end
 
-def password_reset_params
-   #params[:password]
-    if params.has_key? :user
-      ActiveSupport::Deprecation.warn %{Since locales functionality was added, accessing params[:user] is no longer supported.}
-      params[:user][:password]
-      #params[:password]
+# def password_reset_params
+#    #params[:password]
+#     if params.has_key? :user
+#       ActiveSupport::Deprecation.warn %{Since locales functionality was added, accessing params[:user] is no longer supported.}
+#       params[:user][:password]
+#       #params[:password]
 
-    else
-      params[:password]
-      #params[:password_reset][:password]
-    end
-  end
+#     else
+#       params[:password]
+#       #params[:password_reset][:password]
+#     end
+#   end
 
 end
