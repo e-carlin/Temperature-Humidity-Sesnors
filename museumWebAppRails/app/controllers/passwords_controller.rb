@@ -1,92 +1,113 @@
 class PasswordsController < Clearance::PasswordsController
      #added for forgot password
      #before_filter :ensure_existing_user, except: [:edit, :update]
-  #   skip_before_filter :ensure_existing_user, only: [:edit, :update]
-
-  # def deliver_email(user)
-  #   mail = ::ClearanceMailer.change_password(user)
-
-  #   if mail.respond_to?(:deliver_later)
-  #     mail.deliver_later
-  #   else
-  #     mail.deliver
-  #   end
-  # end
+     skip_before_filter :ensure_existing_user, only: [:edit, :update]
 
 
-  # def new
-  #   render template: 'passwords/new'
-  # end
+  def create
+    if user = find_user_for_create
+      user.forgot_password!
+      deliver_email(user)
+    end
+    render template: 'passwords/create'
+  end
+
+  def edit
+    @user = find_user_for_edit
+
+    if params[:token]
+      session[:password_reset_token] = params[:token]
+      redirect_to url_for
+    else
+      render template: 'passwords/edit'
+    end
+  end
+
+  def new
+    render template: 'passwords/new'
+  end
 
 
+  def update
+    @user = find_user_for_update
 
- # if respond_to?(:before_action)
- #    skip_before_action :require_login,
- #      only: [:create, :edit, :new, :update],
- #      raise: false
- #    skip_before_action :authorize,
- #      only: [:create, :edit, :new, :update],
- #      raise: false
- #    #before_action :ensure_existing_user, only: [:edit, :update]
- #  else
- #    skip_before_filter :require_login,
- #      only: [:create, :edit, :new, :update],
- #      raise: false
- #    skip_before_filter :authorize,
- #      only: [:create, :edit, :new, :update],
- #      raise: false
- #    #before_filter :ensure_existing_user, only: [:edit, :update]
- #  end
-#Might not need this controller
-#overwrite the edit method so that we can hide it from the outside
-# def edit
-#     #@user = find_user_for_edit
-#     @user = current_user
-#     if params[:token]
-#       session[:password_reset_token] = params[:token]
-#       #redirect_to url_for
-#       redirect_to sign_in
-#     else
-#       render template: 'passwords/edit'
-#     end
-#   end
+    if @user.update_password password_reset_params
+      sign_in @user
+      redirect_to url_after_update
+      session[:password_reset_token] = nil
+    else
+      flash_failure_after_update
+      render template: 'passwords/edit'
+    end
+  end
 
-# def update
-#     @user = find_user_for_update
+  private
 
-#     if @user.update_password password_reset_params
-#       sign_in @user
-#       redirect_to url_after_update
-#       session[:password_reset_token] = nil
-#     else
-#       flash_failure_after_update
-#       render template: 'passwords/edit'
-#     end
-#   end
+  def deliver_email(user)
+    mail = ::ClearanceMailer.change_password(user)
 
-# def edit
-# 	#don't really need this method
-#     @user = current_user
-#     #@user = find_user_for_edit
-#     if params[:token]
-#       session[:password_reset_token] = params[:token]
-#       pp "Here"
-#       #redirect_to url_for
-#       redirect_to sign_in
-#     else
-#     	pp "else"
-#       render template: 'passwords/edit'
-#       redirect_to sign_in
-#     end
-#   end
+    if mail.respond_to?(:deliver_later)
+      mail.deliver_later
+    else
+      mail.deliver
+    end
+  end
 
+  def password_reset_params
+    if params.has_key? :user
+      ActiveSupport::Deprecation.warn %{Since locales functionality was added, accessing params[:user] is no longer supported.}
+      params[:user][:password]
+    else
+      params[:password_reset][:password]
+    end
+  end
 
-  # def index
-  # 	render template: 'passwords/edit'
-  # end
+  def find_user_by_id_and_confirmation_token
+    user_param = Clearance.configuration.user_id_parameter
+    token = session[:password_reset_token] || params[:token]
 
-  # def find_user_for_create
-  #   Clearance.configuration.user_model.
-  #     find_by_normalized_email params[:password][:email]
-  # end
+    Clearance.configuration.user_model.
+      find_by_id_and_confirmation_token params[user_param], token.to_s
+  end
+
+  def find_user_for_create
+    Clearance.configuration.user_model.
+      find_by_normalized_email params[:password][:email]
+  end
+
+  def find_user_for_edit
+    find_user_by_id_and_confirmation_token
+  end
+
+  def find_user_for_update
+    find_user_by_id_and_confirmation_token
+  end
+
+  def ensure_existing_user
+    unless find_user_by_id_and_confirmation_token
+      flash_failure_when_forbidden
+      render template: "passwords/new"
+    end
+  end
+
+  def flash_failure_when_forbidden
+    flash.now[:notice] = translate(:forbidden,
+      scope: [:clearance, :controllers, :passwords],
+      default: t('flashes.failure_when_forbidden'))
+  end
+
+  def flash_failure_after_update
+    flash.now[:notice] = translate(:blank_password,
+      scope: [:clearance, :controllers, :passwords],
+      default: t('flashes.failure_after_update'))
+  end
+
+  def url_after_create
+    sign_in_url
+  end
+
+  def url_after_update
+    Clearance.configuration.redirect_url
+  end
+  
 end
