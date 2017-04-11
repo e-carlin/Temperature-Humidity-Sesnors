@@ -12,8 +12,6 @@ class UsersController < Clearance::UsersController
         end
       end
     end
-   
-    
 
 	end
 
@@ -85,7 +83,9 @@ class UsersController < Clearance::UsersController
   def update
     #Find the user
     @user = User.find(params[:id])
-    if @user.update_attributes(user_params)
+    if @user.update_attributes(user_update_params)
+
+    #if @user.update_attributes(user_params)
       # Handle a successful update.
       redirect_to graphs_path
     else
@@ -97,9 +97,15 @@ class UsersController < Clearance::UsersController
 
   private
   def user_params
-    params.require(:user).permit(:email, :password)
+    #Needed for the update 
+    #params.require(:user).permit(:email, :password)
                 
-    #params[Clearance.configuration.user_parameter] || Hash.new
+    params[Clearance.configuration.user_parameter] || Hash.new
+  end
+#need for update
+  def user_update_params
+        params.require(:user).permit(:email, :password)
+
   end
   
   #Helper methods for edit (probably don't need)
@@ -112,13 +118,13 @@ def find_user_for_edit
     find_user_by_id_and_confirmation_token
   end
 
-def find_user_by_id_and_confirmation_token
-    user_param = Clearance.configuration.user_id_parameter
-    token = session[:password_reset_token] || params[:token]
+# def find_user_by_id_and_confirmation_token
+#     user_param = Clearance.configuration.user_id_parameter
+#     token = session[:password_reset_token] || params[:token]
 
-    Clearance.configuration.user_model.
-      find_by_id_and_confirmation_token params[user_param], token.to_s
-  end
+#     Clearance.configuration.user_model.
+#       find_by_id_and_confirmation_token params[user_param], token.to_s
+#   end
 
 def password_reset_params
    #params[:password]
