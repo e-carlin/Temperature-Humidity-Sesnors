@@ -31,5 +31,14 @@ class IndexController < ApplicationController
 
     end
 
+    #Displays the home page information
+    def index
+        @avgtmp = Reading.average(:temperature)
+        @totalSensors = Node.where(last_reading: (Time.now.midnight-1.day)..Time.now.midnight).count(:all)
+        @lastTemp = Reading.last.temperature
+        @lastHum = Reading.last.humidity
+        @totalReadings = Reading.count(:all)
+    end
+
   
 end

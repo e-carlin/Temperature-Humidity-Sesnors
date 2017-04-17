@@ -1,9 +1,8 @@
 class PasswordsController < Clearance::PasswordsController
-     #added for forgot password
-     #before_filter :ensure_existing_user, except: [:edit, :update]
+     #We skip this filter so we can update the user, won't update if there isn't a user in the db
      skip_before_filter :ensure_existing_user, only: [:edit, :update]
 
-
+     #These methods are from Clearance gem but need to be in our controller so that we can change use custom methods
   def create
     if user = find_user_for_create
       user.forgot_password!

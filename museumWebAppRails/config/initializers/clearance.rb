@@ -1,9 +1,8 @@
 Clearance.configure do |config|
+  #These are the configuration settings we are using from the clearance gem
   config.routes = false
   config.mailer_sender = "LelooskaSensorWebsite@gmail.com"
-
   #config.mailer_sender = "reply@example.com"
-
   #config.allow_sign_up = true
   #config.cookie_domain = "gmail.com"
   #config.cookie_expiration = lambda { |cookies| 1.year.from_now.utc }
