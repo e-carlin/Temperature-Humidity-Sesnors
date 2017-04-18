@@ -1,33 +1,28 @@
-<div class="container">
-        <h2> Temperature and Humidity Sensors </h2>
+<h1 class = "text-center"> Temperature and Humidity Sensors </h1>
+<div class = "container">
+<div class="row">
+   <div class="col-md-6">
+      <div class="box">
+         Total Sensors: <%= @totalSensors %>
+      </div>
+   </div>
+   <div class="col-md-6">
+      <div class="box">
+         Total Readings:<%= @totalReadings %>
+      </div>
+   </div>
 </div>
-  
-<div class="container">    
-      <h1>Welcome</h1>
-      <hr>
-      <div class="row">
-        <div class="col-md-6">
-            <div class="box">
-            Total Sensors: <%= @totalSensors %>
-            </div>
-        </div>
-        <div class="col-md-6-offset-6">
-            <div class="box">
-            Total Readings:<%= @totalReadings %>
-            </div>
-        </div>
-    </div>
-<hr>
-  <div class="row">
-        <div class="col-md-6">
-            <div class="box">
-            Last Temperature: <%= @lastTemp %>
-            </div>
-         </div>
-        <div class="col-md-6-offset-6">
-            <div class="box">
-            Last Humidity: <%= @lastHum %>
-            </div>
-        </div>
-  </div>
+<div class="row">
+   <div class="col-md-6">
+      <div class="box">
+         Last Temperature: <%= @lastTemp %>
+      </div>
+   </div>
+   <div class="col-md-6">
+      <div class="box">
+         Last Humidity: <%= @lastHum %>
+      </div>
+   </div>
 </div>
+</div>
+
