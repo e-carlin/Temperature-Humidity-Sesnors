@@ -1,5 +1,4 @@
-
-
+<div class=readings-text-container>
 <p id="notice">
    <%= notice %>
 </p>
@@ -8,7 +7,7 @@
    <div class="h1">Readings</div>
 </div>
 
-<div class="container text-center date-select-container">
+<div class="container text-center">
    <p>Specify the date range you want for readings, then click the download button</p>
    <%= form_for :reading, url: 'readings.xls', method: :get do %>
    <%= label_tag(:start_date, "Start Date") %>
@@ -28,7 +27,7 @@
 
       <h2 class="text-center">The 20 most recent readings</h2>
   <div class="table-padding">
-   <table class="table-bordered table-striped text-center table-container">
+   <table class="table-bordered table-striped text-center">
       <thead>
          <tr>
             <th>Node_ID</th>
@@ -60,5 +59,6 @@
          <% end %>
       </tbody>
    </table>
+   </div>
    </div>
 
