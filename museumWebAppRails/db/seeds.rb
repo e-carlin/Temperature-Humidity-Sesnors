@@ -28,10 +28,11 @@
 
 		{created_at: '2017-01-01 10:12:15', updated_at: '2017-01-07 12:30:05', email: 'mgilbert@pugetsound.edu', admin: true, encrypted_password: 'BlahBlah', confirmation_token: 'boopboop', remember_token: 'Set'},
 		{created_at: '2017-01-01 10:12:15', updated_at: '2017-01-07 12:30:05', email: 'mbogert@pugetsound.edu', admin: false, encrypted_password: 'BlahBlah', confirmation_token: 'boopboop', remember_token: 'Set'},
-		{created_at: '2017-01-01 10:12:15', updated_at: '2017-01-07 12:30:05', email: 'ecarlin@pugetsound.edu', admin: false, encrypted_password: 'BlahBlah', confirmation_token: 'boopboop', remember_token: 'Set'},
+		{created_at: '2017-01-01 10:12:15', updated_at: '2017-01-07 12:30:05', email: 'ecarlin@pugetsound.edu', admin: true, encrypted_password: 'BlahBlah', confirmation_token: 'boopboop', remember_token: 'Set'},
 		{created_at: '2017-01-01 10:12:15', updated_at: '2017-01-07 12:30:05', email: 'gabe@pugetsound.edu', admin: false, encrypted_password: 'BlahBlah', confirmation_token: 'boopboop', remember_token: 'Set'},
 		{created_at: '2017-03-01 10:12:15', updated_at: '2017-03-07 12:30:05', email: 'mark@pugetsound.edu', admin: true, encrypted_password: 'BlahBlah', confirmation_token: 'boopboop', remember_token: 'Set'},
 		])
+
 
 # Empty shell for readings, if more test data is needed
 # 	{ pin: , node_id: , temperature: , humidity: , recorded_at: , created_at: , updated_at: },
@@ -40,12 +41,12 @@
 	readings = Reading.create([
 
 		#Node 1, Sensor 1
-		{ node_id: 1, temperature: 71, humidity: 50, recorded_at: '2017-01-20 08:00:00', created_at: '2017-01-20 08:05:00', updated_at: '2017-01-20 08:05:00'},
-		{ node_id: 1, temperature: 71, humidity: 50, recorded_at: '2017-01-20 12:00:00', created_at: '2017-01-20 12:05:00', updated_at: '2017-01-20 12:05:00'},
-		{ node_id: 1, temperature: 71, humidity: 50, recorded_at: '2017-01-20 16:00:00', created_at: '2017-01-20 16:05:00', updated_at: '2017-01-20 16:05:00'},
+		{ node_id: 1, temperature: 71, humidity: 50, recorded_at: '2017-04-18 08:00:00'},
+		{ node_id: 1, temperature: 71, humidity: 50, recorded_at: '2017-04-18 12:00:00'},
+		{ node_id: 1, temperature: 71, humidity: 50, recorded_at: '2017-04-18 16:00:00'},
 		#Node 1, Sensor 2
-		{ node_id: 2, temperature: 70, humidity: 52, recorded_at: '2017-01-20 08:00:00', created_at: '2017-01-20 08:05:00', updated_at: '2017-01-20 08:05:00'},
-		{ node_id: 2, temperature: 68, humidity: 57, recorded_at: '2017-01-20 12:00:00', created_at: '2017-01-20 12:05:00', updated_at: '2017-01-20 12:05:00'},
+		{ node_id: 2, temperature: 70, humidity: 52, recorded_at: '2017-04-18 08:00:00'},
+		{ node_id: 2, temperature: 68, humidity: 57, recorded_at: '2017-04-18 12:00:00'},
 		{ node_id: 2, temperature: 69, humidity: 60, recorded_at: '2017-01-20 16:00:00', created_at: '2017-01-20 16:05:00', updated_at: '2017-01-20 16:05:00'},
 		{ node_id: 2, temperature: 69, humidity: 60, recorded_at: '2017-01-20 16:00:00', created_at: '2017-01-20 16:05:00', updated_at: '2017-01-20 16:05:00'},
 		{ node_id: 2, temperature: 69, humidity: 60, recorded_at: '2017-01-21 23:00:00', created_at: '2017-01-20 23:05:00', updated_at: '2017-01-20 23:05:00'},		
