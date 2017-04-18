@@ -1,3 +1,4 @@
+<div class="nodes-text-container">
 <h1>Rename Sensor <%=@node.node_id%></h1>
 <h2>Current name: <%= @node.name %></h2>
  <%= form_for :node, :method => :put, :url => {:action => "update"} do |f| %> 
@@ -8,3 +9,4 @@
  </table>
 <%= submit_tag("Update name") %>
 <% end %>
+</div>
