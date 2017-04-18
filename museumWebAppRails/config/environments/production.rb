@@ -1,6 +1,5 @@
 Rails.application.configure do
   config.root_directory = '/sensors'
-  config.assets.prefix = '/sensors'
   RAILS_RELATIVE_URL_ROOT= "/sensors"
   # Settings specified here will take precedence over those in config/application.rb.
 
