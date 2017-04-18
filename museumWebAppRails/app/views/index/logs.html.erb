@@ -1,6 +1,8 @@
 <h1> Error logs: </h1>
+<div class="table-container">
 <div>The file can be found at /var/www/museum_monitoring_sensors/museumWebAppRails/log/piAndMoteino.log</div>
 <br>
 <% @logs.split("\n").each do |log| %>
   <%= log %><br>
 <% end %>
+</div>
