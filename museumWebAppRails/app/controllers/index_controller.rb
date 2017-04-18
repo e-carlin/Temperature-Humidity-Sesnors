@@ -6,7 +6,6 @@ class IndexController < ApplicationController
     #@logs = "some logs"
     #@logs = `tail -n 5 /home/gabe/Desktop/capstone2/museum_monitoring_sensors/museumWebAppRails/log/moteinoAndPi.log`.split("\n")
 
-
     #file = Rails.root + "/log/moteinoAndPi.log"
     file = File.join(Rails.root, 'log','moteinoAndPi.log')
     if !File.file?('moteinoAndPi.log')
@@ -34,7 +33,7 @@ class IndexController < ApplicationController
     #Displays the home page information
     def index
         @avgtmp = Reading.average(:temperature)
-        @totalSensors = Node.where(last_reading: (Time.now.midnight-1.day)..Time.now.midnight).count(:all)
+        @totalSensors = Node.where(last_reading: (Time.zone.now.beginning_of_day..Time.zone.now.end_of_day)).count(:all)
         @lastTemp = Reading.last.temperature
         @lastHum = Reading.last.humidity
         @totalReadings = Reading.count(:all)
