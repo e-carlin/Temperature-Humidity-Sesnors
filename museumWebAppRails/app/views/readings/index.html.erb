@@ -1,76 +1,64 @@
-<p id="notice"><%= notice %></p>
-
+<div class=readings-text-container>
+<p id="notice">
+   <%= notice %>
+</p>
 <script src="application.js"></script>
-
-  <div class="text-center">
-    <div class="h1">Readings</div>
-  </div>
-
-<div class="container">
-<!--<%= form_for :reading, url: readings_path, method: :get do %>-->
-<!--<br>--> 
-
-<p>Specify the date range you want for readings, then click the download button</p>
-<%= form_for :reading, url: 'readings.xls', method: :get do %>
-
-  <%= label_tag(:start_date, "Start Date") %>
-  <%= select_date Date.today, prefix: :start_date %>
-  <!--</br>-->
-  <%= label_tag(:end_date, "End Date") %>
-  <%= select_date Date.today, prefix: :end_date %>
-  </br>
-  <%= submit_tag("Download File") %>
-
-<% end %>
-
-<p>After downloading a file, push "Refresh to setup a new file for download</p>
-<form action="readings.html">
-  <input type="submit" value="Refresh" />
-</form>
-
+<div class="text-center">
+   <div class="h1">Readings</div>
 </div>
 
-<!--
-<div class="container-form">
-<form action="readings.html">
-  <input type="submit" value="Refresh" />
-</form>
+<div class="container text-center">
+   <p>Specify the date range you want for readings, then click the download button</p>
+   <%= form_for :reading, url: 'readings.xls', method: :get do %>
+   <%= label_tag(:start_date, "Start Date") %>
+   <%= select_date Date.today, prefix: :start_date %>
+   <!--</br>-->
+   <%= label_tag(:end_date, "End Date") %>
+   <%= select_date Date.today, prefix: :end_date %>
+   </br>
+   <%= submit_tag("Download File") %>
+   <% end %>
+   <p>After downloading a file, push "Refresh to setup a new file for download</p>
+   <form action="readings.html">
+      <input type="submit" value="Refresh" />
+   </form>
 </div>
 
 
-<div class="container">
- Just to separate the sections -->
-</div>
+      <h2 class="text-center">The 20 most recent readings</h2>
+  <div class="table-padding">
+   <table class="table-bordered table-striped text-center">
+      <thead>
+         <tr>
+            <th>Node_ID</th>
+            <th>Name</th>
+            <th>Temperature</th>
+            <th>Humidity</th>
+            <th>Recorded at</th>
+         </tr>
+      </thead>
+      <tbody>
+         <% @last_20.each do |reading| %>
+         <tr>
+            <td>
+               <%= reading.node_id%>
+            </td>
+            <td>
+               <%= reading.name%>
+            </td>
+            <td>
+               <%= reading.temperature%>
+            </td>
+            <td>
+               <%= reading.humidity%>
+            </td>
+            <td>
+               <%= reading.recorded_at%>
+            </td>
+         </tr>
+         <% end %>
+      </tbody>
+   </table>
+   </div>
+   </div>
 
-<div class="content">
- <!--Just to separate the sections -->
-</div>
-
-
-<div class="container">
-<table class="table table-bordered">
-<h2>The 20 most recent readings</h2>
-  <thead>
-    <tr>
-    <th>Node_ID</th>
-    <th>Name</th>
-    <th>Temperature</th>
-    <th>Humidity</th>
-    <th>Recorded at</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @last_20.each do |reading| %>
-      <tr>
-        <td><%= reading.node_id%></td>
-        <td><%= reading.name%></td>
-        <td><%= reading.temperature%></td>
-        <td><%= reading.humidity%></td>
-        <td><%= reading.recorded_at%></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
-</div>
-<% end %>

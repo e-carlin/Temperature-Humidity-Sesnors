@@ -34,6 +34,9 @@ class IndexController < ApplicationController
     def index
         @avgtmp = Reading.average(:temperature)
         @totalSensors = Node.where(last_reading: (Time.zone.now.beginning_of_day..Time.zone.now.end_of_day)).count(:all)
+
+        #@totalSensors = Node.where(last_reading: Time.zone.now.beginning_of_day..Time.zone.now.end_of_day).count(:all)
+
         
         if Reading.last.nil?
           @lastTemp = "NA"

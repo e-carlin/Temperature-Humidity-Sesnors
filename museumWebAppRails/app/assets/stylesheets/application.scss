@@ -27,61 +27,21 @@ $cpad: 20px;		/* Variables are not limited to colors, you can use it to store va
 $primaryColor: #333;
 $color: #800000;
 
-
 body {
+	background-image: url(http://lelooska.org/wp-content/uploads/2013/01/salmon_transparent.png);
 	background-color: #A9A9A9;
 	background-attachment:fixed;
 	font: 100% Helvetica, sans-serif;
-	
-}
-
-.navbar-header {
-		color: #800000;
-		background-color: #FFFFFF;
-}
-.nav navbar-nav {
-		color: #800000;
-		background-color: #FFFFFF;
-}
-
-#header {
-	background-color: #000000;
-	padding: 10px;
-	font-color: #000000;
 
 }
 
-.content {
-    padding:20px;
-    text-align: center;
-    .box-right {
-        float : right;
-        border: 1px solid #000;
-  
-    }
+nav{
+	background-color: green;
 }
 
-.h1 {
-           	font-size: 64px;
-    		color: #FFFFFF;
-        }
-
-.button {
-	background-color: #000000;
-	color: #800000;
-}
-
-.box {
-	background-color: #A9A9A9;
-	font-color: #FFFFFF;
-	font-size: 48px;
-    border: 1px solid #000;
-}
-
-.left_box {
-	padding: 20px;
-	background-color: #000000;
-	font-color: #FFFFFF;
+.container-fluid{
+	color: red;
+	font-size: 15px;
 }
 
 .right_box {
@@ -136,3 +96,4 @@ body {
 	padding: $cpad;
 	color: #800000;
 }
+

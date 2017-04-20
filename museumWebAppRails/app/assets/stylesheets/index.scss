@@ -1,3 +1,17 @@
 // Place all the styles related to the index controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+.box {
+	background-color: #A9A9A9;
+	font-color: #FFFFFF;
+	font-size: 48px;
+    border: 1px solid #000;
+}
+
+.index-text-container{
+	background-color: white; 
+	width: 90%;
+	padding-bottom: 20px;
+	margin: auto;
+}
