@@ -49,8 +49,8 @@ RFM69_ATC radio;
 
 //********** DHT22 definitions ************************
 #define DHTTYPE DHT22
-int SENSOR_PIN = 19; //A2 => Digital 16
-int POWER_PIN = 16; //A5 = Digital 19
+int SENSOR_PIN = 19; //Digital 19 => A5 on moteino
+int POWER_PIN = 16; //Digital 16 => A2 on moteino
 DHT dht(SENSOR_PIN, DHTTYPE);
 
 //******** LowPower definitions ***********************************
