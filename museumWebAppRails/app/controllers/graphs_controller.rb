@@ -95,7 +95,7 @@ class GraphsController < ApplicationController
 		unless max_val.nil? 
 			offset = 25 - (max_val % 25)
 			# Visibility adjustment
-			if offset == 0 
+			if offset == 1 
 				offset = 5
 			end
 			return max_val + offset
@@ -121,7 +121,7 @@ class GraphsController < ApplicationController
 		unless min_val.nil?
 			offset = (min_val % 25)
 			# Visibility adjustment
-			if offset == 0 
+			if offset == 1 
 				offset = 5
 			end			
 			return min_val - (offset)
